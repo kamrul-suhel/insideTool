@@ -15,8 +15,9 @@ class CreatePagesPostsTable extends Migration
     {
         Schema::create('pages_posts', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('page_id');
-            $table->integer('post_id');
+            $table->unsignedInteger('page_id');
+            $table->unsignedInteger('post_id');
+            $table->text('description');
         });
     }
 
