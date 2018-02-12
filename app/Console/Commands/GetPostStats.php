@@ -45,6 +45,39 @@ class GetPostStats extends Command
         $post->facebook_id = $postId;
         $post->post_id = 0;
 
+        // Copy stats we're not pulling
+        if ($latest = PostStatSnapshot::where('facebook_id', $postId)->latest()->first()) {
+            $post->impressions = $latest->impressions;
+            $post->impressions_paid = $latest->impressions_paid;
+            $post->uniques = $latest->uniques;
+            $post->uniques_paid = $latest->uniques_paid;
+            $post->fan_impressions = $latest->fan_impressions;
+            $post->fan_impressions_paid = $latest->fan_impressions_paid;
+            $post->fan_uniques = $latest->fan_uniques;
+            $post->fan_uniques_paid = $latest->fan_uniques_paid;
+            $post->impressions_organic = $latest->impressions_organic;
+            $post->uniques_organic = $latest->uniques_organic;
+            $post->impressions_viral = $latest->impressions_viral;
+            $post->uniques_viral = $latest->uniques_viral;
+        } else {
+            $post->impressions = 0;
+            $post->impressions_paid = 0;
+            $post->uniques = 0;
+            $post->uniques_paid = 0;
+            $post->fan_impressions = 0;
+            $post->fan_impressions_paid = 0;
+            $post->fan_uniques = 0;
+            $post->fan_uniques_paid = 0;
+            $post->impressions_organic = 0;
+            $post->uniques_organic = 0;
+            $post->impressions_viral = 0;
+            $post->uniques_viral = 0;
+        }
+        
+        $post->impressions_nonviral = 0;
+        $post->uniques_nonviral = 0;
+            
+
         // Like count
         $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=LIKE&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
         $post->likes = $response->getDecodedBody()["summary"]["total_count"];

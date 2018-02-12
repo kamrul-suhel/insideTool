@@ -44,7 +44,26 @@ class GetPostStatsDelayed extends Command
         $postId = $this->argument('postid');
         $post->facebook_id = $postId;
         $post->post_id = 0;
-        
+
+        // Copy stats we're not pulling
+        if ($latest = PostStatSnapshot::where('facebook_id', $postId)->latest()->first()) {
+            $post->likes = $latest->likes;
+            $post->loves = $latest->loves;
+            $post->wows = $latest->wows;
+            $post->hahas = $latest->hahas;
+            $post->sads = $latest->sads;
+            $post->angrys = $latest->angrys;
+            $post->thankfuls = $latest->thankfuls;
+        } else {
+            $post->likes = 0;
+            $post->loves = 0;
+            $post->wows = 0;
+            $post->hahas = 0;
+            $post->sads = 0;
+            $post->angrys = 0;
+            $post->thankfuls = 0;
+        }
+
         // Impressions
         $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions', env('FACEBOOK_ACCESS_TOKEN'));
         $post->impressions = $response->getGraphEdge()[0]["values"][0]["value"];
