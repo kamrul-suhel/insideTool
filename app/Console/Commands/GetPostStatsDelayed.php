@@ -45,30 +45,36 @@ class GetPostStatsDelayed extends Command
         $post->facebook_id = $postId;
         $post->post_id = 0;
 
-        // Impressions
-        $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions', env('FACEBOOK_ACCESS_TOKEN'));
-        $post->impressions = $response->getGraphEdge()[0]["values"][0]["value"];
-        
-        // Unique impressions
-        $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_unique', env('FACEBOOK_ACCESS_TOKEN'));
-        $post->uniques = $response->getGraphEdge()[0]["values"][0]["value"];
+        try {
+            // Impressions
+            $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions', env('FACEBOOK_ACCESS_TOKEN'));
+            $post->impressions = $response->getGraphEdge()[0]["values"][0]["value"];
+            
+            // Unique impressions
+            $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_unique', env('FACEBOOK_ACCESS_TOKEN'));
+            $post->uniques = $response->getGraphEdge()[0]["values"][0]["value"];
 
-        // Fan impressions
-        $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_fan', env('FACEBOOK_ACCESS_TOKEN'));
-        $post->fan_impressions = $response->getGraphEdge()[0]["values"][0]["value"];
-        
-        // Fan uniques
-        $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_fan_unique', env('FACEBOOK_ACCESS_TOKEN'));
-        $post->fan_uniques = $response->getGraphEdge()[0]["values"][0]["value"];
+            // Fan impressions
+            $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_fan', env('FACEBOOK_ACCESS_TOKEN'));
+            $post->fan_impressions = $response->getGraphEdge()[0]["values"][0]["value"];
+            
+            // Fan uniques
+            $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_fan_unique', env('FACEBOOK_ACCESS_TOKEN'));
+            $post->fan_uniques = $response->getGraphEdge()[0]["values"][0]["value"];
 
-        // Viral impressions
-        $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_viral', env('FACEBOOK_ACCESS_TOKEN'));
-        $post->impressions_viral = $response->getGraphEdge()[0]["values"][0]["value"];
+            // Viral impressions
+            $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_viral', env('FACEBOOK_ACCESS_TOKEN'));
+            $post->impressions_viral = $response->getGraphEdge()[0]["values"][0]["value"];
 
-        // Viral uniques
-        $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_viral_unique', env('FACEBOOK_ACCESS_TOKEN'));
-        $post->uniques_viral = $response->getGraphEdge()[0]["values"][0]["value"];
-        
-        $post->save();
+            // Viral uniques
+            $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_viral_unique', env('FACEBOOK_ACCESS_TOKEN'));
+            $post->uniques_viral = $response->getGraphEdge()[0]["values"][0]["value"];
+            
+            $post->save();
+        } catch(\Facebook\Exceptions\FacebookResponseException $e) {
+            if ($e->getCode() == 100 && $e->getSubErrorCode() == 33) {
+                // Post has been deleted
+            }
+        }
     }
 }

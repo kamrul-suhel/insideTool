@@ -45,41 +45,47 @@ class GetPostStats extends Command
         $post->facebook_id = $postId;
         $post->post_id = 0;
         
-        // Like count
-        $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=LIKE&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
-        $post->likes = $response->getDecodedBody()["summary"]["total_count"];
+        try {
+            // Like count
+            $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=LIKE&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
+            $post->likes = $response->getDecodedBody()["summary"]["total_count"];
 
-        // Love count
-        $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=LOVE&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
-        $post->loves = $response->getDecodedBody()["summary"]["total_count"];
-        
-        // Wow count
-        $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=WOW&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
-        $post->wows = $response->getDecodedBody()["summary"]["total_count"];
-        
-        // Haha count
-        $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=HAHA&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
-        $post->hahas = $response->getDecodedBody()["summary"]["total_count"];
-        
-        // Sad count
-        $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=SAD&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
-        $post->sads = $response->getDecodedBody()["summary"]["total_count"];
-        
-        // Angry count
-        $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=ANGRY&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
-        $post->angrys = $response->getDecodedBody()["summary"]["total_count"];
+            // Love count
+            $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=LOVE&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
+            $post->loves = $response->getDecodedBody()["summary"]["total_count"];
+            
+            // Wow count
+            $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=WOW&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
+            $post->wows = $response->getDecodedBody()["summary"]["total_count"];
+            
+            // Haha count
+            $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=HAHA&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
+            $post->hahas = $response->getDecodedBody()["summary"]["total_count"];
+            
+            // Sad count
+            $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=SAD&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
+            $post->sads = $response->getDecodedBody()["summary"]["total_count"];
+            
+            // Angry count
+            $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=ANGRY&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
+            $post->angrys = $response->getDecodedBody()["summary"]["total_count"];
 
-        // Thankful count
-        $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=THANKFUL&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
-        $post->thankfuls = $response->getDecodedBody()["summary"]["total_count"];
-        
-        // Comment count
-        $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/comments/?summary=1', env('FACEBOOK_ACCESS_TOKEN'));
-        $post->comments = $response->getDecodedBody()["summary"]["total_count"];
+            // Thankful count
+            $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=THANKFUL&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
+            $post->thankfuls = $response->getDecodedBody()["summary"]["total_count"];
+            
+            // Comment count
+            $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/comments/?summary=1', env('FACEBOOK_ACCESS_TOKEN'));
+            $post->comments = $response->getDecodedBody()["summary"]["total_count"];
 
-        // Share count
-        $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/?fields=shares', env('FACEBOOK_ACCESS_TOKEN'));
-        $post->shares = $response->getDecodedBody()["shares"]["count"];        
+            // Share count
+            $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/?fields=shares', env('FACEBOOK_ACCESS_TOKEN'));
+            $post->shares = $response->getDecodedBody()["shares"]["count"];
+        } catch(\Facebook\Exceptions\FacebookResponseException $e) {
+            if ($e->getCode() == 100 && $e->getSubErrorCode() == 33) {
+                // Post has been deleted
+            }
+        }
         
         $post->save();
     }
