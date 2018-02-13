@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
+    protected $fillable = ['facebook_id'];
+
     /**
      * Return pages associated with this post
      */
