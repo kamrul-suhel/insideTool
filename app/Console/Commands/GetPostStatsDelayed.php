@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Facebook\Facebook;
-use App\PostStatSnapshot;
+use App\PostDelayedStatSnapshot;
 
 class GetPostStatsDelayed extends Command
 {
@@ -40,29 +40,10 @@ class GetPostStatsDelayed extends Command
     public function handle()
     {
         $api = new Facebook;
-        $post = new PostStatSnapshot;
+        $post = new PostDelayedStatSnapshot;
         $postId = $this->argument('postid');
         $post->facebook_id = $postId;
         $post->post_id = 0;
-
-        // Copy stats we're not pulling
-        if ($latest = PostStatSnapshot::where('facebook_id', $postId)->latest()->first()) {
-            $post->likes = $latest->likes;
-            $post->loves = $latest->loves;
-            $post->wows = $latest->wows;
-            $post->hahas = $latest->hahas;
-            $post->sads = $latest->sads;
-            $post->angrys = $latest->angrys;
-            $post->thankfuls = $latest->thankfuls;
-        } else {
-            $post->likes = 0;
-            $post->loves = 0;
-            $post->wows = 0;
-            $post->hahas = 0;
-            $post->sads = 0;
-            $post->angrys = 0;
-            $post->thankfuls = 0;
-        }
 
         // Impressions
         $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions', env('FACEBOOK_ACCESS_TOKEN'));
@@ -112,8 +93,6 @@ class GetPostStatsDelayed extends Command
         $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_viral_unique', env('FACEBOOK_ACCESS_TOKEN'));
         $post->uniques_viral = $response->getGraphEdge()[0]["values"][0]["value"];
         
-        $post->impressions_nonviral = 0;
-        $post->uniques_nonviral = 0;
         $post->save();
     }
 }
