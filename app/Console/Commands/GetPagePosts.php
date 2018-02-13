@@ -42,7 +42,7 @@ class GetPagePosts extends Command
         $api = new Facebook;
         $response = $api->get('/' . $this->argument('pageid') . '/posts/?limit=5', env('FACEBOOK_ACCESS_TOKEN'));
         foreach ($response->getGraphEdge() as $node) {
-            $postResponse = $api->get('/' . $node->getField('id') . '?fields=message,name,link,picture,type', env('FACEBOOK_ACCESS_TOKEN'));
+            $postResponse = $api->get('/' . $node->getField('id') . '?fields=message,name,link,picture,type,created_time', env('FACEBOOK_ACCESS_TOKEN'));
             $postId = explode("_", $postResponse->getGraphNode()->getField('id'))[1];
             $post = Post::firstOrNew(['facebook_id' => $postId]);
             $post->page_id = 0;
@@ -51,6 +51,7 @@ class GetPagePosts extends Command
             $post->link = $postResponse->getGraphNode()->getField('link');
             $post->picture = $postResponse->getGraphNode()->getField('picture');
             $post->type = $postResponse->getGraphNode()->getField('type');
+            $post->posted = $postResponse->getGraphNode()->getField('created_time');
             $post->save();
         }
 
