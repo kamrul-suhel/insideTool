@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Facebook\Facebook;
 use App\PostDelayedStatSnapshot;
+use App\Post;
 
 class GetPostStatsDelayed extends Command
 {
@@ -40,40 +41,43 @@ class GetPostStatsDelayed extends Command
     public function handle()
     {
         $api = new Facebook;
-        $post = new PostDelayedStatSnapshot;
+        $snapshot = new PostDelayedStatSnapshot;
         $postId = $this->argument('postid');
-        $post->facebook_id = $postId;
-        $post->post_id = 0;
+        $snapshot->facebook_id = $postId;
+        $post = Post::where(['facebook_id' => $postId])->first();
+        if ($post) {
+            $snapshot->post_id = $post->id;
 
-        try {
-            // Impressions
-            $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions', env('FACEBOOK_ACCESS_TOKEN'));
-            $post->impressions = $response->getGraphEdge()[0]["values"][0]["value"];
-            
-            // Unique impressions
-            $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_unique', env('FACEBOOK_ACCESS_TOKEN'));
-            $post->uniques = $response->getGraphEdge()[0]["values"][0]["value"];
+            try {
+                // Impressions
+                $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions', env('FACEBOOK_ACCESS_TOKEN'));
+                $snapshot->impressions = $response->getGraphEdge()[0]["values"][0]["value"];
+                
+                // Unique impressions
+                $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_unique', env('FACEBOOK_ACCESS_TOKEN'));
+                $snapshot->uniques = $response->getGraphEdge()[0]["values"][0]["value"];
 
-            // Fan impressions
-            $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_fan', env('FACEBOOK_ACCESS_TOKEN'));
-            $post->fan_impressions = $response->getGraphEdge()[0]["values"][0]["value"];
-            
-            // Fan uniques
-            $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_fan_unique', env('FACEBOOK_ACCESS_TOKEN'));
-            $post->fan_uniques = $response->getGraphEdge()[0]["values"][0]["value"];
+                // Fan impressions
+                $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_fan', env('FACEBOOK_ACCESS_TOKEN'));
+                $snapshot->fan_impressions = $response->getGraphEdge()[0]["values"][0]["value"];
+                
+                // Fan uniques
+                $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_fan_unique', env('FACEBOOK_ACCESS_TOKEN'));
+                $snapshot->fan_uniques = $response->getGraphEdge()[0]["values"][0]["value"];
 
-            // Viral impressions
-            $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_viral', env('FACEBOOK_ACCESS_TOKEN'));
-            $post->impressions_viral = $response->getGraphEdge()[0]["values"][0]["value"];
+                // Viral impressions
+                $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_viral', env('FACEBOOK_ACCESS_TOKEN'));
+                $snapshot->impressions_viral = $response->getGraphEdge()[0]["values"][0]["value"];
 
-            // Viral uniques
-            $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_viral_unique', env('FACEBOOK_ACCESS_TOKEN'));
-            $post->uniques_viral = $response->getGraphEdge()[0]["values"][0]["value"];
-            
-            $post->save();
-        } catch(\Facebook\Exceptions\FacebookResponseException $e) {
-            if ($e->getCode() == 100 && $e->getSubErrorCode() == 33) {
-                // Post has been deleted
+                // Viral uniques
+                $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_viral_unique', env('FACEBOOK_ACCESS_TOKEN'));
+                $snapshot->uniques_viral = $response->getGraphEdge()[0]["values"][0]["value"];
+                
+                $snapshot->save();
+            } catch(\Facebook\Exceptions\FacebookResponseException $e) {
+                if ($e->getCode() == 100 && $e->getSubErrorCode() == 33) {
+                    // Post has been deleted
+                }
             }
         }
     }
