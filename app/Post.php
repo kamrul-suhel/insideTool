@@ -11,14 +11,23 @@ class Post extends Model
      */
     public function pages()
     {
-        return $this->belongsToMany('App\Page');
+        return $this->belongsTo('App\Page');
     }
 
     /**
-     * Return pages associated with this post
+     * Return live stat snapshots
      */
     public function statSnapshots()
     {
         return $this->hasMany('App\PostStatSnapshot');
     }
+
+    /**
+     * Return delayed stat snapshots
+     */
+    public function delayedStatSnapshots()
+    {
+        return $this->hasMany('App\PostDelayedStatSnapshot');
+    }
+
 }
