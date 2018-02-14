@@ -14,7 +14,7 @@ class Post extends Model
     /**
      * Return pages associated with this post
      */
-    public function pages()
+    public function page()
     {
         return $this->belongsTo('App\Page');
     }

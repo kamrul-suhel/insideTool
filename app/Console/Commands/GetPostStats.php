@@ -88,6 +88,8 @@ class GetPostStats extends Command
                 if ($e->getCode() == 100 && $e->getSubErrorCode() == 33) {
                     // Post has been deleted
                     $post->delete();
+                } else {
+                    throw $e;
                 }
             }
             

@@ -45,7 +45,13 @@ class GetPagePosts extends Command
         foreach ($response->getGraphEdge() as $node) {
             $postResponse = $api->get('/' . $node->getField('id') . '?fields=message,name,link,picture,type,created_time', env('FACEBOOK_ACCESS_TOKEN'));
             $postId = explode("_", $postResponse->getGraphNode()->getField('id'))[1];
-            $post = Post::firstOrNew(['facebook_id' => $postId]);
+            $newPost = false;
+            $post = Post::withTrashed()->where('facebook_id', $postId)->first();
+            if (!$post) {
+                $post = new Post;
+                $post->facebook_id = $postId;
+                $newPost = true;
+            }
             $page = Page::where('facebook_id', $this->argument('pageid'))->firstOrFail();            
             $post->page_id = $page->id;
             $post->message = $postResponse->getGraphNode()->getField('message');
@@ -56,9 +62,11 @@ class GetPagePosts extends Command
             $post->posted = $postResponse->getGraphNode()->getField('created_time');
             $post->save();
 
-            // Immediately pull stats
-            \Artisan::call('stats:getpoststats', ['postid' => $postId]);
-            \Artisan::call('stats:getpoststatsdelayed', ['postid' => $postId]);
+            if ($newPost) {
+                // Immediately pull stats
+                \Artisan::call('stats:getpoststats', ['postid' => $postId]);
+                \Artisan::call('stats:getpoststatsdelayed', ['postid' => $postId]);
+            }
         }
 
     }
