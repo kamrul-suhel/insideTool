@@ -14,3 +14,8 @@
 Route::get('/', function () {
     return view('index');
 });
+
+Route::get('/pages', 'PageController@index');
+Route::model('post', 'App\Post');
+Route::get('/posts', 'PostController@index');
+Route::get('/posts/{post}', 'PostController@show');

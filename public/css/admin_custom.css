@@ -1,0 +1,13 @@
+.info-box-number-big {
+    font-size: 36px;
+}
+
+.post-image {
+    float: left;
+    margin-right: 2em;
+    width: 130px;
+}
+
+.row.top-margin-2 {
+    margin-top: 2em;
+}

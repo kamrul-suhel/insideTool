@@ -111,14 +111,14 @@ return [
         'FACEBOOK',
         [
             'text'        => 'Pages',
-            'url'         => 'admin/pages',
-            'icon'        => 'file',
+            'url'         => '/pages',
+            'icon'        => 'book',
             'label_color' => 'success',
         ],
         [
             'text'        => 'Posts',
-            'url'         => 'admin/posts',
-            'icon'        => 'file',
+            'url'         => '/posts',
+            'icon'        => 'thumb-tack',
             'label_color' => 'success',
         ],
     ],
