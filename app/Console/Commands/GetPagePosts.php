@@ -53,6 +53,10 @@ class GetPagePosts extends Command
             $post->type = $postResponse->getGraphNode()->getField('type');
             $post->posted = $postResponse->getGraphNode()->getField('created_time');
             $post->save();
+
+            // Immediately pull stats
+            \Artisan::call('stats:getpoststats', ['postid' => $postId]);
+            \Artisan::call('stats:getpoststatsdelayed', ['postid' => $postId]);
         }
 
     }
