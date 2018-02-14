@@ -67,11 +67,22 @@
             </div>
             <div class="row">
                 <div class="col-sm-10">
-                    <div class="info-box bg-maroon">
-                        <span class="info-box-icon"><i class="fa fa-heart"></i></span>
+                    <div class="info-box bg-green">
+                        <span class="info-box-icon"><i class="fa fa-share"></i></span>
                         <div class="info-box-content">
-                            <span class="info-box-text">Loves</span>
-                            <span class="info-box-number info-box-number-big">{{ number_format($liveLatest->loves) }}</span>
+                            <span class="info-box-text">Shares</span>
+                            <span class="info-box-number info-box-number-big">{{ number_format($liveLatest->shares) }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-10">
+                    <div class="info-box bg-purple">
+                        <span class="info-box-icon"><i class="fa fa-comment"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Comments</span>
+                            <span class="info-box-number info-box-number-big">{{ number_format($liveLatest->comments) }}</span>
                         </div>
                     </div>
                 </div>
@@ -89,7 +100,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-10">
-                    <div class="info-box bg-purple">
+                    <div class="info-box bg-olive">
                         <span class="info-box-icon"><i class="fa fa-hand-paper-o"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Hahas</span>
