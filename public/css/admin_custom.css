@@ -12,7 +12,18 @@
     margin-top: 2em;
 }
 
-tr.error.bg-red a {
-    color: #fff;
-    text-decoration: underline;
+tr.deleted-post.error {
+    background: #ffa3a3 !important;
+}
+
+tr.deleted-post.error:hover {
+    background: #ff9d9d !important;
+}
+
+tr.deleted-post.error a {
+    color: #660000 !important;
+}
+
+tr.deleted-post.error a:hover {
+    color: #a23333 !important;
 }

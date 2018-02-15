@@ -20,7 +20,7 @@
                     @foreach ($posts as $post)
                         <tr
                         @if (!is_null($post->deleted_at))
-                            class="error bg-red disabled color-palette"
+                            class="error deleted-post"
                         @endif
                         >
                             <td><strong>{{ $post->page->name }}</strong></td>
