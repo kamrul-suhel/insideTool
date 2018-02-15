@@ -18,7 +18,7 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
-        $latestStats = PostStatSnapshot::where('post_id', $post->id)->orderBy('id', 'DESC')->first();
+        $latestStats = PostStatSnapshot::where('post_id', $post->id)->where('likes', '>', 0)->orderBy('id', 'DESC')->first();
         return view('posts.show', ['post' => $post, 'liveLatest' => $latestStats]);
     }
 
@@ -41,7 +41,10 @@ class PostController extends Controller
 
         } else {
             if ($type == 'live') {
-                $snapshots = PostStatSnapshot::select(['created_at as x', $metric . ' as y'])->where('post_id', $post->id)->orderBy('id', 'DESC')->get();
+                $snapshots = PostStatSnapshot::select(['created_at as x', $metric . ' as y'])
+                    ->where('post_id', $post->id)
+                    ->where('likes', '>', 0)
+                    ->orderBy('id', 'DESC')->get();
             } else {
                 $snapshots = PostDelayedStatSnapshot::where('post_id', $post->id)->orderBy('id', 'DESC')->get();
             }
