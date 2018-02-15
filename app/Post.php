@@ -35,4 +35,20 @@ class Post extends Model
         return $this->hasMany('App\PostDelayedStatSnapshot');
     }
 
+    /**
+     * Static method to set hidden fields when serialising
+     */
+    public static function setHiddenFields($fields = []) {
+       static::$hiddenFields = $fields;
+    }
+
+    /**
+     * Set hidden fields when serialising
+     */
+    public function toJson($options = 0) {
+        $this->setHidden(static::$hiddenFields);
+        return parent::toJson($options);
+    }
+ 
+
 }

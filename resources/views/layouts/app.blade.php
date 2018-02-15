@@ -1,5 +1,3 @@
-{{-- resources/views/admin/dashboard.blade.php --}}
-
 @extends('adminlte::page')
 
 @section('title', 'UNILAD Insights')
@@ -17,5 +15,5 @@
 @stop
 
 @section('js')
-    <script> </script>
+    @yield('js')
 @stop

@@ -23,6 +23,8 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-12">
                     <div class="box">
                         <div class="box-header">
@@ -50,8 +52,26 @@
                         </div>
                     </div>
                 </div>
-
             </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">Charts</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <div class="chart">
+                                        <canvas id="myChart" width="650" height="350"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
         <div class="col-md-4">
             <div class="row">
@@ -136,4 +156,45 @@
     <div class="row">
         
     </div>
+@stop
+
+@push('js')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js"></script>
+@endpush
+
+@section('js')
+<script>
+    jQuery(function() {
+
+        var color = Chart.helpers.color;
+        $.ajax({
+            url: "/posts/{{ $post->id }}/snapshots/live/likes",
+            method: 'GET',
+            dataType: 'json',
+            success: function (d) {
+                var ctx = document.getElementById("myChart").getContext("2d");
+                var chart = new Chart(ctx, {
+                    'type' : 'line',
+                    'data' : {
+                        datasets: [{
+                            data: d.data,
+                            label: 'Likes',
+                            backgroundColor: color("rgb(54, 162, 235)").alpha(0.5).rgbString(),
+                            borderColor: "rgb(54, 162, 235)",
+                            fill: false
+                        }]
+                    },
+                    'options' : {
+                        scales: {
+                            xAxes: [{
+                                type: "time"
+                            }]
+                        }
+                    }
+                });
+        }
+    });
+
+    });
+    </script>
 @stop

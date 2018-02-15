@@ -19,3 +19,5 @@ Route::get('/pages', 'PageController@index');
 Route::model('post', 'App\Post');
 Route::get('/posts', 'PostController@index');
 Route::get('/posts/{post}', 'PostController@show');
+Route::get('/posts/{post}/snapshots/{type}/{metric}', 'PostController@jsonSnapshots')
+    ->where('metric', '(likes|loves|wows|hahas|sads|angrys|shares|comments)');
