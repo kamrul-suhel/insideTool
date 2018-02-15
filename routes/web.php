@@ -16,7 +16,9 @@ Route::get('/', function () {
 });
 
 Route::get('/pages', 'PageController@index');
-Route::model('post', 'App\Post');
+Route::bind('post', function($id, $route) {
+    return \App\Post::withTrashed()->find($id);
+});
 Route::get('/posts', 'PostController@index');
 Route::get('/posts/{post}', 'PostController@show');
 Route::get('/posts/{post}/snapshots/{type}/{metric}', 'PostController@jsonSnapshots')

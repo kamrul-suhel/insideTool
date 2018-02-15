@@ -18,7 +18,11 @@
                 </thead>
                 <tbody>
                     @foreach ($posts as $post)
-                        <tr>
+                        <tr
+                        @if (!is_null($post->deleted_at))
+                            class="error bg-red disabled color-palette"
+                        @endif
+                        >
                             <td><strong>{{ $post->page->name }}</strong></td>
                             <td>{{ title_case($post->type) }}</td>
                             <td><a href="/posts/{{ $post->id }}"><img src="{{ $post->picture }}" width="50"></a></td>

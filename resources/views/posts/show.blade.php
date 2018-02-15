@@ -36,8 +36,14 @@
                                     <table class="table">
                                         <tr>
                                             <th>Posted</th>
-                                            <td>{{ date("H:i:s, jS F Y", strtotime($post->posted)) }}</td>
+                                            <td>{{ date("H:i, jS F Y", strtotime($post->posted)) }}</td>
                                         </tr>
+                                        @if (!is_null($post->deleted_at))
+                                            <tr class="error bg-red disabled">
+                                                <th>Deleted</th>
+                                                <td>{{ date("H:i, jS F Y", strtotime($post->deleted_at)) }}</td>
+                                            </tr>
+                                        @endif
                                         <tr>
                                             <th>Page</th>
                                             <td>{{ $post->page->name }}</td>

@@ -12,7 +12,7 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::orderBy('posted', 'desc')->with('page')->get();
+        $posts = Post::withTrashed()->orderBy('posted', 'desc')->with('page')->get();
         return view('posts.index', ['posts' => $posts]);
     }
 

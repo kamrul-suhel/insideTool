@@ -11,3 +11,8 @@
 .row.top-margin-2 {
     margin-top: 2em;
 }
+
+tr.error.bg-red a {
+    color: #fff;
+    text-decoration: underline;
+}
