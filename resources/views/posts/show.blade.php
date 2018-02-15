@@ -35,6 +35,10 @@
                                 <div class="col-sm-10">
                                     <table class="table">
                                         <tr>
+                                            <th>Posted</th>
+                                            <td>{{ date("H:i:s, jS F Y", strtotime($post->posted)) }}</td>
+                                        </tr>
+                                        <tr>
                                             <th>Page</th>
                                             <td>{{ $post->page->name }}</td>
                                         </tr>
@@ -177,18 +181,28 @@
                     'type' : 'line',
                     'data' : {
                         datasets: [{
-                            data: d.data,
+                            data: d,
                             label: 'Likes',
-                            backgroundColor: color("rgb(54, 162, 235)").alpha(0.5).rgbString(),
+                            backgroundColor: color("rgb(54, 162 ,235)").alpha(0.5).rgbString(),
                             borderColor: "rgb(54, 162, 235)",
+                            borderWidth: 0,
                             fill: false
                         }]
                     },
                     'options' : {
+                        elements: {
+                            point: {
+                                radius: 0
+                            } 
+                        },
                         scales: {
                             xAxes: [{
                                 type: "time"
                             }]
+                        },
+                        tooltips: {
+                            mode: 'index',
+                            intersect: false,
                         }
                     }
                 });

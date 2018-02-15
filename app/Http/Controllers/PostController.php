@@ -24,21 +24,29 @@ class PostController extends Controller
 
     public function jsonSnapshots(Post $post, $type, $metric)
     {
-        if ($type == 'live') {
-            $snapshots = PostStatSnapshot::select(['created_at as x', $metric . ' as y'])->where('post_id', $post->id)->orderBy('id', 'DESC')->get();
-        } else if ($type == 'delayed') {
-            $snapshots = PostDelayedStatSnapshot::where('post_id', $post->id)->orderBy('id', 'DESC')->get();
-        } else {
-            $snapshots = ["error" => "invalid snapshot type"];
+        if (!in_array($type, ["live", "delayed"])) {
+            return response()->json(["error" => "invalid type, must be one of 'live', 'delayed'"]);
         }
 
-        $response = [
-            'labels' => [$snapshots->last()->x, 
-                $snapshots->get((int) floor(count($snapshots) / 2))->x,
-                $snapshots->first()->x],
-            'data' => $snapshots
-        ];
+        if ($metric == "all") {
+            if ($type == 'live') {
+                $snapshots = PostStatSnapshot::where('post_id', $post->id)->orderBy('id', 'DESC')->get();
+            } else {
+                $snapshots = PostDelayedStatSnapshot::where('post_id', $post->id)->orderBy('id', 'DESC')->get();
+            }
 
-        return response()->json($response);
+            $dropFields = ['id', 'post_id', 'facebook_id', 'updated_at'];
+
+            // foreach ($snapshots)
+
+        } else {
+            if ($type == 'live') {
+                $snapshots = PostStatSnapshot::select(['created_at as x', $metric . ' as y'])->where('post_id', $post->id)->orderBy('id', 'DESC')->get();
+            } else {
+                $snapshots = PostDelayedStatSnapshot::where('post_id', $post->id)->orderBy('id', 'DESC')->get();
+            }
+        }
+
+        return response()->json($snapshots);
     }
 }
