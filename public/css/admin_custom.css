@@ -27,3 +27,11 @@ tr.deleted-post.error a {
 tr.deleted-post.error a:hover {
     color: #a23333 !important;
 }
+
+.box-body.charts .charts-col {
+    text-align: center;
+}
+
+.box-body.charts canvas {
+    border: 1px solid #f0f0f0;
+}

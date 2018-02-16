@@ -6,7 +6,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-9">
             <div class="row">
                 <div class="col-md-12">
                     <div class="box box-primary">
@@ -32,7 +32,7 @@
                         </div>
                         <div class="box-body">
                             <div class="row">
-                                <div class="col-sm-10">
+                                <div class="col-sm-12">
                                     <table class="table">
                                         <tr>
                                             <th>Posted</th>
@@ -78,7 +78,7 @@
                             <div class="row">
                                 <div class="col-sm-12 chart-col">
                                     <div class="chart">
-                                        <canvas id="chart-lcs" width="650" height="250"></canvas>
+                                        <canvas id="chart-lcs" width="650" height="300"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -86,11 +86,10 @@
                     </div>
                 </div>
             </div>
-
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="row">
-                <div class="col-md-10">
+                <div class="col-sm-12">
                     <div class="info-box bg-aqua">
                         <span class="info-box-icon"><i class="fa fa-thumbs-o-up"></i></span>
                         <div class="info-box-content">
@@ -101,7 +100,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-10">
+                <div class="col-sm-12">
                     <div class="info-box bg-green">
                         <span class="info-box-icon"><i class="fa fa-share"></i></span>
                         <div class="info-box-content">
@@ -112,7 +111,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-10">
+                <div class="col-sm-12">
                     <div class="info-box bg-purple">
                         <span class="info-box-icon"><i class="fa fa-comment"></i></span>
                         <div class="info-box-content">
@@ -123,7 +122,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-10">
+                <div class="col-sm-12">
                     <div class="info-box bg-maroon">
                         <span class="info-box-icon"><i class="fa fa-heart"></i></span>
                         <div class="info-box-content">
@@ -134,7 +133,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-10">
+                <div class="col-sm-12">
                     <div class="info-box bg-yellow">
                         <span class="info-box-icon"><i class="fa fa-exclamation"></i></span>
                         <div class="info-box-content">
@@ -145,7 +144,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-10">
+                <div class="col-sm-12">
                     <div class="info-box bg-teal">
                         <span class="info-box-icon"><i class="fa fa-hand-paper-o"></i></span>
                         <div class="info-box-content">
@@ -156,7 +155,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-10">
+                <div class="col-sm-12">
                     <div class="info-box bg-blue">
                         <span class="info-box-icon"><i class="fa fa-frown-o"></i></span>
                         <div class="info-box-content">
@@ -167,7 +166,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-10">
+                <div class="col-sm-12">
                     <div class="info-box bg-red">
                         <span class="info-box-icon"><i class="fa fa-at"></i></span>
                         <div class="info-box-content">
@@ -178,9 +177,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        
     </div>
 @stop
 
@@ -244,6 +240,11 @@
                         tooltips: {
                             mode: 'index',
                             intersect: false
+                        },
+                        legend: {
+                            labels: {
+                                fontStyle: 'bold'
+                            }
                         }
                     }
                 });
