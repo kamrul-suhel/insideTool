@@ -74,11 +74,11 @@
                         <div class="box-header">
                             <h3 class="box-title">Charts</h3>
                         </div>
-                        <div class="box-body">
+                        <div class="box-body charts">
                             <div class="row">
-                                <div class="col-sm-10">
+                                <div class="col-sm-12 chart-col">
                                     <div class="chart">
-                                        <canvas id="myChart" width="650" height="350"></canvas>
+                                        <canvas id="chart-lcs" width="650" height="250"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -123,6 +123,17 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-md-10">
+                    <div class="info-box bg-maroon">
+                        <span class="info-box-icon"><i class="fa fa-heart"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Loves</span>
+                            <span class="info-box-number info-box-number-big">{{ number_format($liveLatest->loves) }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-sm-10">
                     <div class="info-box bg-yellow">
                         <span class="info-box-icon"><i class="fa fa-exclamation"></i></span>
@@ -135,7 +146,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-10">
-                    <div class="info-box bg-olive">
+                    <div class="info-box bg-teal">
                         <span class="info-box-icon"><i class="fa fa-hand-paper-o"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Hahas</span>
@@ -187,7 +198,7 @@
             method: 'GET',
             dataType: 'json',
             success: function (d) {
-                var ctx = document.getElementById("myChart").getContext("2d");
+                var ctx = document.getElementById("chart-lcs").getContext("2d");
                 var chart = new Chart(ctx, {
                     'type' : 'line',
                     'data' : {
