@@ -38,10 +38,22 @@ class PostController extends Controller
                 $snapshots = PostDelayedStatSnapshot::where('post_id', $post->id)->orderBy('id', 'DESC')->get();
             }
 
-            $dropFields = ['id', 'post_id', 'facebook_id', 'updated_at'];
+            $fields = ['likes', 'shares', 'comments', 'loves', 'hahas', 'wows', 'sads', 'angrys'];
 
-            // foreach ($snapshots)
+            $response = [];
 
+            if ($snapshots) {
+                foreach ($fields as $field) {
+                    foreach ($snapshots as $snapshot) {
+                        $response[$field][] = [
+                            "x" => (string) $snapshot->created_at,
+                            "y" => $snapshot->$field
+                        ];
+                    }
+                }
+            }
+            
+            return response()->json($response);
         } else {
             if ($type == 'live') {
                 $snapshots = PostStatSnapshot::select(['created_at as x', $metric . ' as y'])

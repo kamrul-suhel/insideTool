@@ -183,7 +183,7 @@
 
         var color = Chart.helpers.color;
         $.ajax({
-            url: "/posts/{{ $post->id }}/snapshots/live/likes",
+            url: "/posts/{{ $post->id }}/snapshots/live/all",
             method: 'GET',
             dataType: 'json',
             success: function (d) {
@@ -192,10 +192,26 @@
                     'type' : 'line',
                     'data' : {
                         datasets: [{
-                            data: d,
+                            data: d.likes,
                             label: 'Likes',
-                            backgroundColor: color("rgb(54, 162 ,235)").alpha(0.5).rgbString(),
-                            borderColor: "rgb(54, 162, 235)",
+                            backgroundColor: color("rgb(0, 192 ,239)").alpha(0.5).rgbString(),
+                            borderColor: "rgb(0, 192, 239)",
+                            borderWidth: 0,
+                            fill: false
+                        },
+                        {
+                            data: d.shares,
+                            label: 'Shares',
+                            backgroundColor: color("rgb(0, 166 ,90)").alpha(0.5).rgbString(),
+                            borderColor: "rgb(0, 166, 90)",
+                            borderWidth: 0,
+                            fill: false
+                        },
+                        {
+                            data: d.comments,
+                            label: 'Comments',
+                            backgroundColor: color("rgb(96, 92 ,168)").alpha(0.5).rgbString(),
+                            borderColor: "rgb(96, 92, 168)",
                             borderWidth: 0,
                             fill: false
                         }]
