@@ -19,6 +19,9 @@ class PostController extends Controller
     public function show(Post $post)
     {
         $latestStats = PostStatSnapshot::where('post_id', $post->id)->where('likes', '>', 0)->orderBy('id', 'DESC')->first();
+        if (!$latestStats) {
+            $latestStats = new PostStatSnapshot;
+        }
         return view('posts.show', ['post' => $post, 'liveLatest' => $latestStats]);
     }
 
