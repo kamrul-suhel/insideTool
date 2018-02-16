@@ -54,8 +54,13 @@
                                         </tr>
                                         <tr>
                                             <th>Link</th>
-                                            <td><a href="{{ $post->link }}">{{ $post->link }}</a></td>
+                                            <td><a target="_blank" href="{{ $post->link }}">{{ $post->link }}</a></td>
                                         </tr>
+                                        <tr>
+                                            <th>Facebook</th>
+                                            <td><a target="_blank" href="https://facebook.com/{{ $post->page->facebook_id }}/posts/{{ $post->facebook_id }}">Link</a></td>
+                                        </tr>
+
                                     </table>
                                 </div>
                             </div>
