@@ -227,9 +227,12 @@
                                 type: "time"
                             }]
                         },
+                        hover: {
+                            intersect: false
+                        },
                         tooltips: {
                             mode: 'index',
-                            intersect: false,
+                            intersect: false
                         }
                     }
                 });
