@@ -367,7 +367,7 @@
                             data: d.wows,
                             label: 'Wows',
                             backgroundColor: color("rgb(243, 156, 18)").alpha(0.5).rgbString(),
-                            borderColor: "rgb(0, 166, 90)",
+                            borderColor: "rgb(0, 156, 90)",
                             borderWidth: 0,
                             fill: false
                         },
