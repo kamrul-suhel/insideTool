@@ -21,5 +21,5 @@ Route::bind('post', function($id, $route) {
 });
 Route::get('/posts', 'PostController@index');
 Route::get('/posts/{post}', 'PostController@show');
-Route::get('/posts/{post}/snapshots/{type}/{metric}', 'PostController@jsonSnapshots')
+Route::get('/posts/{post}/snapshots/{type}/{metric}/{birth?}', 'PostController@jsonSnapshots')
     ->where('metric', '(all|likes|loves|wows|hahas|sads|angrys|shares|comments)');

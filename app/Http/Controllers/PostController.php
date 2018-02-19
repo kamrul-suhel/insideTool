@@ -25,7 +25,7 @@ class PostController extends Controller
         return view('posts.show', ['post' => $post, 'liveLatest' => $latestStats]);
     }
 
-    public function jsonSnapshots(Post $post, $type, $metric)
+    public function jsonSnapshots(Post $post, $type, $metric, $birth = false)
     {
         if (!in_array($type, ["live", "delayed"])) {
             return response()->json(["error" => "invalid type, must be one of 'live', 'delayed'"]);
@@ -33,7 +33,19 @@ class PostController extends Controller
 
         if ($metric == "all") {
             if ($type == 'live') {
-                $snapshots = PostStatSnapshot::where('post_id', $post->id)->orderBy('id', 'DESC')->get();
+                if ($birth) {
+                    $birthEndDate = new \Carbon\Carbon($post->posted);
+                    $birthEndDate = $birthEndDate->addMinutes(5)->format('Y-m-d H:i:s');
+                    $snapshots = PostStatSnapshot::where('post_id', $post->id)
+                        ->whereRaw('created_at BETWEEN \'' . $post->posted . '\' AND \'' . $birthEndDate . '\'')
+                        ->where('likes', '>', 0)
+                        ->orderBy('id', 'DESC')
+                        ->get();
+                } else {
+                    $snapshots = PostStatSnapshot::where('post_id', $post->id)
+                    ->where('likes', '>', 0)
+                    ->orderBy('id', 'DESC')->get();
+                }
             } else {
                 $snapshots = PostDelayedStatSnapshot::where('post_id', $post->id)->orderBy('id', 'DESC')->get();
             }

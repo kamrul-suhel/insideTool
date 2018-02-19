@@ -77,8 +77,21 @@
                         <div class="box-body charts">
                             <div class="row">
                                 <div class="col-sm-12 chart-col">
+                                    <h3>Likes, comments, and shares <small>Post lifetime</small></h3>
                                     <div class="chart">
                                         <canvas id="chart-lcs" width="650" height="300"></canvas>
+                                    </div>
+                                    <h3>Reactions <small>Post lifetime</small></h3>
+                                    <div class="chart">
+                                        <canvas id="chart-reactions" width="650" height="300"></canvas>
+                                    </div>
+                                    <h3>Likes, comments, and shares <small>First 5 minutes</small></h3>
+                                    <div class="chart">
+                                        <canvas id="chart-lcs-birth" width="650" height="300"></canvas>
+                                    </div>
+                                    <h3>Reactions <small>First 5 minutes</small></h3>
+                                    <div class="chart">
+                                        <canvas id="chart-reactions-birth" width="650" height="300"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -194,8 +207,8 @@
             method: 'GET',
             dataType: 'json',
             success: function (d) {
-                var ctx = document.getElementById("chart-lcs").getContext("2d");
-                var chart = new Chart(ctx, {
+                var lcsctx = document.getElementById("chart-lcs").getContext("2d");
+                var lcschart = new Chart(lcsctx, {
                     'type' : 'line',
                     'data' : {
                         datasets: [{
@@ -248,8 +261,213 @@
                         }
                     }
                 });
-        }
-    });
+
+                var reactionsctx = document.getElementById("chart-reactions").getContext("2d");
+                var reactionschart = new Chart(reactionsctx, {
+                    'type' : 'line',
+                    'data' : {
+                        datasets: [{
+                            data: d.loves,
+                            label: 'Loves',
+                            backgroundColor: color("rgb(216, 27, 96)").alpha(0.5).rgbString(),
+                            borderColor: "rgb(216, 27, 96)",
+                            borderWidth: 0,
+                            fill: false
+                        },
+                        {
+                            data: d.wows,
+                            label: 'Wows',
+                            backgroundColor: color("rgb(243, 156, 18)").alpha(0.5).rgbString(),
+                            borderColor: "rgb(0, 166, 90)",
+                            borderWidth: 0,
+                            fill: false
+                        },
+                        {
+                            data: d.hahas,
+                            label: 'Hahas',
+                            backgroundColor: color("rgb(57, 204 ,204)").alpha(0.5).rgbString(),
+                            borderColor: "rgb(57, 204, 204)",
+                            borderWidth: 0,
+                            fill: false
+                        },
+                        {
+                            data: d.sads,
+                            label: 'Sads',
+                            backgroundColor: color("rgb(0, 185 ,183)").alpha(0.5).rgbString(),
+                            borderColor: "rgb(0, 185, 183)",
+                            borderWidth: 0,
+                            fill: false
+                        },
+                        {
+                            data: d.angrys,
+                            label: 'Angrys',
+                            backgroundColor: color("rgb(221, 75, 157)").alpha(0.5).rgbString(),
+                            borderColor: "rgb(221, 75, 157)",
+                            borderWidth: 0,
+                            fill: false
+                        }
+                        ]
+                    },
+                    'options' : {
+                        elements: {
+                            point: {
+                                radius: 0
+                            } 
+                        },
+                        scales: {
+                            xAxes: [{
+                                type: "time"
+                            }]
+                        },
+                        hover: {
+                            intersect: false
+                        },
+                        tooltips: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        legend: {
+                            labels: {
+                                fontStyle: 'bold'
+                            }
+                        }
+                    }
+                });
+            }
+        });
+        $.ajax({
+            url: "/posts/{{ $post->id }}/snapshots/live/all/birth",
+            method: 'GET',
+            dataType: 'json',
+            success: function (d) {
+                var lcsctx = document.getElementById("chart-lcs-birth").getContext("2d");
+                var lcschart = new Chart(lcsctx, {
+                    'type' : 'line',
+                    'data' : {
+                        datasets: [{
+                            data: d.likes,
+                            label: 'Likes',
+                            backgroundColor: color("rgb(0, 192 ,239)").alpha(0.5).rgbString(),
+                            borderColor: "rgb(0, 192, 239)",
+                            borderWidth: 0,
+                            fill: false
+                        },
+                        {
+                            data: d.shares,
+                            label: 'Shares',
+                            backgroundColor: color("rgb(0, 166 ,90)").alpha(0.5).rgbString(),
+                            borderColor: "rgb(0, 166, 90)",
+                            borderWidth: 0,
+                            fill: false
+                        },
+                        {
+                            data: d.comments,
+                            label: 'Comments',
+                            backgroundColor: color("rgb(96, 92 ,168)").alpha(0.5).rgbString(),
+                            borderColor: "rgb(96, 92, 168)",
+                            borderWidth: 0,
+                            fill: false
+                        }]
+                    },
+                    'options' : {
+                        elements: {
+                            point: {
+                                radius: 0
+                            } 
+                        },
+                        scales: {
+                            xAxes: [{
+                                type: "time"
+                            }]
+                        },
+                        hover: {
+                            intersect: false
+                        },
+                        tooltips: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        legend: {
+                            labels: {
+                                fontStyle: 'bold'
+                            }
+                        }
+                    }
+                });
+
+                var reactionsctx = document.getElementById("chart-reactions-birth").getContext("2d");
+                var reactionschart = new Chart(reactionsctx, {
+                    'type' : 'line',
+                    'data' : {
+                        datasets: [{
+                            data: d.loves,
+                            label: 'Loves',
+                            backgroundColor: color("rgb(216, 27, 96)").alpha(0.5).rgbString(),
+                            borderColor: "rgb(216, 27, 96)",
+                            borderWidth: 0,
+                            fill: false
+                        },
+                        {
+                            data: d.wows,
+                            label: 'Wows',
+                            backgroundColor: color("rgb(243, 156, 18)").alpha(0.5).rgbString(),
+                            borderColor: "rgb(0, 166, 90)",
+                            borderWidth: 0,
+                            fill: false
+                        },
+                        {
+                            data: d.hahas,
+                            label: 'Hahas',
+                            backgroundColor: color("rgb(57, 204 ,204)").alpha(0.5).rgbString(),
+                            borderColor: "rgb(57, 204, 204)",
+                            borderWidth: 0,
+                            fill: false
+                        },
+                        {
+                            data: d.sads,
+                            label: 'Sads',
+                            backgroundColor: color("rgb(0, 185 ,183)").alpha(0.5).rgbString(),
+                            borderColor: "rgb(0, 185, 183)",
+                            borderWidth: 0,
+                            fill: false
+                        },
+                        {
+                            data: d.angrys,
+                            label: 'Angrys',
+                            backgroundColor: color("rgb(221, 75, 157)").alpha(0.5).rgbString(),
+                            borderColor: "rgb(221, 75, 157)",
+                            borderWidth: 0,
+                            fill: false
+                        }
+                        ]
+                    },
+                    'options' : {
+                        elements: {
+                            point: {
+                                radius: 0
+                            } 
+                        },
+                        scales: {
+                            xAxes: [{
+                                type: "time"
+                            }]
+                        },
+                        hover: {
+                            intersect: false
+                        },
+                        tooltips: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        legend: {
+                            labels: {
+                                fontStyle: 'bold'
+                            }
+                        }
+                    }
+                });
+            }
+        });
 
     });
     </script>
