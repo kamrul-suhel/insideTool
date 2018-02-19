@@ -201,6 +201,31 @@
 <script>
     jQuery(function() {
 
+        var lineOptions = {
+            elements: {
+                point: {
+                    radius: 0
+                } 
+            },
+            scales: {
+                xAxes: [{
+                    type: "time"
+                }]
+            },
+            hover: {
+                intersect: false
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false
+            },
+            legend: {
+                labels: {
+                    fontStyle: 'bold'
+                }
+            }
+        };
+
         var color = Chart.helpers.color;
         $.ajax({
             url: "/posts/{{ $post->id }}/snapshots/live/all",
@@ -236,30 +261,7 @@
                             fill: false
                         }]
                     },
-                    'options' : {
-                        elements: {
-                            point: {
-                                radius: 0
-                            } 
-                        },
-                        scales: {
-                            xAxes: [{
-                                type: "time"
-                            }]
-                        },
-                        hover: {
-                            intersect: false
-                        },
-                        tooltips: {
-                            mode: 'index',
-                            intersect: false
-                        },
-                        legend: {
-                            labels: {
-                                fontStyle: 'bold'
-                            }
-                        }
-                    }
+                    'options' : lineOptions
                 });
 
                 var reactionsctx = document.getElementById("chart-reactions").getContext("2d");
@@ -308,30 +310,7 @@
                         }
                         ]
                     },
-                    'options' : {
-                        elements: {
-                            point: {
-                                radius: 0
-                            } 
-                        },
-                        scales: {
-                            xAxes: [{
-                                type: "time"
-                            }]
-                        },
-                        hover: {
-                            intersect: false
-                        },
-                        tooltips: {
-                            mode: 'index',
-                            intersect: false
-                        },
-                        legend: {
-                            labels: {
-                                fontStyle: 'bold'
-                            }
-                        }
-                    }
+                    'options' : lineOptions
                 });
             }
         });
@@ -369,30 +348,7 @@
                             fill: false
                         }]
                     },
-                    'options' : {
-                        elements: {
-                            point: {
-                                radius: 0
-                            } 
-                        },
-                        scales: {
-                            xAxes: [{
-                                type: "time"
-                            }]
-                        },
-                        hover: {
-                            intersect: false
-                        },
-                        tooltips: {
-                            mode: 'index',
-                            intersect: false
-                        },
-                        legend: {
-                            labels: {
-                                fontStyle: 'bold'
-                            }
-                        }
-                    }
+                    'options' : lineOptions
                 });
 
                 var reactionsctx = document.getElementById("chart-reactions-birth").getContext("2d");
@@ -441,30 +397,7 @@
                         }
                         ]
                     },
-                    'options' : {
-                        elements: {
-                            point: {
-                                radius: 0
-                            } 
-                        },
-                        scales: {
-                            xAxes: [{
-                                type: "time"
-                            }]
-                        },
-                        hover: {
-                            intersect: false
-                        },
-                        tooltips: {
-                            mode: 'index',
-                            intersect: false
-                        },
-                        legend: {
-                            labels: {
-                                fontStyle: 'bold'
-                            }
-                        }
-                    }
+                    'options' : lineOptions
                 });
             }
         });
