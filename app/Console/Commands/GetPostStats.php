@@ -72,10 +72,6 @@ class GetPostStats extends Command
                 // Angry count
                 $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=ANGRY&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
                 $snapshot->angrys = $response->getDecodedBody()["summary"]["total_count"];
-
-                // Thankful count
-                $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=THANKFUL&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
-                $snapshot->thankfuls = $response->getDecodedBody()["summary"]["total_count"];
                 
                 // Comment count
                 $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/comments/?summary=1', env('FACEBOOK_ACCESS_TOKEN'));
@@ -87,6 +83,9 @@ class GetPostStats extends Command
             } catch(\Facebook\Exceptions\FacebookResponseException $e) {
                 if ($e->getCode() == 100 && $e->getSubErrorCode() == 33) {
                     // Post has been deleted
+                    $post->delete();
+                } else {
+                    throw $e;
                 }
             }
             

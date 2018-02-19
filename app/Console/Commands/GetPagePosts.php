@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Facebook\Facebook;
 use App\Post;
+use App\Page;
 
 class GetPagePosts extends Command
 {
@@ -44,8 +45,15 @@ class GetPagePosts extends Command
         foreach ($response->getGraphEdge() as $node) {
             $postResponse = $api->get('/' . $node->getField('id') . '?fields=message,name,link,picture,type,created_time', env('FACEBOOK_ACCESS_TOKEN'));
             $postId = explode("_", $postResponse->getGraphNode()->getField('id'))[1];
-            $post = Post::firstOrNew(['facebook_id' => $postId]);
-            $post->page_id = 0;
+            $newPost = false;
+            $post = Post::withTrashed()->where('facebook_id', $postId)->first();
+            if (!$post) {
+                $post = new Post;
+                $post->facebook_id = $postId;
+                $newPost = true;
+            }
+            $page = Page::where('facebook_id', $this->argument('pageid'))->firstOrFail();            
+            $post->page_id = $page->id;
             $post->message = $postResponse->getGraphNode()->getField('message');
             $post->name = $postResponse->getGraphNode()->getField('name');
             $post->link = $postResponse->getGraphNode()->getField('link');
@@ -53,6 +61,12 @@ class GetPagePosts extends Command
             $post->type = $postResponse->getGraphNode()->getField('type');
             $post->posted = $postResponse->getGraphNode()->getField('created_time');
             $post->save();
+
+            if ($newPost) {
+                // Immediately pull stats
+                \Artisan::call('stats:getpoststats', ['postid' => $postId]);
+                \Artisan::call('stats:getpoststatsdelayed', ['postid' => $postId]);
+            }
         }
 
     }

@@ -1,0 +1,37 @@
+.info-box-number-big {
+    font-size: 36px;
+}
+
+.post-image {
+    float: left;
+    margin-right: 2em;
+    width: 130px;
+}
+
+.row.top-margin-2 {
+    margin-top: 2em;
+}
+
+tr.deleted-post.error {
+    background: #ffa3a3 !important;
+}
+
+tr.deleted-post.error:hover {
+    background: #ff9d9d !important;
+}
+
+tr.deleted-post.error a {
+    color: #660000 !important;
+}
+
+tr.deleted-post.error a:hover {
+    color: #a23333 !important;
+}
+
+.box-body.charts .charts-col {
+    text-align: center;
+}
+
+.box-body.charts canvas {
+    border: 1px solid #f0f0f0;
+}

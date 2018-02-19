@@ -3,15 +3,18 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Post extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = ['facebook_id'];
 
     /**
      * Return pages associated with this post
      */
-    public function pages()
+    public function page()
     {
         return $this->belongsTo('App\Page');
     }
@@ -31,5 +34,21 @@ class Post extends Model
     {
         return $this->hasMany('App\PostDelayedStatSnapshot');
     }
+
+    /**
+     * Static method to set hidden fields when serialising
+     */
+    public static function setHiddenFields($fields = []) {
+       static::$hiddenFields = $fields;
+    }
+
+    /**
+     * Set hidden fields when serialising
+     */
+    public function toJson($options = 0) {
+        $this->setHidden(static::$hiddenFields);
+        return parent::toJson($options);
+    }
+ 
 
 }

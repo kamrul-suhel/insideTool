@@ -77,6 +77,9 @@ class GetPostStatsDelayed extends Command
             } catch(\Facebook\Exceptions\FacebookResponseException $e) {
                 if ($e->getCode() == 100 && $e->getSubErrorCode() == 33) {
                     // Post has been deleted
+                    $post->delete();
+                } else {
+                    throw $e;
                 }
             }
         }
