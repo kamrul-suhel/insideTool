@@ -35,3 +35,7 @@ tr.deleted-post.error a:hover {
 .box-body.charts canvas {
     border: 1px solid #f0f0f0;
 }
+
+[v-cloak] {
+    display: none;
+}

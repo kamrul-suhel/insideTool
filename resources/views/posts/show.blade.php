@@ -100,14 +100,14 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3" id="metrics">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="info-box bg-aqua">
                         <span class="info-box-icon"><i class="fa fa-thumbs-o-up"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Likes</span>
-                            <span class="info-box-number info-box-number-big">{{ number_format($liveLatest->likes) }}</span>
+                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.likes }}</span>
                         </div>
                     </div>
                 </div>
@@ -118,7 +118,7 @@
                         <span class="info-box-icon"><i class="fa fa-share"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Shares</span>
-                            <span class="info-box-number info-box-number-big">{{ number_format($liveLatest->shares) }}</span>
+                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.shares }}</span>
                         </div>
                     </div>
                 </div>
@@ -129,7 +129,7 @@
                         <span class="info-box-icon"><i class="fa fa-comment"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Comments</span>
-                            <span class="info-box-number info-box-number-big">{{ number_format($liveLatest->comments) }}</span>
+                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.comments }}</span>
                         </div>
                     </div>
                 </div>
@@ -140,7 +140,7 @@
                         <span class="info-box-icon"><i class="fa fa-heart"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Loves</span>
-                            <span class="info-box-number info-box-number-big">{{ number_format($liveLatest->loves) }}</span>
+                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.loves }}</span>
                         </div>
                     </div>
                 </div>
@@ -151,7 +151,7 @@
                         <span class="info-box-icon"><i class="fa fa-exclamation"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Wows</span>
-                            <span class="info-box-number info-box-number-big">{{ number_format($liveLatest->wows) }}</span>
+                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.wows }}</span>
                         </div>
                     </div>
                 </div>
@@ -162,7 +162,7 @@
                         <span class="info-box-icon"><i class="fa fa-hand-paper-o"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Hahas</span>
-                            <span class="info-box-number info-box-number-big">{{ number_format($liveLatest->hahas) }}</span>
+                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.hahas }}</span>
                         </div>
                     </div>
                 </div>
@@ -173,7 +173,7 @@
                         <span class="info-box-icon"><i class="fa fa-frown-o"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Sads</span>
-                            <span class="info-box-number info-box-number-big">{{ number_format($liveLatest->sads) }}</span>
+                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.sads }}</span>
                         </div>
                     </div>
                 </div>
@@ -184,7 +184,7 @@
                         <span class="info-box-icon"><i class="fa fa-at"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Angrys</span>
-                            <span class="info-box-number info-box-number-big">{{ number_format($liveLatest->angrys) }}</span>
+                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.angrys }}</span>
                         </div>
                     </div>
                 </div>
@@ -194,11 +194,45 @@
 @stop
 
 @push('js')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.7.1/dist/Chart.bundle.min.js"></script>
 @endpush
 
 @section('js')
 <script>
+
+    new Vue({
+        el: '#metrics',
+        data: {
+            metrics: {
+                likes: {{ $liveLatest->likes }},
+                shares: {{ $liveLatest->shares }},
+                comments: {{ $liveLatest->comments }},
+                loves: {{ $liveLatest->loves }},
+                wows: {{ $liveLatest->wows }},
+                hahas: {{ $liveLatest->hahas}},
+                sads: {{ $liveLatest->sads }},
+                angrys: {{ $liveLatest->angrys }}
+            }
+        },
+        methods: {
+            loadData: function () {
+                $.get('/posts/{{ $post->id }}/snapshots/latest/all', function (response) {
+                    this.metrics = response.metrics;
+                }.bind(this));
+            }
+        },
+        ready: function () {
+            this.loadData();
+
+            setInterval(function () {
+                this.loadData();
+            }.bind(this),1000); 
+        }
+    });
+
+
+
     jQuery(function() {
 
         var lineOptions = {

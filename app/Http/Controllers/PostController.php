@@ -27,8 +27,8 @@ class PostController extends Controller
 
     public function jsonSnapshots(Post $post, $type, $metric, $birth = false)
     {
-        if (!in_array($type, ["live", "delayed"])) {
-            return response()->json(["error" => "invalid type, must be one of 'live', 'delayed'"]);
+        if (!in_array($type, ["live", "delayed", "latest"])) {
+            return response()->json(["error" => "invalid type, must be one of 'live', 'delayed', 'latest"]);
         }
 
         if ($metric == "all") {
@@ -46,6 +46,11 @@ class PostController extends Controller
                     ->where('likes', '>', 0)
                     ->orderBy('id', 'DESC')->get();
                 }
+            } else if ($type == 'latest') {
+                $snapshot = PostStatSnapshot::select(['likes', 'shares', 'comments', 'loves', 'hahas', 'wows', 'sads', 'angrys'])
+                    ->orderBy('id', 'DESC')
+                    ->first();
+                return response()->json($snapshot);
             } else {
                 $snapshots = PostDelayedStatSnapshot::where('post_id', $post->id)->orderBy('id', 'DESC')->get();
             }
