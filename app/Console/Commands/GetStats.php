@@ -42,7 +42,7 @@ class GetStats extends Command
         $to = new \Carbon\Carbon($this->option('to'));
         $type = $this->option('type');
 
-        $posts = Post::whereBetween('posted', [$from, $to])->get();
+        $posts = Post::whereBetween('posted', [$from, $to])->orderBy('id', 'DESC')->get();
         if ($type == 'live') {
             foreach ($posts as $post) {
                 \Artisan::call('stats:getpoststats', ['postid' => $post->facebook_id]);
