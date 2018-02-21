@@ -194,7 +194,7 @@
 @stop
 
 @push('js')
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.7.1/dist/Chart.bundle.min.js"></script>
 @endpush
 

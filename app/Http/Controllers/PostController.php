@@ -47,7 +47,8 @@ class PostController extends Controller
                     ->orderBy('id', 'DESC')->get();
                 }
             } else if ($type == 'latest') {
-                $snapshot = PostStatSnapshot::select(['likes', 'shares', 'comments', 'loves', 'hahas', 'wows', 'sads', 'angrys'])
+                $snapshot = PostStatSnapshot::select('likes', 'shares', 'comments', 'loves', 'hahas', 'wows', 'sads', 'angrys')
+                    ->where('post_id', $post->id)
                     ->orderBy('id', 'DESC')
                     ->first();
                 return response()->json($snapshot);
