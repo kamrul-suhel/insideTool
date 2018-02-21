@@ -218,16 +218,16 @@
         methods: {
             loadData: function () {
                 $.get('/posts/{{ $post->id }}/snapshots/latest/all', function (response) {
-                    this.metrics = response.metrics;
+                    this.metrics = response;
                 }.bind(this));
             }
         },
-        ready: function () {
+        mounted: function () {
             this.loadData();
 
             setInterval(function () {
                 this.loadData();
-            }.bind(this),1000); 
+            }.bind(this),10000); 
         }
     });
 
