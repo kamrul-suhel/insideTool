@@ -227,7 +227,7 @@
 
             setInterval(function () {
                 this.loadData();
-            }.bind(this),10000); 
+            }.bind(this),1000); 
         }
     });
 
@@ -313,7 +313,7 @@
                         {
                             data: d.wows,
                             label: 'Wows',
-                            backgroundColor: color("rgb(243, 156, 18)").alpha(0.5).rgbString(),
+                            backgroundColor: color("rgb(0, 166 ,90)").alpha(0.5).rgbString(),
                             borderColor: "rgb(0, 166, 90)",
                             borderWidth: 0,
                             fill: false
@@ -400,8 +400,8 @@
                         {
                             data: d.wows,
                             label: 'Wows',
-                            backgroundColor: color("rgb(243, 156, 18)").alpha(0.5).rgbString(),
-                            borderColor: "rgb(0, 156, 90)",
+                            backgroundColor: color("rgb(0, 166 ,90)").alpha(0.5).rgbString(),
+                            borderColor: "rgb(0, 166, 90)",
                             borderWidth: 0,
                             fill: false
                         },
