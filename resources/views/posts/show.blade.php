@@ -70,29 +70,30 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="box">
-                        <div class="box-header">
-                            <h3 class="box-title">Charts</h3>
-                        </div>
-                        <div class="box-body charts">
-                            <div class="row">
-                                <div class="col-sm-12 chart-col">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#lcs" data-toggle="tab"><i class="fa fa-thumbs-up"></i>&nbsp;&nbsp;<i class="fa fa-share"></i>&nbsp;&nbsp;<i class="fa fa-comment"></i></a></li>
+                            <li><a href="#reactions" data-toggle="tab"><i class="fa fa-heart"></i>&nbsp;&nbsp;<i class="fa fa-exclamation"></i>&nbsp;&nbsp;<i class="fa fa-hand-paper-o"></i>&nbsp;&nbsp;<i class="fa fa-frown-o"></i>&nbsp;&nbsp;<i class="fa fa-at"></i></a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="active tab-pane" id="lcs">
                                     <h3>Likes, comments, and shares <small>Post lifetime</small></h3>
                                     <div class="chart">
                                         <canvas id="chart-lcs" width="650" height="300"></canvas>
-                                    </div>
-                                    <h3>Reactions <small>Post lifetime</small></h3>
-                                    <div class="chart">
-                                        <canvas id="chart-reactions" width="650" height="300"></canvas>
                                     </div>
                                     <h3>Likes, comments, and shares <small>First 5 minutes</small></h3>
                                     <div class="chart">
                                         <canvas id="chart-lcs-birth" width="650" height="300"></canvas>
                                     </div>
-                                    <h3>Reactions <small>First 5 minutes</small></h3>
-                                    <div class="chart">
-                                        <canvas id="chart-reactions-birth" width="650" height="300"></canvas>
-                                    </div>
+                            </div>
+                            <div class="tab-pane" id="reactions">
+                                <h3>Reactions <small>Post lifetime</small></h3>
+                                <div class="chart">
+                                    <canvas id="chart-reactions" width="650" height="300"></canvas>
+                                </div>
+                                <h3>Reactions <small>First 5 minutes</small></h3>
+                                <div class="chart">
+                                    <canvas id="chart-reactions-birth" width="650" height="300"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -104,7 +105,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="info-box bg-aqua">
-                        <span class="info-box-icon"><i class="fa fa-thumbs-o-up"></i></span>
+                        <span class="info-box-icon"><i class="fa fa-thumbs-up"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Likes</span>
                             <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.likes }}</span>
