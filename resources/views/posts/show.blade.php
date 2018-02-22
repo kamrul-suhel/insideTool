@@ -74,17 +74,18 @@
                         <ul class="nav nav-tabs">
                             <li class="active"><a href="#lcs" data-toggle="tab"><i class="fa fa-thumbs-up"></i>&nbsp;&nbsp;<i class="fa fa-share"></i>&nbsp;&nbsp;<i class="fa fa-comment"></i></a></li>
                             <li><a href="#reactions" data-toggle="tab"><i class="fa fa-heart"></i>&nbsp;&nbsp;<i class="fa fa-exclamation"></i>&nbsp;&nbsp;<i class="fa fa-hand-paper-o"></i>&nbsp;&nbsp;<i class="fa fa-frown-o"></i>&nbsp;&nbsp;<i class="fa fa-at"></i></a></li>
+                            <li><a href="#views" data-toggle="tab">Views</a></li>
                         </ul>
                         <div class="tab-content">
                             <div class="active tab-pane" id="lcs">
-                                    <h3>Likes, comments, and shares <small>Post lifetime</small></h3>
-                                    <div class="chart">
-                                        <canvas id="chart-lcs" width="650" height="300"></canvas>
-                                    </div>
-                                    <h3>Likes, comments, and shares <small>First 5 minutes</small></h3>
-                                    <div class="chart">
-                                        <canvas id="chart-lcs-birth" width="650" height="300"></canvas>
-                                    </div>
+                                <h3>Likes, comments, and shares <small>Post lifetime</small></h3>
+                                <div class="chart">
+                                    <canvas id="chart-lcs" width="650" height="300"></canvas>
+                                </div>
+                                <h3>Likes, comments, and shares <small>First 5 minutes</small></h3>
+                                <div class="chart">
+                                    <canvas id="chart-lcs-birth" width="650" height="300"></canvas>
+                                </div>
                             </div>
                             <div class="tab-pane" id="reactions">
                                 <h3>Reactions <small>Post lifetime</small></h3>
@@ -96,6 +97,17 @@
                                     <canvas id="chart-reactions-birth" width="650" height="300"></canvas>
                                 </div>
                             </div>
+                            <div class="tab-pane" id="views">
+                                <h3>Views <small>Everyone</small></h3>
+                                <div class="chart">
+                                    <canvas id="chart-views" width="650" height="300"></canvas>
+                                </div>
+                                <h3>Views <small>Fans</small></h3>
+                                <div class="chart">
+                                    <canvas id="chart-views-fans" width="650" height="300"></canvas>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -436,7 +448,60 @@
                 });
             }
         });
+        $.ajax({
+            url: "/posts/{{ $post->id }}/snapshots/delayed/all",
+            method: 'GET',
+            dataType: 'json',
+            success: function (d) {
+                var viewsctx = document.getElementById("chart-views").getContext("2d");
+                var viewschart = new Chart(viewsctx, {
+                    'type' : 'line',
+                    'data' : {
+                        datasets: [{
+                            data: d.impressions,
+                            label: 'Impressions',
+                            backgroundColor: color("rgb(0, 192 ,239)").alpha(0.5).rgbString(),
+                            borderColor: "rgb(0, 192, 239)",
+                            borderWidth: 0,
+                            fill: false
+                        },
+                        {
+                            data: d.uniques,
+                            label: 'Unique Impressions',
+                            backgroundColor: color("rgb(0, 166 ,90)").alpha(0.5).rgbString(),
+                            borderColor: "rgb(0, 166, 90)",
+                            borderWidth: 0,
+                            fill: false
+                        }]
+                    },
+                    'options' : lineOptions
+                });
 
+                var fanviewsctx = document.getElementById("chart-views-fans").getContext("2d");
+                var fanviewschart = new Chart(fanviewsctx, {
+                    'type' : 'line',
+                    'data' : {
+                        datasets: [{
+                            data: d.fan_impressions,
+                            label: 'Fan Impressions',
+                            backgroundColor: color("rgb(0, 192 ,239)").alpha(0.5).rgbString(),
+                            borderColor: "rgb(0, 192, 239)",
+                            borderWidth: 0,
+                            fill: false
+                        },
+                        {
+                            data: d.fan_uniques,
+                            label: 'Fan Unique Impressions',
+                            backgroundColor: color("rgb(0, 166 ,90)").alpha(0.5).rgbString(),
+                            borderColor: "rgb(0, 166, 90)",
+                            borderWidth: 0,
+                            fill: false
+                        }]
+                    },
+                    'options' : lineOptions
+                });
+            }
+        });
     });
     </script>
 @stop

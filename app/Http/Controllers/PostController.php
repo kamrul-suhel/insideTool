@@ -33,6 +33,8 @@ class PostController extends Controller
 
         if ($metric == "all") {
             if ($type == 'live') {
+                $fields = ['likes', 'shares', 'comments', 'loves', 'hahas', 'wows', 'sads', 'angrys'];
+
                 if ($birth) {
                     $birthEndDate = new \Carbon\Carbon($post->posted);
                     $birthEndDate = $birthEndDate->addMinutes(5)->format('Y-m-d H:i:s');
@@ -47,17 +49,18 @@ class PostController extends Controller
                     ->orderBy('id', 'DESC')->get();
                 }
             } else if ($type == 'latest') {
+                $fields = ['likes', 'shares', 'comments', 'loves', 'hahas', 'wows', 'sads', 'angrys'];
+
                 $snapshot = PostStatSnapshot::select('likes', 'shares', 'comments', 'loves', 'hahas', 'wows', 'sads', 'angrys')
                     ->where('post_id', $post->id)
                     ->where('likes', '>', 0)
                     ->orderBy('id', 'DESC')
                     ->first();
                 return response()->json($snapshot);
-            } else {
+            } else if ($type == 'delayed') {
+                $fields = ['impressions', 'uniques', 'fan_impressions', 'fan_uniques'];
                 $snapshots = PostDelayedStatSnapshot::where('post_id', $post->id)->orderBy('id', 'DESC')->get();
             }
-
-            $fields = ['likes', 'shares', 'comments', 'loves', 'hahas', 'wows', 'sads', 'angrys'];
 
             $response = [];
 
