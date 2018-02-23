@@ -102,10 +102,6 @@
                                 <div class="chart">
                                     <canvas id="chart-views" width="650" height="300"></canvas>
                                 </div>
-                                <h3>Views <small>Fans</small></h3>
-                                <div class="chart">
-                                    <canvas id="chart-views-fans" width="650" height="300"></canvas>
-                                </div>
                             </div>
 
                         </div>
@@ -460,43 +456,36 @@
                         datasets: [{
                             data: d.impressions,
                             label: 'Impressions',
-                            backgroundColor: color("rgb(0, 192 ,239)").alpha(0.5).rgbString(),
-                            borderColor: "rgb(0, 192, 239)",
+                            backgroundColor: color("rgb(216, 27, 96)").alpha(0.5).rgbString(),
+                            borderColor: "rgb(216, 27, 96)",
                             borderWidth: 0,
                             fill: false
                         },
                         {
                             data: d.uniques,
-                            label: 'Unique Impressions',
+                            label: 'Uniques',
                             backgroundColor: color("rgb(0, 166 ,90)").alpha(0.5).rgbString(),
                             borderColor: "rgb(0, 166, 90)",
                             borderWidth: 0,
                             fill: false
-                        }]
-                    },
-                    'options' : lineOptions
-                });
-
-                var fanviewsctx = document.getElementById("chart-views-fans").getContext("2d");
-                var fanviewschart = new Chart(fanviewsctx, {
-                    'type' : 'line',
-                    'data' : {
-                        datasets: [{
+                        },
+                        {
                             data: d.fan_impressions,
-                            label: 'Fan Impressions',
-                            backgroundColor: color("rgb(0, 192 ,239)").alpha(0.5).rgbString(),
-                            borderColor: "rgb(0, 192, 239)",
+                            label: 'Fan impressions',
+                            backgroundColor: color("rgb(57, 204 ,204)").alpha(0.5).rgbString(),
+                            borderColor: "rgb(57, 204, 204)",
                             borderWidth: 0,
                             fill: false
                         },
                         {
                             data: d.fan_uniques,
-                            label: 'Fan Unique Impressions',
-                            backgroundColor: color("rgb(0, 166 ,90)").alpha(0.5).rgbString(),
-                            borderColor: "rgb(0, 166, 90)",
+                            label: 'Fan uniques',
+                            backgroundColor: color("rgb(0, 185 ,183)").alpha(0.5).rgbString(),
+                            borderColor: "rgb(0, 185, 183)",
                             borderWidth: 0,
                             fill: false
-                        }]
+                        },
+                        ]
                     },
                     'options' : lineOptions
                 });
