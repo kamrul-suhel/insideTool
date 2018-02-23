@@ -74,7 +74,7 @@
                         <ul class="nav nav-tabs">
                             <li class="active"><a href="#lcs" data-toggle="tab"><i class="fa fa-thumbs-up"></i>&nbsp;&nbsp;<i class="fa fa-share"></i>&nbsp;&nbsp;<i class="fa fa-comment"></i></a></li>
                             <li><a href="#reactions" data-toggle="tab"><i class="fa fa-heart"></i>&nbsp;&nbsp;<i class="fa fa-exclamation"></i>&nbsp;&nbsp;<i class="fa fa-hand-paper-o"></i>&nbsp;&nbsp;<i class="fa fa-frown-o"></i>&nbsp;&nbsp;<i class="fa fa-at"></i></a></li>
-                            <li><a href="#views" data-toggle="tab">Views</a></li>
+                            <li><a href="#views" data-toggle="tab"><i class="fa fa-eye"></i></a></li>
                         </ul>
                         <div class="tab-content">
                             <div class="active tab-pane" id="lcs">
