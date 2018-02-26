@@ -468,24 +468,7 @@
                             borderColor: "rgb(0, 166, 90)",
                             borderWidth: 0,
                             fill: false
-                        },
-                        {
-                            data: d.fan_impressions,
-                            label: 'Fan impressions',
-                            backgroundColor: color("rgb(57, 204 ,204)").alpha(0.5).rgbString(),
-                            borderColor: "rgb(57, 204, 204)",
-                            borderWidth: 0,
-                            fill: false
-                        },
-                        {
-                            data: d.fan_uniques,
-                            label: 'Fan uniques',
-                            backgroundColor: color("rgb(0, 185 ,183)").alpha(0.5).rgbString(),
-                            borderColor: "rgb(0, 185, 183)",
-                            borderWidth: 0,
-                            fill: false
-                        },
-                        ]
+                        }]
                     },
                     'options' : lineOptions
                 });
