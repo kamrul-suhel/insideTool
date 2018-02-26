@@ -57,14 +57,6 @@ class GetPostStatsDelayed extends Command
                 $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_unique', env('FACEBOOK_ACCESS_TOKEN'));
                 $snapshot->uniques = $response->getGraphEdge()[0]["values"][0]["value"];
 
-                // Fan impressions
-                $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_fan', env('FACEBOOK_ACCESS_TOKEN'));
-                $snapshot->fan_impressions = $response->getGraphEdge()[0]["values"][0]["value"];
-                
-                // Fan uniques
-                $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_fan_unique', env('FACEBOOK_ACCESS_TOKEN'));
-                $snapshot->fan_uniques = $response->getGraphEdge()[0]["values"][0]["value"];
-
                 // Viral impressions
                 $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_viral', env('FACEBOOK_ACCESS_TOKEN'));
                 $snapshot->impressions_viral = $response->getGraphEdge()[0]["values"][0]["value"];
