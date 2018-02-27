@@ -69,6 +69,71 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-md-4">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-aqua"><i class="fa fa-thumbs-up"></i></span>
+                        <div class="info-box-content">
+                        <span class="info-box-text">LPM (Lifetime)</span>
+                        <span class="info-box-number info-box-number-big">{{ round($liveLatest->likespm_lifetime) }} <em><sup><small>({{ $averages->get('likes_perminute_lifetime')->average }})</small></sup></em></span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-green"><i class="fa fa-share"></i></span>
+                        <div class="info-box-content">
+                        <span class="info-box-text">SPM (Lifetime)</span>
+                        <span class="info-box-number info-box-number-big">{{ round($liveLatest->sharespm_lifetime) }} <em><sup><small>({{ $averages->get('shares_perminute_lifetime')->average }})</small></sup></em></span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-purple"><i class="fa fa-comment"></i></span>
+                        <div class="info-box-content">
+                        <span class="info-box-text">CPM (Lifetime)</span>
+                        <span class="info-box-number info-box-number-big">{{ round($liveLatest->commentspm_lifetime) }} <em><sup><small>({{ $averages->get('comments_perminute_lifetime')->average }})</small></sup></em></span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-aqua"><i class="fa fa-thumbs-up"></i></span>
+                        <div class="info-box-content">
+                        <span class="info-box-text">LPM (First 5 minutes)</span>
+                        <span class="info-box-number info-box-number-big">{{ round($liveLatest->likespm_birth) }} <em><sup><small>({{ $averages->get('likes_perminute_birth')->average }})</small></sup></em></span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-green"><i class="fa fa-share"></i></span>
+                        <div class="info-box-content">
+                        <span class="info-box-text">SPM (First 5 minutes)</span>
+                        <span class="info-box-number info-box-number-big">{{ round($liveLatest->sharespm_birth) }} <em><sup><small>({{ $averages->get('shares_perminute_birth')->average }})</small></sup></em></span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-purple"><i class="fa fa-comment"></i></span>
+                        <div class="info-box-content">
+                        <span class="info-box-text">CPM (First 5 minutes)</span>
+                        <span class="info-box-number info-box-number-big">{{ round($liveLatest->commentspm_birth) }} <em><sup><small>({{ $averages->get('comments_perminute_birth')->average }})</small></sup></em></span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="col-md-12">
                     <div class="nav-tabs-custom">
                         <ul class="nav nav-tabs">

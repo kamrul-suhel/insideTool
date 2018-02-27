@@ -7,6 +7,7 @@ use Facebook\Facebook;
 use App\Post;
 use App\PostStatSnapshot;
 use App\PostDelayedStatSnapshot;
+use App\AverageMetric;
 
 class PostController extends Controller
 {
@@ -19,10 +20,25 @@ class PostController extends Controller
     public function show(Post $post)
     {
         $latestStats = PostStatSnapshot::where('post_id', $post->id)->where('likes', '>', 0)->orderBy('id', 'DESC')->first();
+        $birthStats = PostStatSnapshot::where('post_id', $post->id)->where('likes', '>', 0)
+            ->where('created_at', '<', \Carbon\Carbon::parse($post->posted)->addMinutes(5))
+            ->orderBy('id', 'DESC')
+            ->first();
         if (!$latestStats) {
             $latestStats = new PostStatSnapshot;
         }
-        return view('posts.show', ['post' => $post, 'liveLatest' => $latestStats]);
+
+        $postAge = (time() - strtotime($post->posted)) / 60;
+        $latestStats->likespm_lifetime = ($latestStats->likes / $postAge);
+        $latestStats->sharespm_lifetime = ($latestStats->shares / $postAge);
+        $latestStats->commentspm_lifetime = ($latestStats->comments / $postAge);
+        $latestStats->likespm_birth = ($birthStats->likes / 5);
+        $latestStats->sharespm_birth = ($birthStats->shares / 5);
+        $latestStats->commentspm_birth = ($birthStats->comments / 5);
+
+        $averages = AverageMetric::all()->keyBy('key');
+        return view('posts.show', ['post' => $post, 'liveLatest' => $latestStats, 
+            'lastBirthStats' => $birthStats, 'averages' => $averages]);
     }
 
     public function jsonSnapshots(Post $post, $type, $metric, $birth = false)
