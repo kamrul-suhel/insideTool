@@ -78,7 +78,7 @@
 	ln -s {{ $path }}/storage {{ $release }}/storage
 	ln -s {{ $path }}/storage/public {{ $release }}/public/storage
 	echo "Storage directories set up"
-	cp -f {{ $path }}/.env {{ $release }}/.env
+	ln -s {{ $path }}/.env {{ $release }}/.env
 	echo "Environment file set up"
 @endtask
 
