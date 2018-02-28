@@ -74,8 +74,19 @@
                         <span class="info-box-icon bg-aqua"><i class="fa fa-thumbs-up"></i></span>
                         <div class="info-box-content">
                         <span class="info-box-text">LPM (Lifetime)</span>
-                        <span class="info-box-number info-box-number-big">{{ round($liveLatest->likespm_lifetime) }} <em><sup><small>({{ $averages->get('likes_perminute_lifetime')->average }})</small></sup></em></span>
-                        </div>
+                            <span class="info-box-number info-box-number-big 
+                                @if ($liveLatest->commentspm_lifetime > $averages->get('likes_perminute_lifetime')->average)
+                                    text-green 
+                                @else
+                                    text-red 
+                                @endif
+                                ">
+                                @if ($liveLatest->commentspm_lifetime > $averages->get('likes_perminute_lifetime')->average)
+                                    <i class="fa fa-angle-up"></i> {{ round($liveLatest->commentspm_lifetime) }} <em><sup><small>({{ $averages->get('likes_perminute_lifetime')->average }})</small></sup></em>
+                                @else
+                                    <i class="fa fa-angle-down"></i> {{ round($liveLatest->commentspm_lifetime) }} <em><sup><small>({{ $averages->get('likes_perminute_lifetime')->average }})</small></sup></em>
+                                @endif
+                            </span>                        </div>
                         <!-- /.info-box-content -->
                     </div>
                 </div>
@@ -84,8 +95,19 @@
                         <span class="info-box-icon bg-green"><i class="fa fa-share"></i></span>
                         <div class="info-box-content">
                         <span class="info-box-text">SPM (Lifetime)</span>
-                        <span class="info-box-number info-box-number-big">{{ round($liveLatest->sharespm_lifetime) }} <em><sup><small>({{ $averages->get('shares_perminute_lifetime')->average }})</small></sup></em></span>
-                        </div>
+                        <span class="info-box-number info-box-number-big 
+                                @if ($liveLatest->commentspm_lifetime > $averages->get('shares_perminute_lifetime')->average)
+                                    text-green 
+                                @else
+                                    text-red 
+                                @endif
+                                ">
+                                @if ($liveLatest->commentspm_lifetime > $averages->get('shares_perminute_lifetime')->average)
+                                    <i class="fa fa-angle-up"></i> {{ round($liveLatest->sharespm_lifetime) }} <em><sup><small>({{ $averages->get('shares_perminute_lifetime')->average }})</small></sup></em>
+                                @else
+                                    <i class="fa fa-angle-down"></i> {{ round($liveLatest->sharespm_lifetime) }} <em><sup><small>({{ $averages->get('shares_perminute_lifetime')->average }})</small></sup></em>
+                                @endif
+                            </span>                        </div>
                         <!-- /.info-box-content -->
                     </div>
                 </div>
@@ -94,7 +116,19 @@
                         <span class="info-box-icon bg-purple"><i class="fa fa-comment"></i></span>
                         <div class="info-box-content">
                         <span class="info-box-text">CPM (Lifetime)</span>
-                        <span class="info-box-number info-box-number-big">{{ round($liveLatest->commentspm_lifetime) }} <em><sup><small>({{ $averages->get('comments_perminute_lifetime')->average }})</small></sup></em></span>
+                            <span class="info-box-number info-box-number-big 
+                                @if ($liveLatest->commentspm_lifetime > $averages->get('comments_perminute_lifetime')->average)
+                                    text-green 
+                                @else
+                                    text-red 
+                                @endif
+                                ">
+                                @if ($liveLatest->commentspm_lifetime > $averages->get('comments_perminute_lifetime')->average)
+                                    <i class="fa fa-angle-up"></i> {{ round($liveLatest->commentspm_lifetime) }} <em><sup><small>({{ $averages->get('comments_perminute_lifetime')->average }})</small></sup></em>
+                                @else
+                                    <i class="fa fa-angle-down"></i> {{ round($liveLatest->commentspm_lifetime) }} <em><sup><small>({{ $averages->get('comments_perminute_lifetime')->average }})</small></sup></em>
+                                @endif
+                            </span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
@@ -106,8 +140,19 @@
                         <span class="info-box-icon bg-aqua"><i class="fa fa-thumbs-up"></i></span>
                         <div class="info-box-content">
                         <span class="info-box-text">LPM (First 5 minutes)</span>
-                        <span class="info-box-number info-box-number-big">{{ round($liveLatest->likespm_birth) }} <em><sup><small>({{ $averages->get('likes_perminute_birth')->average }})</small></sup></em></span>
-                        </div>
+                            <span class="info-box-number info-box-number-big 
+                                @if ($liveLatest->likesspm_birth > $averages->get('likes_perminute_birth')->average)
+                                    text-green 
+                                @else
+                                    text-red 
+                                @endif
+                                ">
+                                @if ($liveLatest->likespm_birth > $averages->get('likes_perminute_birth')->average)
+                                    <i class="fa fa-angle-up"></i> {{ round($liveLatest->likespm_birth) }} <em><sup><small>({{ $averages->get('likes_perminute_birth')->average }})</small></sup></em>
+                                @else
+                                    <i class="fa fa-angle-down"></i> {{ round($liveLatest->likespm_birth) }} <em><sup><small>({{ $averages->get('likes_perminute_birth')->average }})</small></sup></em>
+                                @endif
+                            </span>                        </div>
                         <!-- /.info-box-content -->
                     </div>
                 </div>
@@ -116,8 +161,19 @@
                         <span class="info-box-icon bg-green"><i class="fa fa-share"></i></span>
                         <div class="info-box-content">
                         <span class="info-box-text">SPM (First 5 minutes)</span>
-                        <span class="info-box-number info-box-number-big">{{ round($liveLatest->sharespm_birth) }} <em><sup><small>({{ $averages->get('shares_perminute_birth')->average }})</small></sup></em></span>
-                        </div>
+                        <span class="info-box-number info-box-number-big 
+                                @if ($liveLatest->commentspm_lifetime > $averages->get('shares_perminute_birth')->average)
+                                    text-green 
+                                @else
+                                    text-red 
+                                @endif
+                                ">
+                                @if ($liveLatest->likespm_birth > $averages->get('shares_perminute_birth')->average)
+                                    <i class="fa fa-angle-up"></i> {{ round($liveLatest->sharespm_birth) }} <em><sup><small>({{ $averages->get('shares_perminute_birth')->average }})</small></sup></em>
+                                @else
+                                    <i class="fa fa-angle-down"></i> {{ round($liveLatest->sharespm_birth) }} <em><sup><small>({{ $averages->get('shares_perminute_birth')->average }})</small></sup></em>
+                                @endif
+                            </span>                        </div>
                         <!-- /.info-box-content -->
                     </div>
                 </div>
@@ -126,13 +182,24 @@
                         <span class="info-box-icon bg-purple"><i class="fa fa-comment"></i></span>
                         <div class="info-box-content">
                         <span class="info-box-text">CPM (First 5 minutes)</span>
-                        <span class="info-box-number info-box-number-big">{{ round($liveLatest->commentspm_birth) }} <em><sup><small>({{ $averages->get('comments_perminute_birth')->average }})</small></sup></em></span>
+                            <span class="info-box-number info-box-number-big 
+                                @if ($liveLatest->commentspm_lifetime > $averages->get('comments_perminute_birth')->average)
+                                    text-green 
+                                @else
+                                    text-red 
+                                @endif
+                                ">
+                                @if ($liveLatest->likespm_birth > $averages->get('comments_perminute_birth')->average)
+                                    <i class="fa fa-angle-up"></i> {{ round($liveLatest->commentspm_birth) }} <em><sup><small>({{ $averages->get('comments_perminute_birth')->average }})</small></sup></em>
+                                @else
+                                    <i class="fa fa-angle-down"></i> {{ round($liveLatest->commentspm_birth) }} <em><sup><small>({{ $averages->get('comments_perminute_birth')->average }})</small></sup></em>
+                                @endif
+                            </span>
                         </div>
                         <!-- /.info-box-content -->
                     </div>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-md-12">
                     <div class="nav-tabs-custom">
