@@ -33,8 +33,8 @@
 		ln -s {{ $path }}/storage {{ $release }}/storage
 		ln -s {{ $path }}/storage/public {{ $release }}/public/storage
 		echo "Storage directory set up"
-		cp {{ $release }}/.env.example {{ $path }}/.env
-		ln -s {{ $path }}/.env {{ $release }}/.env
+		{{-- cp {{ $release }}/.env.example {{ $path }}/.env
+		ln -s {{ $path }}/.env {{ $release }}/.env --}}
 		echo "Environment file set up"
 		rm -rf {{ $release }}
 		echo "Deployment path initialised. Run 'envoy run deploy' now."
