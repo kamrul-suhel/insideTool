@@ -61,7 +61,7 @@ class Kernel extends HttpKernel
 
     protected function schedule() {
         $schedule->command('stats:get --from="48 hours ago" --to="now" --type=live')->everyMinute();
-        $schedule->command('stats:get --from="48 hours ago" --to="now" --type=delayed')->everyMinute();
+        $schedule->command('stats:get --from="48 hours ago" --to="now" --type=delayed')->everyFiveMinutes();
         $schedule->command('stats:getposts')->everyMinute();
     }
 }
