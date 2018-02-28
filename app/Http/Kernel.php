@@ -59,7 +59,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
     ];
 
-    protected function schedule() {
+    protected function schedule(Schedule $schedule) {
         $schedule->command('stats:get --from="48 hours ago" --to="now" --type=live')->everyMinute();
         $schedule->command('stats:get --from="48 hours ago" --to="now" --type=delayed')->everyFiveMinutes();
         $schedule->command('stats:getposts')->everyMinute();
