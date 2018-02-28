@@ -29,12 +29,12 @@ class PostController extends Controller
         }
 
         $postAge = (time() - strtotime($post->posted)) / 60;
-        $latestStats->likespm_lifetime = ($latestStats->likes / $postAge);
-        $latestStats->sharespm_lifetime = ($latestStats->shares / $postAge);
-        $latestStats->commentspm_lifetime = ($latestStats->comments / $postAge);
-        $latestStats->likespm_birth = ($birthStats->likes / 5);
-        $latestStats->sharespm_birth = ($birthStats->shares / 5);
-        $latestStats->commentspm_birth = ($birthStats->comments / 5);
+        $latestStats->likespm_lifetime = $latestStats ? ($latestStats->likes / $postAge) : 0;
+        $latestStats->sharespm_lifetime = $latestStats ? ($latestStats->shares / $postAge) : 0;
+        $latestStats->commentspm_lifetime = $latestStats ? ($latestStats->comments / $postAge) : 0;
+        $latestStats->likespm_birth = $birthStats ? ($birthStats->likes / 5) : 0;
+        $latestStats->sharespm_birth = $birthStats ? ($birthStats->shares / 5) : 0;
+        $latestStats->commentspm_birth = $birthStats ? ($birthStats->comments / 5) : 0;
 
         $averages = AverageMetric::all()->keyBy('key');
         return view('posts.show', ['post' => $post, 'liveLatest' => $latestStats, 
