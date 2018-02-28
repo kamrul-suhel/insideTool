@@ -58,11 +58,5 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
     ];
-
-    protected function schedule(Schedule $schedule) {
-        $schedule->command('stats:getposts')->everyMinute();
-        $schedule->command('stats:get --from="48 hours ago" --to="now" --type=live')->everyMinute();
-        $schedule->command('stats:get --from="48 hours ago" --to="now" --type=delayed')->everyFiveMinutes();
-        $schedule->command('stats:updateaverages')->everyThirtyMinutes();
-    }
+    
 }
