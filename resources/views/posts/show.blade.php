@@ -141,7 +141,7 @@
                         <div class="info-box-content">
                         <span class="info-box-text">LPM (First 5 minutes)</span>
                             <span class="info-box-number info-box-number-big 
-                                @if ($liveLatest->likesspm_birth > $averages->get('likes_perminute_birth')->average)
+                                @if ($liveLatest->likespm_birth > $averages->get('likes_perminute_birth')->average)
                                     text-green 
                                 @else
                                     text-red 
