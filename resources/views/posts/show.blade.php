@@ -162,13 +162,13 @@
                         <div class="info-box-content">
                         <span class="info-box-text">SPM (First 5 minutes)</span>
                         <span class="info-box-number info-box-number-big 
-                                @if ($liveLatest->commentspm_lifetime > $averages->get('shares_perminute_birth')->average)
+                                @if ($liveLatest->sharespm_birth > $averages->get('shares_perminute_birth')->average)
                                     text-green 
                                 @else
                                     text-red 
                                 @endif
                                 ">
-                                @if ($liveLatest->likespm_birth > $averages->get('shares_perminute_birth')->average)
+                                @if ($liveLatest->sharespm_birth > $averages->get('shares_perminute_birth')->average)
                                     <i class="fa fa-angle-up"></i> {{ round($liveLatest->sharespm_birth) }} <em><sup><small>({{ $averages->get('shares_perminute_birth')->average }})</small></sup></em>
                                 @else
                                     <i class="fa fa-angle-down"></i> {{ round($liveLatest->sharespm_birth) }} <em><sup><small>({{ $averages->get('shares_perminute_birth')->average }})</small></sup></em>
@@ -183,13 +183,13 @@
                         <div class="info-box-content">
                         <span class="info-box-text">CPM (First 5 minutes)</span>
                             <span class="info-box-number info-box-number-big 
-                                @if ($liveLatest->commentspm_lifetime > $averages->get('comments_perminute_birth')->average)
+                                @if ($liveLatest->commentspm_birth > $averages->get('comments_perminute_birth')->average)
                                     text-green 
                                 @else
                                     text-red 
                                 @endif
                                 ">
-                                @if ($liveLatest->likespm_birth > $averages->get('comments_perminute_birth')->average)
+                                @if ($liveLatest->commentspm_birth > $averages->get('comments_perminute_birth')->average)
                                     <i class="fa fa-angle-up"></i> {{ round($liveLatest->commentspm_birth) }} <em><sup><small>({{ $averages->get('comments_perminute_birth')->average }})</small></sup></em>
                                 @else
                                     <i class="fa fa-angle-down"></i> {{ round($liveLatest->commentspm_birth) }} <em><sup><small>({{ $averages->get('comments_perminute_birth')->average }})</small></sup></em>
