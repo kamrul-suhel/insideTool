@@ -60,7 +60,6 @@
 	deployment_composer
 	deployment_migrate
 	deployment_cache
-	deployment_optimize
 	deployment_finish
 	deployment_cleanup
 @endstory
