@@ -93,7 +93,7 @@
 @task('deployment_cache')
 	php {{ $release }}/artisan view:clear --quiet
 	php {{ $release }}/artisan cache:clear --quiet
-	php {{ $release }}/artisan config:cache --quiet
+	{{-- php {{ $release }}/artisan config:cache --quiet --}}
 	echo 'Cache cleared'
 @endtask
 
