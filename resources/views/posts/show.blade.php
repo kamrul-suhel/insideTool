@@ -248,7 +248,7 @@
                         <span class="info-box-icon"><i class="fa fa-thumbs-up"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Likes</span>
-                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.likes }}</span>
+                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.likes | number_format }}</span>
                         </div>
                     </div>
                 </div>
@@ -259,7 +259,7 @@
                         <span class="info-box-icon"><i class="fa fa-share"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Shares</span>
-                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.shares }}</span>
+                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.shares | number_format}}</span>
                         </div>
                     </div>
                 </div>
@@ -270,7 +270,7 @@
                         <span class="info-box-icon"><i class="fa fa-comment"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Comments</span>
-                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.comments }}</span>
+                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.comments | number_format }}</span>
                         </div>
                     </div>
                 </div>
@@ -281,7 +281,7 @@
                         <span class="info-box-icon"><i class="fa fa-heart"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Loves</span>
-                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.loves }}</span>
+                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.loves | number_format }}</span>
                         </div>
                     </div>
                 </div>
@@ -292,7 +292,7 @@
                         <span class="info-box-icon"><i class="fa fa-exclamation"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Wows</span>
-                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.wows }}</span>
+                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.wows | number_format }}</span>
                         </div>
                     </div>
                 </div>
@@ -303,7 +303,7 @@
                         <span class="info-box-icon"><i class="fa fa-hand-paper-o"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Hahas</span>
-                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.hahas }}</span>
+                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.hahas | number_format }}</span>
                         </div>
                     </div>
                 </div>
@@ -314,7 +314,7 @@
                         <span class="info-box-icon"><i class="fa fa-frown-o"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Sads</span>
-                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.sads }}</span>
+                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.sads | number_format }}</span>
                         </div>
                     </div>
                 </div>
@@ -325,7 +325,7 @@
                         <span class="info-box-icon"><i class="fa fa-at"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Angrys</span>
-                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.angrys }}</span>
+                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.angrys | number_format }}</span>
                         </div>
                     </div>
                 </div>
@@ -344,6 +344,11 @@
 
     new Vue({
         el: '#metrics',
+        filters: {
+            number_format(number) {
+                return number.toLocaleString('en');
+            }
+        },
         data: {
             metrics: {
                 likes: {{ $liveLatest->likes }},
