@@ -27,8 +27,8 @@ Route::middleware('auth')->group(function() {
     });
     Route::get('/posts', 'PostController@index');
     Route::get('/posts/{post}', 'PostController@show');
-    Route::get('/posts/{post}/snapshots/{type}/{metric}/{birth?}', 'PostController@jsonSnapshots')
-        ->where('metric', '(all|likes|loves|wows|hahas|sads|angrys|shares|comments)');
+    Route::get('/posts/{post}/snapshots/{type}/{birth?}', 'PostController@jsonSnapshots');
+        //->where('metric', '(all|likes|loves|wows|hahas|sads|angrys|shares|comments)');
     
 });
 

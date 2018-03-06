@@ -15,8 +15,43 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component('graph-view', require('./components/Graph.vue'));
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+
+    data: {
+        metrics: {
+            likes: 0,
+            shares: 0,
+            comments: 0,
+            loves: 0,
+            wows: 0,
+            hahas: 0,
+            sads: 0,
+            angrys: 0
+        }
+    },
+
+    mounted: function () {
+        this.loadData();
+
+        setInterval(function () {
+            this.loadData();
+        }.bind(this),5000); 
+    },
+
+    methods: {
+        loadData: function () {
+            $.get('/posts/75/snapshots/latest/all', function (response) {
+                this.metrics = response;
+            }.bind(this));
+        }
+    },
+
+    events:{
+        'userUnauthenticated': function(){
+            $('#session-expired').modal();
+        }
+    }
 });

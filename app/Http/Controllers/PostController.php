@@ -41,15 +41,17 @@ class PostController extends Controller
             'lastBirthStats' => $birthStats, 'averages' => $averages]);
     }
 
-    public function jsonSnapshots(Post $post, $type, $metric, $birth = false)
+    public function jsonSnapshots(Request $request, Post $post, $type, $birth = false)
     {
         if (!in_array($type, ["live", "delayed", "latest"])) {
             return response()->json(["error" => "invalid type, must be one of 'live', 'delayed', 'latest"]);
         }
 
-        if ($metric == "all") {
+        $fields = explode(',',$request->input('fields'));
+
+        //if ($metric == "all") {
             if ($type == 'live') {
-                $fields = ['likes', 'shares', 'comments', 'loves', 'hahas', 'wows', 'sads', 'angrys'];
+                //$fields = ['likes', 'shares', 'comments', 'loves', 'hahas', 'wows', 'sads', 'angrys'];
 
                 if ($birth) {
                     $birthEndDate = new \Carbon\Carbon($post->posted);
@@ -65,7 +67,7 @@ class PostController extends Controller
                     ->orderBy('id', 'DESC')->get();
                 }
             } else if ($type == 'latest') {
-                $fields = ['likes', 'shares', 'comments', 'loves', 'hahas', 'wows', 'sads', 'angrys'];
+                //$fields = ['likes', 'shares', 'comments', 'loves', 'hahas', 'wows', 'sads', 'angrys'];
 
                 $snapshot = PostStatSnapshot::select('likes', 'shares', 'comments', 'loves', 'hahas', 'wows', 'sads', 'angrys')
                     ->where('post_id', $post->id)
@@ -74,16 +76,22 @@ class PostController extends Controller
                     ->first();
                 return response()->json($snapshot);
             } else if ($type == 'delayed') {
-                $fields = ['impressions', 'uniques', 'fan_impressions', 'fan_uniques'];
+                //$fields = ['impressions', 'uniques', 'fan_impressions', 'fan_uniques'];
                 $snapshots = PostDelayedStatSnapshot::where('post_id', $post->id)->orderBy('id', 'DESC')->get();
             }
 
             $response = [];
 
             if ($snapshots) {
-                foreach ($fields as $field) {
+                foreach ($fields as $key => $field) {
+                    $response[$key]['label'] = $field;
+                    $response[$key]['backgroundColor'] = $this->getMetricColor($field, 0.5);
+                    $response[$key]['borderColor'] = $this->getMetricColor($field);
+                    $response[$key]['borderWidth'] = 0;
+                    $response[$key]['fill'] = false;
+
                     foreach ($snapshots as $snapshot) {
-                        $response[$field][] = [
+                        $response[$key]['data'][] = [
                             "x" => (string) $snapshot->created_at,
                             "y" => $snapshot->$field
                         ];
@@ -92,17 +100,55 @@ class PostController extends Controller
             }
             
             return response()->json($response);
-        } else {
-            if ($type == 'live') {
-                $snapshots = PostStatSnapshot::select(['created_at as x', $metric . ' as y'])
-                    ->where('post_id', $post->id)
-                    ->where('likes', '>', 0)
-                    ->orderBy('id', 'DESC')->get();
-            } else {
-                $snapshots = PostDelayedStatSnapshot::where('post_id', $post->id)->orderBy('id', 'DESC')->get();
-            }
+        // } else {
+        //     if ($type == 'live') {
+        //         $snapshots = PostStatSnapshot::select(['created_at as x', $metric . ' as y'])
+        //             ->where('post_id', $post->id)
+        //             ->where('likes', '>', 0)
+        //             ->orderBy('id', 'DESC')->get();
+        //     } else {
+        //         $snapshots = PostDelayedStatSnapshot::where('post_id', $post->id)->orderBy('id', 'DESC')->get();
+        //     }
+        // }
+
+        //return response()->json($snapshots);
+    }
+
+    public function getMetricColor($metric, $opacity = 1){
+        switch($metric){
+            case 'likes':
+                $color = 'rgba(0, 192 ,239, '.$opacity.')';
+                break;
+            case 'shares':
+                $color = 'rgba(0, 166, 9, '.$opacity.')';
+                break;
+            case 'comments':
+                $color = 'rgba(96, 92 ,168, '.$opacity.')';
+                break;
+            case 'loves':
+                $color = 'rgba(216, 27, 96, '.$opacity.')';
+                break;
+            case 'wows':
+                $color = 'rgba(0, 166, 90, '.$opacity.')';
+                break;
+            case 'hahas':
+                $color = 'rgba(57, 204, 204, '.$opacity.')';
+                break;
+            case 'sads':
+                $color = 'rgba(0, 185, 183, '.$opacity.')';
+                break;
+            case 'angrys':
+                $color = 'rgba(221, 75, 157, '.$opacity.')';
+                break;
+            case 'impressions':
+                $color = 'rgba(216, 27, 96, '.$opacity.')';
+                break;
+            case 'uniques':
+            default:
+                $color = 'rgba(0, 166 ,90, '.$opacity.')';
+                break;
         }
 
-        return response()->json($snapshots);
+        return $color;
     }
 }
