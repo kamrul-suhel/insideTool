@@ -107,7 +107,6 @@ class GetVideoStats extends Command
                 }
             }
             $snapshot->fill($simpleStats);
-            var_dump($snapshot);
             
             $snapshot->save();
         }
