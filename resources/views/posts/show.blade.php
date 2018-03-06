@@ -222,17 +222,21 @@
                             <div class="tab-pane" id="reactions">
                                 <h3>Reactions <small>First 5 minutes</small></h3>
                                 <div class="chart">
-                                    <graph-view id="chart-reactions-birth" fields="loves,wows,hahas,sads,angrys" type="live" birth="" post-id="{{ $post->id }}"></graph-view>
+                                    <graph-view id="chart-reactions-birth" fields="loves,wows,hahas,sads,angrys" type="live" birth="true" post-id="{{ $post->id }}"></graph-view>
                                 </div>
                                 <h3>Reactions <small>Post lifetime</small></h3>
                                 <div class="chart">
-                                    <graph-view id="chart-reactions" fields="loves,wows,hahas,sads,angrys" type="live" birth="true" post-id="{{ $post->id }}"></graph-view>
+                                    <graph-view id="chart-reactions" fields="loves,wows,hahas,sads,angrys" type="live" birth="false" post-id="{{ $post->id }}"></graph-view>
                                 </div>
                             </div>
                             <div class="tab-pane" id="views">
                                 <h3>Views <small>Everyone</small></h3>
                                 <div class="chart">
                                     <graph-view id="chart-views" birth="" fields="impressions,uniques" type="delayed" post-id="{{ $post->id }}"></graph-view>
+                                </div>
+                                <h3>Video Views <small>Everyone</small></h3>
+                                <div class="chart">
+                                    <graph-view id="chart-video-views" birth="" fields="total_video_views,total_video_views_unique" type="video" post-id="{{ $post->id }}"></graph-view>
                                 </div>
                             </div>
 
@@ -337,279 +341,43 @@
 
 @push('js')
     <script src="{{ asset('js/app.js') }}"></script>
-    <!--script src="https://cdn.jsdelivr.net/npm/vue@2.5/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.7.1/dist/Chart.bundle.min.js"></script-->
 @endpush
 
 @section('js')
 <script>
-
-    // new Vue({
-    //     el: '#metrics',
-    //     data: {
-    //         metrics: {
-    //             likes: {{ $liveLatest->likes }},
-    //             shares: {{ $liveLatest->shares }},
-    //             comments: {{ $liveLatest->comments }},
-    //             loves: {{ $liveLatest->loves }},
-    //             wows: {{ $liveLatest->wows }},
-    //             hahas: {{ $liveLatest->hahas}},
-    //             sads: {{ $liveLatest->sads }},
-    //             angrys: {{ $liveLatest->angrys }}
-    //         }
-    //     },
-    //     methods: {
-    //         loadData: function () {
-    //             $.get('/posts/{{ $post->id }}/snapshots/latest/all', function (response) {
-    //                 this.metrics = response;
-    //             }.bind(this));
-    //         }
-    //     },
-    //     mounted: function () {
-    //         this.loadData();
-
-    //         setInterval(function () {
-    //             this.loadData();
-    //         }.bind(this),1000); 
-    //     }
-    // });
-
-
-
-    //jQuery(function() {
-
-        // var lineOptions = {
-        //     elements: {
-        //         point: {
-        //             radius: 0
-        //         } 
-        //     },
-        //     scales: {
-        //         xAxes: [{
-        //             type: "time"
-        //         }]
-        //     },
-        //     hover: {
-        //         intersect: false
-        //     },
-        //     tooltips: {
-        //         mode: 'index',
-        //         intersect: false
-        //     },
-        //     legend: {
-        //         labels: {
-        //             fontStyle: 'bold'
-        //         }
-        //     }
-        // };
-
-        // var color = Chart.helpers.color;
-        // $.ajax({
-        //     url: "/posts/{{ $post->id }}/snapshots/live/all",
-        //     method: 'GET',
-        //     dataType: 'json',
-        //     success: function (d) {
-        //         var lcsctx = document.getElementById("chart-lcs").getContext("2d");
-        //         var lcschart = new Chart(lcsctx, {
-        //             'type' : 'line',
-        //             'data' : {
-        //                 datasets: [{
-        //                     data: d.likes,
-        //                     label: 'Likes',
-        //                     backgroundColor: color("rgb(0, 192 ,239)").alpha(0.5).rgbString(),
-        //                     borderColor: "rgb(0, 192, 239)",
-        //                     borderWidth: 0,
-        //                     fill: false
-        //                 },
-        //                 {
-        //                     data: d.shares,
-        //                     label: 'Shares',
-        //                     backgroundColor: color("rgb(0, 166 ,90)").alpha(0.5).rgbString(),
-        //                     borderColor: "rgb(0, 166, 90)",
-        //                     borderWidth: 0,
-        //                     fill: false
-        //                 },
-        //                 {
-        //                     data: d.comments,
-        //                     label: 'Comments',
-        //                     backgroundColor: color("rgb(96, 92 ,168)").alpha(0.5).rgbString(),
-        //                     borderColor: "rgb(96, 92, 168)",
-        //                     borderWidth: 0,
-        //                     fill: false
-        //                 }]
-        //             },
-        //             'options' : lineOptions
-        //         });
-        //     }
-        // });
-
-    //             var reactionsctx = document.getElementById("chart-reactions").getContext("2d");
-    //             var reactionschart = new Chart(reactionsctx, {
-    //                 'type' : 'line',
-    //                 'data' : {
-    //                     datasets: [{
-    //                         data: d.loves,
-    //                         label: 'Loves',
-    //                         backgroundColor: color("rgb(216, 27, 96)").alpha(0.5).rgbString(),
-    //                         borderColor: "rgb(216, 27, 96)",
-    //                         borderWidth: 0,
-    //                         fill: false
-    //                     },
-    //                     {
-    //                         data: d.wows,
-    //                         label: 'Wows',
-    //                         backgroundColor: color("rgb(0, 166 ,90)").alpha(0.5).rgbString(),
-    //                         borderColor: "rgb(0, 166, 90)",
-    //                         borderWidth: 0,
-    //                         fill: false
-    //                     },
-    //                     {
-    //                         data: d.hahas,
-    //                         label: 'Hahas',
-    //                         backgroundColor: color("rgb(57, 204 ,204)").alpha(0.5).rgbString(),
-    //                         borderColor: "rgb(57, 204, 204)",
-    //                         borderWidth: 0,
-    //                         fill: false
-    //                     },
-    //                     {
-    //                         data: d.sads,
-    //                         label: 'Sads',
-    //                         backgroundColor: color("rgb(0, 185 ,183)").alpha(0.5).rgbString(),
-    //                         borderColor: "rgb(0, 185, 183)",
-    //                         borderWidth: 0,
-    //                         fill: false
-    //                     },
-    //                     {
-    //                         data: d.angrys,
-    //                         label: 'Angrys',
-    //                         backgroundColor: color("rgb(221, 75, 157)").alpha(0.5).rgbString(),
-    //                         borderColor: "rgb(221, 75, 157)",
-    //                         borderWidth: 0,
-    //                         fill: false
-    //                     }
-    //                     ]
-    //                 },
-    //                 'options' : lineOptions
-    //             });
-    //         }
-    //     });
-    //     $.ajax({
-    //         url: "/posts/{{ $post->id }}/snapshots/live/all/birth",
-    //         method: 'GET',
-    //         dataType: 'json',
-    //         success: function (d) {
-    //             var lcsctx = document.getElementById("chart-lcs-birth").getContext("2d");
-    //             var lcschart = new Chart(lcsctx, {
-    //                 'type' : 'line',
-    //                 'data' : {
-    //                     datasets: [{
-    //                         data: d.likes,
-    //                         label: 'Likes',
-    //                         backgroundColor: color("rgb(0, 192 ,239)").alpha(0.5).rgbString(),
-    //                         borderColor: "rgb(0, 192, 239)",
-    //                         borderWidth: 0,
-    //                         fill: false
-    //                     },
-    //                     {
-    //                         data: d.shares,
-    //                         label: 'Shares',
-    //                         backgroundColor: color("rgb(0, 166 ,90)").alpha(0.5).rgbString(),
-    //                         borderColor: "rgb(0, 166, 90)",
-    //                         borderWidth: 0,
-    //                         fill: false
-    //                     },
-    //                     {
-    //                         data: d.comments,
-    //                         label: 'Comments',
-    //                         backgroundColor: color("rgb(96, 92 ,168)").alpha(0.5).rgbString(),
-    //                         borderColor: "rgb(96, 92, 168)",
-    //                         borderWidth: 0,
-    //                         fill: false
-    //                     }]
-    //                 },
-    //                 'options' : lineOptions
-    //             });
-
-    //             var reactionsctx = document.getElementById("chart-reactions-birth").getContext("2d");
-    //             var reactionschart = new Chart(reactionsctx, {
-    //                 'type' : 'line',
-    //                 'data' : {
-    //                     datasets: [{
-    //                         data: d.loves,
-    //                         label: 'Loves',
-    //                         backgroundColor: color("rgb(216, 27, 96)").alpha(0.5).rgbString(),
-    //                         borderColor: "rgb(216, 27, 96)",
-    //                         borderWidth: 0,
-    //                         fill: false
-    //                     },
-    //                     {
-    //                         data: d.wows,
-    //                         label: 'Wows',
-    //                         backgroundColor: color("rgb(0, 166 ,90)").alpha(0.5).rgbString(),
-    //                         borderColor: "rgb(0, 166, 90)",
-    //                         borderWidth: 0,
-    //                         fill: false
-    //                     },
-    //                     {
-    //                         data: d.hahas,
-    //                         label: 'Hahas',
-    //                         backgroundColor: color("rgb(57, 204 ,204)").alpha(0.5).rgbString(),
-    //                         borderColor: "rgb(57, 204, 204)",
-    //                         borderWidth: 0,
-    //                         fill: false
-    //                     },
-    //                     {
-    //                         data: d.sads,
-    //                         label: 'Sads',
-    //                         backgroundColor: color("rgb(0, 185 ,183)").alpha(0.5).rgbString(),
-    //                         borderColor: "rgb(0, 185, 183)",
-    //                         borderWidth: 0,
-    //                         fill: false
-    //                     },
-    //                     {
-    //                         data: d.angrys,
-    //                         label: 'Angrys',
-    //                         backgroundColor: color("rgb(221, 75, 157)").alpha(0.5).rgbString(),
-    //                         borderColor: "rgb(221, 75, 157)",
-    //                         borderWidth: 0,
-    //                         fill: false
-    //                     }
-    //                     ]
-    //                 },
-    //                 'options' : lineOptions
-    //             });
-    //         }
-    //     });
-    //     $.ajax({
-    //         url: "/posts/{{ $post->id }}/snapshots/delayed/all",
-    //         method: 'GET',
-    //         dataType: 'json',
-    //         success: function (d) {
-    //             var viewsctx = document.getElementById("chart-views").getContext("2d");
-    //             var viewschart = new Chart(viewsctx, {
-    //                 'type' : 'line',
-    //                 'data' : {
-    //                     datasets: [{
-    //                         data: d.impressions,
-    //                         label: 'Impressions',
-    //                         backgroundColor: color("rgb(216, 27, 96)").alpha(0.5).rgbString(),
-    //                         borderColor: "rgb(216, 27, 96)",
-    //                         borderWidth: 0,
-    //                         fill: false
-    //                     },
-    //                     {
-    //                         data: d.uniques,
-    //                         label: 'Uniques',
-    //                         backgroundColor: color("rgb(0, 166 ,90)").alpha(0.5).rgbString(),
-    //                         borderColor: "rgb(0, 166, 90)",
-    //                         borderWidth: 0,
-    //                         fill: false
-    //                     }]
-    //                 },
-    //                 'options' : lineOptions
-    //             });
-    //         }
-    //     });
-    //});
-    </script>
+     new Vue({
+         el: '#metrics',
+         filters: {
+             number_format(number) {
+                 return number.toLocaleString('en');
+             }
+         },
+         data: {
+             metrics: {
+                 likes: {{ $liveLatest->likes }},
+                 shares: {{ $liveLatest->shares }},
+                 comments: {{ $liveLatest->comments }},
+                 loves: {{ $liveLatest->loves }},
+                 wows: {{ $liveLatest->wows }},
+                 hahas: {{ $liveLatest->hahas}},
+                 sads: {{ $liveLatest->sads }},
+                 angrys: {{ $liveLatest->angrys }}
+             }
+         },
+         methods: {
+             loadData: function () {
+                 $.get('/posts/{{ $post->id }}/snapshots/latest/all', function (response) {
+                     this.metrics = response;
+                 }.bind(this));
+             }
+         },
+         mounted: function () {
+             this.loadData();
+ 
+             setInterval(function () {
+                 this.loadData();
+             }.bind(this),1000); 
+         }
+     });
+</script>
 @stop
