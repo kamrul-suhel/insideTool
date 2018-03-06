@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Facebook\Facebook;
 use App\Post;
 use App\PostStatSnapshot;
+use App\VideoStatSnapshot;
 use App\PostDelayedStatSnapshot;
 use App\AverageMetric;
 
@@ -43,8 +44,8 @@ class PostController extends Controller
 
     public function jsonSnapshots(Request $request, Post $post, $type, $birth = false)
     {
-        if (!in_array($type, ["live", "delayed", "latest"])) {
-            return response()->json(["error" => "invalid type, must be one of 'live', 'delayed', 'latest"]);
+        if (!in_array($type, ["live", "delayed", "latest", "video"])) {
+            return response()->json(["error" => "invalid type, must be one of 'live', 'delayed', 'latest', 'video'"]);
         }
 
         $fields = explode(',',$request->input('fields'));
@@ -78,6 +79,8 @@ class PostController extends Controller
             } else if ($type == 'delayed') {
                 //$fields = ['impressions', 'uniques', 'fan_impressions', 'fan_uniques'];
                 $snapshots = PostDelayedStatSnapshot::where('post_id', $post->id)->orderBy('id', 'DESC')->get();
+            } else if ($type == 'video') {
+                $snapshots = VideoStatSnapshot::where('post_id', $post->id)->orderBy('id', 'DESC')->get();
             }
 
             $response = [];
