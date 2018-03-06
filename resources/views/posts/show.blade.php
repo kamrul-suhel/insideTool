@@ -141,7 +141,7 @@
                         <div class="info-box-content">
                         <span class="info-box-text">LPM (First 5 minutes)</span>
                             <span class="info-box-number info-box-number-big 
-                                @if ($liveLatest->likesspm_birth > $averages->get('likes_perminute_birth')->average)
+                                @if ($liveLatest->likespm_birth > $averages->get('likes_perminute_birth')->average)
                                     text-green 
                                 @else
                                     text-red 
@@ -162,13 +162,13 @@
                         <div class="info-box-content">
                         <span class="info-box-text">SPM (First 5 minutes)</span>
                         <span class="info-box-number info-box-number-big 
-                                @if ($liveLatest->commentspm_lifetime > $averages->get('shares_perminute_birth')->average)
+                                @if ($liveLatest->sharespm_birth > $averages->get('shares_perminute_birth')->average)
                                     text-green 
                                 @else
                                     text-red 
                                 @endif
                                 ">
-                                @if ($liveLatest->likespm_birth > $averages->get('shares_perminute_birth')->average)
+                                @if ($liveLatest->sharespm_birth > $averages->get('shares_perminute_birth')->average)
                                     <i class="fa fa-angle-up"></i> {{ round($liveLatest->sharespm_birth) }} <em><sup><small>({{ $averages->get('shares_perminute_birth')->average }})</small></sup></em>
                                 @else
                                     <i class="fa fa-angle-down"></i> {{ round($liveLatest->sharespm_birth) }} <em><sup><small>({{ $averages->get('shares_perminute_birth')->average }})</small></sup></em>
@@ -183,13 +183,13 @@
                         <div class="info-box-content">
                         <span class="info-box-text">CPM (First 5 minutes)</span>
                             <span class="info-box-number info-box-number-big 
-                                @if ($liveLatest->commentspm_lifetime > $averages->get('comments_perminute_birth')->average)
+                                @if ($liveLatest->commentspm_birth > $averages->get('comments_perminute_birth')->average)
                                     text-green 
                                 @else
                                     text-red 
                                 @endif
                                 ">
-                                @if ($liveLatest->likespm_birth > $averages->get('comments_perminute_birth')->average)
+                                @if ($liveLatest->commentspm_birth > $averages->get('comments_perminute_birth')->average)
                                     <i class="fa fa-angle-up"></i> {{ round($liveLatest->commentspm_birth) }} <em><sup><small>({{ $averages->get('comments_perminute_birth')->average }})</small></sup></em>
                                 @else
                                     <i class="fa fa-angle-down"></i> {{ round($liveLatest->commentspm_birth) }} <em><sup><small>({{ $averages->get('comments_perminute_birth')->average }})</small></sup></em>
@@ -249,7 +249,7 @@
                         <span class="info-box-icon"><i class="fa fa-thumbs-up"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Likes</span>
-                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.likes }}</span>
+                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.likes | number_format }}</span>
                         </div>
                     </div>
                 </div>
@@ -260,7 +260,7 @@
                         <span class="info-box-icon"><i class="fa fa-share"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Shares</span>
-                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.shares }}</span>
+                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.shares | number_format}}</span>
                         </div>
                     </div>
                 </div>
@@ -271,7 +271,7 @@
                         <span class="info-box-icon"><i class="fa fa-comment"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Comments</span>
-                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.comments }}</span>
+                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.comments | number_format }}</span>
                         </div>
                     </div>
                 </div>
@@ -282,7 +282,7 @@
                         <span class="info-box-icon"><i class="fa fa-heart"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Loves</span>
-                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.loves }}</span>
+                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.loves | number_format }}</span>
                         </div>
                     </div>
                 </div>
@@ -293,7 +293,7 @@
                         <span class="info-box-icon"><i class="fa fa-exclamation"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Wows</span>
-                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.wows }}</span>
+                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.wows | number_format }}</span>
                         </div>
                     </div>
                 </div>
@@ -304,7 +304,7 @@
                         <span class="info-box-icon"><i class="fa fa-hand-paper-o"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Hahas</span>
-                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.hahas }}</span>
+                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.hahas | number_format }}</span>
                         </div>
                     </div>
                 </div>
@@ -315,7 +315,7 @@
                         <span class="info-box-icon"><i class="fa fa-frown-o"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Sads</span>
-                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.sads }}</span>
+                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.sads | number_format }}</span>
                         </div>
                     </div>
                 </div>
@@ -326,7 +326,7 @@
                         <span class="info-box-icon"><i class="fa fa-at"></i></span>
                         <div class="info-box-content">
                             <span class="info-box-text">Angrys</span>
-                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.angrys }}</span>
+                            <span v-cloak class="info-box-number info-box-number-big">@{{ metrics.angrys | number_format }}</span>
                         </div>
                     </div>
                 </div>

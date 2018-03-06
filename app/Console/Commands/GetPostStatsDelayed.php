@@ -69,6 +69,10 @@ class GetPostStatsDelayed extends Command
                 $snapshot->uniques_paid = 0;
                 
                 $snapshot->save();
+
+                if ($post->type == 'video') {
+                    \Artisan::call('stats:getvideostats', ['videoid' => $post->facebook_id]);
+                }
             } catch(\Facebook\Exceptions\FacebookResponseException $e) {
                 if ($e->getCode() == 100 && $e->getSubErrorCode() == 33) {
                     // Post has been deleted

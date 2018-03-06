@@ -80,6 +80,7 @@ class GetPostStats extends Command
                 // Share count
                 $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/?fields=shares', env('FACEBOOK_ACCESS_TOKEN'));
                 $snapshot->shares = $response->getDecodedBody()["shares"]["count"];
+
             } catch(\Facebook\Exceptions\FacebookResponseException $e) {
                 if ($e->getCode() == 100 && $e->getSubErrorCode() == 33) {
                     // Post has been deleted
