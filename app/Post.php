@@ -55,7 +55,7 @@ class Post extends Model
      */
     public function latestStatSnapshot()
     {
-        return $this->hasOne('App\PostStatSnapshot')->where('likes', '>', 0)->latest();
+        return \App\PostStatSnapshot::where('post_id', $this->id)->orderBy('id', 'DESC')->take(1)->first();
     }
  
 

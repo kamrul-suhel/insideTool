@@ -35,35 +35,35 @@
                             <td>{{ $post->name }}</td>
                             <td>
                                 <span class="badge
-                                @if ($post->latestStatSnapshot->likes > $averages->get('likes')->average)
+                                @if ($post->latestStatSnapshot()->likes > $averages->get('likes')->average)
                                     bg-green
                                 @else
                                     bg-red
                                 @endif
                                 ">
-                                    {{ $post->latestStatSnapshot->likes }}
+                                    {{ $post->latestStatSnapshot()->likes }}
                                 </span>
                             </td>
                             <td>
                                 <span class="badge
-                                @if ($post->latestStatSnapshot->comments > $averages->get('comments')->average)
+                                @if ($post->latestStatSnapshot()->comments > $averages->get('comments')->average)
                                     bg-green
                                 @else
                                     bg-red
                                 @endif
                                 ">
-                                    {{ $post->latestStatSnapshot->comments }}
+                                    {{ $post->latestStatSnapshot()->comments }}
                                 </span>
                             </td>
                             <td>
                                 <span class="badge
-                                @if ($post->latestStatSnapshot->shares > $averages->get('shares')->average)
+                                @if ($post->latestStatSnapshot()->shares > $averages->get('shares')->average)
                                     bg-green
                                 @else
                                     bg-red
                                 @endif
                                 ">
-                                    {{ $post->latestStatSnapshot->shares }}
+                                    {{ $post->latestStatSnapshot()->shares }}
                                 </span>
                             </td>
                         </tr>
