@@ -15,6 +15,9 @@
                         <th></th>
                         <th>Message</th>
                         <th>Link name</th>
+                        <th><i class="fa fa-thumbs-up"></th>
+                        <th><i class="fa fa-comment"></th>
+                        <th><i class="fa fa-share"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -30,10 +33,48 @@
                             <td><a href="/posts/{{ $post->id }}"><img src="{{ $post->picture }}" width="50"></a></td>
                             <td><a href="/posts/{{ $post->id }}">{{ $post->message }}</a></td>
                             <td>{{ $post->name }}</td>
+                            <td>
+                                <span class="badge
+                                @if ($post->latestStatSnapshot->likes > $averages->get('likes')->average)
+                                    bg-green
+                                @else
+                                    bg-red
+                                @endif
+                                ">
+                                    {{ $post->latestStatSnapshot->likes }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge
+                                @if ($post->latestStatSnapshot->comments > $averages->get('comments')->average)
+                                    bg-green
+                                @else
+                                    bg-red
+                                @endif
+                                ">
+                                    {{ $post->latestStatSnapshot->comments }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge
+                                @if ($post->latestStatSnapshot->shares > $averages->get('shares')->average)
+                                    bg-green
+                                @else
+                                    bg-red
+                                @endif
+                                ">
+                                    {{ $post->latestStatSnapshot->shares }}
+                                </span>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
+        </div>
+        <div class="box-footer clearfix">
+            <div class="pull-right">
+                {{ $posts->links() }}
+            </div>
         </div>
     </div>
 @stop

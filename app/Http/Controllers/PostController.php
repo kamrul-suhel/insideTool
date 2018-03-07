@@ -14,8 +14,13 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::withTrashed()->orderBy('posted', 'desc')->with('page')->get();
-        return view('posts.index', ['posts' => $posts]);
+        $posts = Post::whereHas('latestStatSnapshot')
+            ->withTrashed()
+            ->orderBy('posted', 'desc')
+            ->with(['page', 'latestStatSnapshot'])
+            ->paginate(20);
+        $averages = AverageMetric::all()->keyBy('key');
+        return view('posts.index', ['posts' => $posts, 'averages' => $averages]);
     }
 
     public function show(Post $post)

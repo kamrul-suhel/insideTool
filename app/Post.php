@@ -49,6 +49,14 @@ class Post extends Model
         $this->setHidden(static::$hiddenFields);
         return parent::toJson($options);
     }
+
+    /**
+     * Get latest stat snapshot
+     */
+    public function latestStatSnapshot()
+    {
+        return $this->hasOne('App\PostStatSnapshot')->where('likes', '>', 0)->latest();
+    }
  
 
 }
