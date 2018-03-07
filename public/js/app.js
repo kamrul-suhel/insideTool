@@ -19565,7 +19565,7 @@ var app = new Vue({
 
     methods: {
         loadData: function loadData() {
-            $.get('/posts/75/snapshots/latest/all', function (response) {
+            $.get('/posts/' + $('#app').data('post-id') + '/snapshots/latest/all', function (response) {
                 this.metrics = response;
             }.bind(this));
         }
