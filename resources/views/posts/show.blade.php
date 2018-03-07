@@ -236,7 +236,7 @@
                                 </div>
                                 <h3>Video Views <small>Everyone</small></h3>
                                 <div class="chart">
-                                    <graph-view id="chart-video-views" birth="" fields="total_video_views,total_video_views_unique" type="video" post-id="{{ $post->id }}"></graph-view>
+                                    <graph-view id="chart-video-views" birth="" fields="total_video_views,total_video_views_autoplayed,total_video_views_clicked_to_play,total_video_complete_views" type="video" post-id="{{ $post->id }}"></graph-view>
                                 </div>
                             </div>
 
@@ -344,40 +344,4 @@
 @endpush
 
 @section('js')
-<script>
-     new Vue({
-         el: '#metrics',
-         filters: {
-             number_format(number) {
-                 return number.toLocaleString('en');
-             }
-         },
-         data: {
-             metrics: {
-                 likes: {{ $liveLatest->likes }},
-                 shares: {{ $liveLatest->shares }},
-                 comments: {{ $liveLatest->comments }},
-                 loves: {{ $liveLatest->loves }},
-                 wows: {{ $liveLatest->wows }},
-                 hahas: {{ $liveLatest->hahas}},
-                 sads: {{ $liveLatest->sads }},
-                 angrys: {{ $liveLatest->angrys }}
-             }
-         },
-         methods: {
-             loadData: function () {
-                 $.get('/posts/{{ $post->id }}/snapshots/latest/all', function (response) {
-                     this.metrics = response;
-                 }.bind(this));
-             }
-         },
-         mounted: function () {
-             this.loadData();
- 
-             setInterval(function () {
-                 this.loadData();
-             }.bind(this),1000); 
-         }
-     });
-</script>
 @stop

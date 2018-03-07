@@ -87,7 +87,7 @@ class PostController extends Controller
 
             if ($snapshots) {
                 foreach ($fields as $key => $field) {
-                    $response[$key]['label'] = $field;
+                    $response[$key]['label'] = $this->getMetricLabel($field);
                     $response[$key]['backgroundColor'] = $this->getMetricColor($field, 0.5);
                     $response[$key]['borderColor'] = $this->getMetricColor($field);
                     $response[$key]['borderWidth'] = 0;
@@ -146,6 +146,18 @@ class PostController extends Controller
             case 'impressions':
                 $color = 'rgba(216, 27, 96, '.$opacity.')';
                 break;
+            case 'total_video_views':
+                $color = 'rgba(0, 192 ,239, '.$opacity.')';
+                break;
+            case 'total_video_views_autoplayed':
+                $color = 'rgba(0, 166, 9, '.$opacity.')';
+                break;
+            case 'total_video_views_clicked_to_play':
+                $color = 'rgba(96, 92 ,168, '.$opacity.')';
+                break;
+            case 'total_video_complete_views':
+                $color = 'rgba(216, 27, 96, '.$opacity.')';
+                break;
             case 'uniques':
             default:
                 $color = 'rgba(0, 166 ,90, '.$opacity.')';
@@ -153,5 +165,26 @@ class PostController extends Controller
         }
 
         return $color;
+    }
+
+    protected function getMetricLabel($metric) {
+        switch($metric) {
+            case 'total_video_views':
+                $label = 'Total Views';
+                break;
+            case 'total_video_views_autoplayed':
+                $label = 'Total Views (Autoplayed)';
+                break;
+            case 'total_video_views_clicked_to_play';
+                $label = 'Total Views (Clicked to play)';
+                break;
+            case 'total_video_complete_views':
+                $label = 'Total Complete Views';
+                break;
+            default:
+                $label = title_case(str_replace('_', ' ', $metric));
+                break;
+        }
+        return $label;
     }
 }

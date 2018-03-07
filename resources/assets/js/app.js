@@ -19,7 +19,11 @@ Vue.component('graph-view', require('./components/Graph.vue'));
 
 const app = new Vue({
     el: '#app',
-
+    filters: {
+        number_format(number) {
+            return number.toLocaleString('en');
+        }
+    },
     data: {
         metrics: {
             likes: 0,
