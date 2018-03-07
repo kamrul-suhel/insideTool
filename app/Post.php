@@ -60,7 +60,11 @@ class Post extends Model
         if (!is_null($this->latestSnapshot)) {
             return $this->latestSnapshot;
         } else {
-            $this->latestSnapshot = \App\PostStatSnapshot::where('post_id', $this->id)->orderBy('id', 'DESC')->take(1)->first();
+            $this->latestSnapshot = \App\PostStatSnapshot::where('post_id', $this->id)
+                ->where('likes', '>', 0)
+                ->orderBy('id', 'DESC')
+                ->take(1)
+                ->firstOrNew([]);
             return $this->latestSnapshot;
         }
     }
