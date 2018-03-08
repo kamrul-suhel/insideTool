@@ -25,7 +25,8 @@ Route::middleware('auth')->group(function() {
     Route::bind('post', function($id, $route) {
         return \App\Post::withTrashed()->find($id);
     });
-    Route::get('/posts', 'PostController@index');
+    Route::get('/posts', 'PostController@index')->name('posts.index');
+    Route::get('/posts/labels/{label}', 'PostController@index')->name('posts.label');
     Route::get('/posts/{post}', 'PostController@show');
     Route::get('/posts/{post}/snapshots/{type}/{birth?}', 'PostController@jsonSnapshots');
         //->where('metric', '(all|likes|loves|wows|hahas|sads|angrys|shares|comments)');

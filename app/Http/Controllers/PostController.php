@@ -7,19 +7,28 @@ use Facebook\Facebook;
 use App\Post;
 use App\PostStatSnapshot;
 use App\VideoStatSnapshot;
+use App\VideoLabel;
 use App\PostDelayedStatSnapshot;
 use App\AverageMetric;
 
 class PostController extends Controller
 {
-    public function index()
+    public function index($label = false)
     {
         $posts = Post::withTrashed()
             ->orderBy('posted', 'desc')
-            ->with(['page'])
-            ->paginate(20);
+            ->with(['page']);
+        $labelFilter = false;
+        if ($label) {
+            $posts = $posts->whereHas('videoLabels', function ($q) use ($label) {
+                $q->where('id', (int) $label);
+            });
+            $labelFilter = VideoLabel::find($label);
+        }
+        $labels = VideoLabel::all();
+        $posts = $posts->paginate(20);
         $averages = AverageMetric::all()->keyBy('key');
-        return view('posts.index', ['posts' => $posts, 'averages' => $averages]);
+        return view('posts.index', ['posts' => $posts, 'averages' => $averages, 'labelFilter' => $labelFilter, 'labels' => $labels]);
     }
 
     public function show(Post $post)

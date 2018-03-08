@@ -39,3 +39,7 @@ tr.deleted-post.error a:hover {
 [v-cloak] {
     display: none;
 }
+
+.video-label a {
+    color: #fff;
+}

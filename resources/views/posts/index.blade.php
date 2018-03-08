@@ -4,6 +4,24 @@
     <div class="box box-primary">
         <div class="box-header">
             <h3 class="box-title">Posts</h3>
+            <div class="box-tools pull-right">
+                <span class="badge 
+                        @if (!$labelFilter)
+                            bg-aqua
+                        @else
+                            bg-gray
+                        @endif
+                    video-label"><a href="{{ route('posts.index') }}">All</a></span>
+                @foreach ($labels as $label)
+                    <span class="badge 
+                        @if ($labelFilter && $label->id == $labelFilter->id)
+                            bg-aqua
+                        @else
+                            bg-gray
+                        @endif
+                    video-label"><a href="{{ route('posts.label', ['label' => $label->id]) }}">{{$label->label}}</a></span>
+                @endforeach
+            </div>
         </div>
         <div class="box-body table-responsive no-padding">
             <table class="table table-striped table-hover">
