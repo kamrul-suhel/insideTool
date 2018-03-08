@@ -106,13 +106,13 @@
                         <div class="info-box-content">
                         <span class="info-box-text">SPM (Lifetime)</span>
                         <span class="info-box-number info-box-number-big 
-                                @if ($liveLatest->commentspm_lifetime > $averages->get('shares_perminute_lifetime')->average)
+                                @if ($liveLatest->sharesspm_lifetime > $averages->get('shares_perminute_lifetime')->average)
                                     text-green 
                                 @else
                                     text-red 
                                 @endif
                                 ">
-                                @if ($liveLatest->commentspm_lifetime > $averages->get('shares_perminute_lifetime')->average)
+                                @if ($liveLatest->sharesspm_lifetime > $averages->get('shares_perminute_lifetime')->average)
                                     <i class="fa fa-angle-up"></i> {{ round($liveLatest->sharespm_lifetime) }} <em><sup><small>({{ $averages->get('shares_perminute_lifetime')->average }})</small></sup></em>
                                 @else
                                     <i class="fa fa-angle-down"></i> {{ round($liveLatest->sharespm_lifetime) }} <em><sup><small>({{ $averages->get('shares_perminute_lifetime')->average }})</small></sup></em>
