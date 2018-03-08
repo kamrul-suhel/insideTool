@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Facebook\Facebook;
 use App\Post;
 use App\Page;
+use App\VideoLabel;
 
 class GetPagePosts extends Command
 {
@@ -14,7 +15,7 @@ class GetPagePosts extends Command
      *
      * @var string
      */
-    protected $signature = 'stats:getpageposts {pageid}';
+    protected $signature = 'stats:getpageposts {pageid} {limit?}';
 
     /**
      * The console command description.
@@ -41,9 +42,14 @@ class GetPagePosts extends Command
     public function handle()
     {
         $api = new Facebook;
-        $response = $api->get('/' . $this->argument('pageid') . '/posts/?limit=5', env('FACEBOOK_ACCESS_TOKEN'));
+        if ($this->argument('limit')) {
+            $limit = $this->argument('limit');
+        } else {
+            $limit = 5;
+        }
+        $response = $api->get('/' . $this->argument('pageid') . '/posts/?limit=' . $limit, env('FACEBOOK_ACCESS_TOKEN'));
         foreach ($response->getGraphEdge() as $node) {
-            $postResponse = $api->get('/' . $node->getField('id') . '?fields=message,name,link,picture,type,created_time', env('FACEBOOK_ACCESS_TOKEN'));
+            $postResponse = $api->get('/' . $node->getField('id') . '?fields=message,name,link,picture,type,created_time,object_id', env('FACEBOOK_ACCESS_TOKEN'));
             $postId = explode("_", $postResponse->getGraphNode()->getField('id'))[1];
             $newPost = false;
             $post = Post::withTrashed()->where('facebook_id', $postId)->first();
@@ -61,7 +67,22 @@ class GetPagePosts extends Command
             $post->type = $postResponse->getGraphNode()->getField('type');
             $post->posted = $postResponse->getGraphNode()->getField('created_time');
             $post->save();
+            $objectId = $postResponse->getGraphNode()->getField('object_id');
 
+            if ($post->type == 'video' && $objectId) {
+                $videoResponse = $api->get('/' . $objectId . '/?fields=custom_labels', env('FACEBOOK_ACCESS_TOKEN'));
+                foreach ($videoResponse->getGraphNode() as $node) {
+                    if (is_object($node)) {
+                        foreach ($node as $label) {
+                            $label = VideoLabel::firstOrCreate(['label' => $label]);
+                            if (!$post->videoLabels->contains($label->id)) {
+                                $post->videoLabels()->attach($label);
+                            }
+                        }
+                    }
+                }
+            }
+            
             if ($newPost) {
                 // Immediately pull stats
                 \Artisan::call('stats:getpoststats', ['postid' => $postId]);

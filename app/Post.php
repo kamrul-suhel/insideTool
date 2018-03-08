@@ -38,6 +38,14 @@ class Post extends Model
     }
 
     /**
+     * Return video labels
+     */
+    public function videoLabels()
+    {
+        return $this->belongsToMany('App\VideoLabel');
+    }
+
+    /**
      * Static method to set hidden fields when serialising
      */
     public static function setHiddenFields($fields = []) {

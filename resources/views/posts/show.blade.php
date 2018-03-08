@@ -60,7 +60,16 @@
                                             <th>Facebook</th>
                                             <td><a target="_blank" href="https://facebook.com/{{ $post->page->facebook_id }}/posts/{{ $post->facebook_id }}">Link</a></td>
                                         </tr>
-
+                                        @if ($post->type == 'video')
+                                            <tr>
+                                                <th>Labels</th>
+                                                <td>
+                                                    @foreach ($post->videoLabels as $label)
+                                                        <span class="badge badge-info">{{$label->label}}</span>
+                                                    @endforeach
+                                                </td>
+                                            </tr>
+                                        @endif
                                     </table>
                                 </div>
                             </div>
