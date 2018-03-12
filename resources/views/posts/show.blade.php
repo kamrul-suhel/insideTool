@@ -52,6 +52,12 @@
                                             <th>Type</th>
                                             <td>{{ title_case($post->type) }}</td>
                                         </tr>
+                                        @if ($post->creator)
+                                            <tr>
+                                                <th>Posted by</th>
+                                                <td><a href="{{ route('posts.index', ['creator' => $post->creator->id]) }}">{{ $post->creator->name }}</a></td>
+                                            </tr>
+                                        @endif
                                         <tr>
                                             <th>Link</th>
                                             <td><a target="_blank" href="{{ $post->link }}">{{ $post->link }}</a></td>
