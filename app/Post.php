@@ -46,6 +46,14 @@ class Post extends Model
     }
 
     /**
+     * Post creator
+     */
+    public function creator()
+    {
+        return $this->belongsTo('App\Creator');
+    }
+
+    /**
      * Static method to set hidden fields when serialising
      */
     public static function setHiddenFields($fields = []) {

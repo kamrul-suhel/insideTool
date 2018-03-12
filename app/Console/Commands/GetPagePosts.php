@@ -72,7 +72,7 @@ class GetPagePosts extends Command
             $creator = Creator::firstOrNew(['facebook_id' => $adminCreator["id"]]);
             $creator->name = $adminCreator["name"];
             $creator->save();
-            $post->creator_fbid = $creator->facebook_id;
+            $post->creator_id = $creator->id;
 
             $post->save();
             $objectId = $postResponse->getGraphNode()->getField('object_id');
