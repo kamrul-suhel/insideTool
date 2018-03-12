@@ -3,7 +3,7 @@
 <head>
     <title>UNILAD Insights</title>
     <link rel="stylesheet" href="/vendor/adminlte/vendor/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/admin_custom.css?201803081551">
+    <link rel="stylesheet" href="/css/admin_custom.css?201803121145">
 </head>
 <body>
     <div class="jumbotron vertical-center">
