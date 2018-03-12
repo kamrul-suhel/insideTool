@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Facebook\Facebook;
+use App\Creator;
 use App\Post;
 use App\PostStatSnapshot;
 use App\VideoStatSnapshot;
@@ -13,17 +14,33 @@ use App\AverageMetric;
 
 class PostController extends Controller
 {
-    public function index($label = false)
+    public function index()
     {
+        $label = false;
+        $creator = false;
+
+        if (\Request::get('creator')) {
+            $creator = \Request::get('creator');
+        }
+        if (\Request::get('label')) {
+            $label = \Request::get('label');
+        }
+        
         $posts = Post::withTrashed()
             ->orderBy('posted', 'desc')
-            ->with(['page']);
+            ->with(['page', 'creator']);
         $labelFilter = false;
         if ($label) {
             $posts = $posts->whereHas('videoLabels', function ($q) use ($label) {
                 $q->where('id', (int) $label);
             });
             $labelFilter = VideoLabel::find($label);
+        }
+        if ($creator) {
+            $posts = $posts->whereHas('creator', function ($q) use ($creator) {
+                $q->where('id', (int) $creator);
+            });
+            $creatorFilter = Creator::find($creator);
         }
         $labels = VideoLabel::all();
         $posts = $posts->paginate(20);

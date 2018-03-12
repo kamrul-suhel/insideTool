@@ -65,7 +65,7 @@
                                                 <th>Labels</th>
                                                 <td>
                                                     @foreach ($post->videoLabels as $label)
-                                                        <span class="badge bg-aqua video-label"><a href="{{ route('posts.label', ['label' => $label->id]) }}">{{$label->label}}</a></span>
+                                                        <span class="badge bg-aqua video-label"><a href="{{ route('posts.index', ['label' => $label->id]) }}">{{$label->label}}</a></span>
                                                     @endforeach
                                                 </td>
                                             </tr>

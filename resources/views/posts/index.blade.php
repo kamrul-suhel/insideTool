@@ -19,7 +19,7 @@
                         @else
                             bg-gray
                         @endif
-                    video-label"><a href="{{ route('posts.label', ['label' => $label->id]) }}">{{$label->label}}</a></span>
+                    video-label"><a href="{{ route('posts.index', ['label' => $label->id]) }}">{{$label->label}}</a></span>
                 @endforeach
             </div>
         </div>
@@ -30,6 +30,7 @@
                         <th>Page</th>
                         <th>Posted</th>
                         <th>Type</th>
+                        <th>Posted by</th>
                         <th></th>
                         <th>Message</th>
                         <th>Link name</th>
@@ -48,6 +49,11 @@
                             <td><strong>{{ $post->page->name }}</strong></td>
                             <td>{{ date("d/m/Y H:i:s", strtotime($post->posted)) }}
                             <td>{{ title_case($post->type) }}</td>
+                            @if ($post->creator)
+                                <td><a href="{{ route('posts.index', ['creator' => $post->creator->id]) }}">{{ $post->creator->name }}</a></td>
+                            @else
+                                <td>Unknown</td>
+                            @endif
                             <td><a href="/posts/{{ $post->id }}"><img src="{{ $post->picture }}" width="50"></a></td>
                             <td><a href="/posts/{{ $post->id }}">{{ $post->message }}</a></td>
                             <td>{{ $post->name }}</td>
