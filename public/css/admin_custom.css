@@ -40,7 +40,7 @@ tr.deleted-post.error a:hover {
     display: none;
 }
 
-.video-label a {
+.badge.video-label a, .badge.creator a {
     color: #fff;
 }
 

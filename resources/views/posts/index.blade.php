@@ -23,6 +23,11 @@
                 @endforeach
             </div>
         </div>
+        @if ($creatorFilter)
+            <div class="box-header">
+                <div class="box-tools"><p>Showing posts by: <span class="badge bg-red creator"><a href="{{ route('posts.index') }}">{{ $creatorFilter->name }} <i class="fa fa-times"></i></a></p></div>
+            </div>
+        @endif
         <div class="box-body table-responsive no-padding">
             <table class="table table-striped table-hover">
                 <thead>
@@ -34,9 +39,9 @@
                         <th></th>
                         <th>Message</th>
                         <th>Link name</th>
-                        <th><i class="fa fa-thumbs-up"></th>
-                        <th><i class="fa fa-comment"></th>
-                        <th><i class="fa fa-share"></th>
+                        <th><i class="fa fa-thumbs-up"></i></th>
+                        <th><i class="fa fa-comment"></i></th>
+                        <th><i class="fa fa-share"></i></th>
                     </tr>
                 </thead>
                 <tbody>

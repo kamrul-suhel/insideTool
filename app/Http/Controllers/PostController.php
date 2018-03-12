@@ -30,6 +30,8 @@ class PostController extends Controller
             ->orderBy('posted', 'desc')
             ->with(['page', 'creator']);
         $labelFilter = false;
+        $creatorFilter = false;
+        
         if ($label) {
             $posts = $posts->whereHas('videoLabels', function ($q) use ($label) {
                 $q->where('id', (int) $label);
@@ -45,7 +47,8 @@ class PostController extends Controller
         $labels = VideoLabel::all();
         $posts = $posts->paginate(20);
         $averages = AverageMetric::all()->keyBy('key');
-        return view('posts.index', ['posts' => $posts, 'averages' => $averages, 'labelFilter' => $labelFilter, 'labels' => $labels]);
+        return view('posts.index', ['posts' => $posts, 'averages' => $averages, 'labelFilter' => $labelFilter, 
+            'labels' => $labels, 'creatorFilter' => $creatorFilter]);
     }
 
     public function show(Post $post)
