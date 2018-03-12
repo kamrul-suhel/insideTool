@@ -12,15 +12,17 @@
                             bg-gray
                         @endif
                     video-label"><a href="{{ route('posts.index') }}">All</a></span>
-                @foreach ($labels as $label)
-                    <span class="badge 
-                        @if ($labelFilter && $label->id == $labelFilter->id)
-                            bg-aqua
-                        @else
-                            bg-gray
-                        @endif
-                    video-label"><a href="{{ route('posts.index', ['label' => $label->id]) }}">{{$label->label}}</a></span>
-                @endforeach
+                @if (!$creatorFilter)
+                    @foreach ($labels as $label)
+                        <span class="badge 
+                            @if ($labelFilter && $label->id == $labelFilter->id)
+                                bg-aqua
+                            @else
+                                bg-gray
+                            @endif
+                        video-label"><a href="{{ route('posts.index', ['label' => $label->id]) }}">{{$label->label}}</a></span>
+                    @endforeach
+                @endif
             </div>
         </div>
         @if ($creatorFilter)
