@@ -51,4 +51,7 @@ tr.deleted-post.error a:hover {
     display: flex;
     align-items: center;
   }
-  
+
+.box-tools.pull-right.video-tags {
+    max-width: 90%;
+}

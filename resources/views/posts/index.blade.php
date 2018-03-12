@@ -4,7 +4,7 @@
     <div class="box box-primary">
         <div class="box-header">
             <h3 class="box-title">Posts</h3>
-            <div class="box-tools pull-right">
+            <div class="box-tools pull-right video-tags">
                 <span class="badge 
                         @if (!$labelFilter)
                             bg-aqua
