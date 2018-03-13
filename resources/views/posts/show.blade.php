@@ -98,9 +98,9 @@
                                 @endif
                                 ">
                                 @if ($liveLatest->commentspm_lifetime > $averages->get('likes_perminute_lifetime')->average)
-                                    <i class="fa fa-angle-up"></i> {{ round($liveLatest->commentspm_lifetime) }} <em><sup><small>({{ $averages->get('likes_perminute_lifetime')->average }})</small></sup></em>
+                                    <i class="fa fa-angle-up"></i> {{ round($liveLatest->likespm_lifetime) }} <em><sup><small>({{ $averages->get('likes_perminute_lifetime')->average }})</small></sup></em>
                                 @else
-                                    <i class="fa fa-angle-down"></i> {{ round($liveLatest->commentspm_lifetime) }} <em><sup><small>({{ $averages->get('likes_perminute_lifetime')->average }})</small></sup></em>
+                                    <i class="fa fa-angle-down"></i> {{ round($liveLatest->likespm_lifetime) }} <em><sup><small>({{ $averages->get('likes_perminute_lifetime')->average }})</small></sup></em>
                                 @endif
                             </span>                        
                         </div>
