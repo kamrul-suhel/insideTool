@@ -74414,6 +74414,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         defaultClass: 'bg-gray'
     },
 
+    filters: {
+        number_format: function number_format(number) {
+            return number.toLocaleString('en');
+        }
+    },
+
     mounted: function mounted() {
         this.getData();
 
@@ -74479,17 +74485,17 @@ var render = function() {
   return _c("td", [
     _c("span", { class: "badge " + _vm.likesClass }, [
       _c("i", { staticClass: "fa fa-thumbs-up" }),
-      _vm._v(" " + _vm._s(_vm.likes))
+      _vm._v(" " + _vm._s(_vm._f("number_format")(_vm.likes)))
     ]),
     _vm._v(" "),
     _c("span", { class: "badge " + _vm.commentsClass }, [
       _c("i", { staticClass: "fa fa-comment" }),
-      _vm._v(" " + _vm._s(_vm.comments))
+      _vm._v(" " + _vm._s(_vm._f("number_format")(_vm.comments)))
     ]),
     _vm._v(" "),
     _c("span", { class: "badge " + _vm.sharesClass }, [
       _c("i", { staticClass: "fa fa-share" }),
-      _vm._v(" " + _vm._s(_vm.shares))
+      _vm._v(" " + _vm._s(_vm._f("number_format")(_vm.shares)))
     ])
   ])
 }
