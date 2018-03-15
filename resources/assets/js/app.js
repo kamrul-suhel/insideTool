@@ -16,10 +16,15 @@ window.Vue = require('vue');
  */
 
 Vue.component('graph-view', require('./components/Graph.vue'));
+Vue.component('index-metrics', require('./components/IndexMetrics.vue'));
 
 const app = new Vue({
     el: '#app',
-
+    filters: {
+        number_format(number) {
+            return number.toLocaleString('en');
+        }
+    },
     data: {
         metrics: {
             likes: 0,
@@ -34,16 +39,18 @@ const app = new Vue({
     },
 
     mounted: function () {
-        this.loadData();
-
-        setInterval(function () {
+        if ($('body').data('page') == 'show') {
             this.loadData();
-        }.bind(this),5000); 
+
+            setInterval(function () {
+                this.loadData();
+            }.bind(this),5000);
+        }
     },
 
     methods: {
         loadData: function () {
-            $.get('/posts/75/snapshots/latest/all', function (response) {
+            $.get('/posts/' + $('#app').data('post-id') + '/snapshots/latest/all', function (response) {
                 this.metrics = response;
             }.bind(this));
         }

@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Facebook\Facebook;
+use App\Creator;
 use App\Post;
 use App\PostStatSnapshot;
+use App\VideoStatSnapshot;
+use App\VideoLabel;
 use App\PostDelayedStatSnapshot;
 use App\AverageMetric;
 
@@ -13,8 +16,39 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::withTrashed()->orderBy('posted', 'desc')->with('page')->get();
-        return view('posts.index', ['posts' => $posts]);
+        $label = false;
+        $creator = false;
+
+        if (\Request::get('creator')) {
+            $creator = \Request::get('creator');
+        }
+        if (\Request::get('label')) {
+            $label = \Request::get('label');
+        }
+        
+        $posts = Post::withTrashed()
+            ->orderBy('posted', 'desc')
+            ->with(['page', 'creator']);
+        $labelFilter = false;
+        $creatorFilter = false;
+
+        if ($label) {
+            $posts = $posts->whereHas('videoLabels', function ($q) use ($label) {
+                $q->where('id', (int) $label);
+            });
+            $labelFilter = VideoLabel::find($label);
+        }
+        if ($creator) {
+            $posts = $posts->whereHas('creator', function ($q) use ($creator) {
+                $q->where('id', (int) $creator);
+            });
+            $creatorFilter = Creator::find($creator);
+        }
+        $labels = VideoLabel::all();
+        $posts = $posts->paginate(20);
+        $averages = AverageMetric::all()->keyBy('key');
+        return view('posts.index', ['posts' => $posts, 'averages' => $averages, 'labelFilter' => $labelFilter, 
+            'labels' => $labels, 'creatorFilter' => $creatorFilter]);
     }
 
     public function show(Post $post)
@@ -43,15 +77,15 @@ class PostController extends Controller
 
     public function jsonSnapshots(Request $request, Post $post, $type, $birth = false)
     {
-        if (!in_array($type, ["live", "delayed", "latest"])) {
-            return response()->json(["error" => "invalid type, must be one of 'live', 'delayed', 'latest"]);
+        if (!in_array($type, ["live", "delayed", "latest", "video"])) {
+            return response()->json(["error" => "invalid type, must be one of 'live', 'delayed', 'latest', 'video'"]);
         }
 
         $fields = explode(',',$request->input('fields'));
 
         //if ($metric == "all") {
             if ($type == 'live') {
-                //$fields = ['likes', 'shares', 'comments', 'loves', 'hahas', 'wows', 'sads', 'angrys'];
+                    //$fields = ['likes', 'shares', 'comments', 'loves', 'hahas', 'wows', 'sads', 'angrys'];
 
                 if ($birth) {
                     $birthEndDate = new \Carbon\Carbon($post->posted);
@@ -78,13 +112,15 @@ class PostController extends Controller
             } else if ($type == 'delayed') {
                 //$fields = ['impressions', 'uniques', 'fan_impressions', 'fan_uniques'];
                 $snapshots = PostDelayedStatSnapshot::where('post_id', $post->id)->orderBy('id', 'DESC')->get();
+            } else if ($type == 'video') {
+                $snapshots = VideoStatSnapshot::where('post_id', $post->id)->orderBy('id', 'DESC')->get();
             }
 
             $response = [];
 
             if ($snapshots) {
                 foreach ($fields as $key => $field) {
-                    $response[$key]['label'] = $field;
+                    $response[$key]['label'] = $this->getMetricLabel($field);
                     $response[$key]['backgroundColor'] = $this->getMetricColor($field, 0.5);
                     $response[$key]['borderColor'] = $this->getMetricColor($field);
                     $response[$key]['borderWidth'] = 0;
@@ -143,6 +179,18 @@ class PostController extends Controller
             case 'impressions':
                 $color = 'rgba(216, 27, 96, '.$opacity.')';
                 break;
+            case 'total_video_views':
+                $color = 'rgba(0, 192 ,239, '.$opacity.')';
+                break;
+            case 'total_video_views_autoplayed':
+                $color = 'rgba(0, 166, 9, '.$opacity.')';
+                break;
+            case 'total_video_views_clicked_to_play':
+                $color = 'rgba(96, 92 ,168, '.$opacity.')';
+                break;
+            case 'total_video_complete_views':
+                $color = 'rgba(216, 27, 96, '.$opacity.')';
+                break;
             case 'uniques':
             default:
                 $color = 'rgba(0, 166 ,90, '.$opacity.')';
@@ -150,5 +198,26 @@ class PostController extends Controller
         }
 
         return $color;
+    }
+
+    protected function getMetricLabel($metric) {
+        switch($metric) {
+            case 'total_video_views':
+                $label = 'Total Views';
+                break;
+            case 'total_video_views_autoplayed':
+                $label = 'Total Views (Autoplayed)';
+                break;
+            case 'total_video_views_clicked_to_play';
+                $label = 'Total Views (Clicked to play)';
+                break;
+            case 'total_video_complete_views':
+                $label = 'Total Complete Views';
+                break;
+            default:
+                $label = title_case(str_replace('_', ' ', $metric));
+                break;
+        }
+        return $label;
     }
 }

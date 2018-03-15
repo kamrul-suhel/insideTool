@@ -5,7 +5,7 @@
 @stop
 
 @section('content')
-    <div id="app" class="row" >
+    <div id="app" class="row" data-page="show" data-post-id="{{ $post->id }}">
         <div class="col-md-9">
             <div class="row">
                 <div class="col-md-12">
@@ -52,6 +52,12 @@
                                             <th>Type</th>
                                             <td>{{ title_case($post->type) }}</td>
                                         </tr>
+                                        @if ($post->creator)
+                                            <tr>
+                                                <th>Posted by</th>
+                                                <td><a href="{{ route('posts.index', ['creator' => $post->creator->id]) }}">{{ $post->creator->name }}</a></td>
+                                            </tr>
+                                        @endif
                                         <tr>
                                             <th>Link</th>
                                             <td><a target="_blank" href="{{ $post->link }}">{{ $post->link }}</a></td>
@@ -60,7 +66,16 @@
                                             <th>Facebook</th>
                                             <td><a target="_blank" href="https://facebook.com/{{ $post->page->facebook_id }}/posts/{{ $post->facebook_id }}">Link</a></td>
                                         </tr>
-
+                                        @if ($post->type == 'video')
+                                            <tr>
+                                                <th>Labels</th>
+                                                <td>
+                                                    @foreach ($post->videoLabels as $label)
+                                                        <span class="badge bg-aqua video-label"><a href="{{ route('posts.index', ['label' => $label->id]) }}">{{$label->label}}</a></span>
+                                                    @endforeach
+                                                </td>
+                                            </tr>
+                                        @endif
                                     </table>
                                 </div>
                             </div>
@@ -76,16 +91,16 @@
                         <div class="info-box-content">
                         <span class="info-box-text">LPM (Lifetime)</span>
                             <span class="info-box-number info-box-number-big 
-                                @if ($liveLatest->commentspm_lifetime > $averages->get('likes_perminute_lifetime')->average)
+                                @if ($liveLatest->likespm_lifetime > $averages->get('likes_perminute_lifetime')->average)
                                     text-green 
                                 @else
                                     text-red 
                                 @endif
                                 ">
-                                @if ($liveLatest->commentspm_lifetime > $averages->get('likes_perminute_lifetime')->average)
-                                    <i class="fa fa-angle-up"></i> {{ round($liveLatest->commentspm_lifetime) }} <em><sup><small>({{ $averages->get('likes_perminute_lifetime')->average }})</small></sup></em>
+                                @if ($liveLatest->likespm_lifetime > $averages->get('likes_perminute_lifetime')->average)
+                                    <i class="fa fa-angle-up"></i> {{ round($liveLatest->likespm_lifetime) }} <em><sup><small>({{ $averages->get('likes_perminute_lifetime')->average }})</small></sup></em>
                                 @else
-                                    <i class="fa fa-angle-down"></i> {{ round($liveLatest->commentspm_lifetime) }} <em><sup><small>({{ $averages->get('likes_perminute_lifetime')->average }})</small></sup></em>
+                                    <i class="fa fa-angle-down"></i> {{ round($liveLatest->likespm_lifetime) }} <em><sup><small>({{ $averages->get('likes_perminute_lifetime')->average }})</small></sup></em>
                                 @endif
                             </span>                        
                         </div>
@@ -97,13 +112,13 @@
                         <div class="info-box-content">
                         <span class="info-box-text">SPM (Lifetime)</span>
                         <span class="info-box-number info-box-number-big 
-                                @if ($liveLatest->commentspm_lifetime > $averages->get('shares_perminute_lifetime')->average)
+                                @if ($liveLatest->sharespm_lifetime > $averages->get('shares_perminute_lifetime')->average)
                                     text-green 
                                 @else
                                     text-red 
                                 @endif
                                 ">
-                                @if ($liveLatest->commentspm_lifetime > $averages->get('shares_perminute_lifetime')->average)
+                                @if ($liveLatest->sharespm_lifetime > $averages->get('shares_perminute_lifetime')->average)
                                     <i class="fa fa-angle-up"></i> {{ round($liveLatest->sharespm_lifetime) }} <em><sup><small>({{ $averages->get('shares_perminute_lifetime')->average }})</small></sup></em>
                                 @else
                                     <i class="fa fa-angle-down"></i> {{ round($liveLatest->sharespm_lifetime) }} <em><sup><small>({{ $averages->get('shares_perminute_lifetime')->average }})</small></sup></em>
@@ -222,17 +237,21 @@
                             <div class="tab-pane" id="reactions">
                                 <h3>Reactions <small>First 5 minutes</small></h3>
                                 <div class="chart">
-                                    <graph-view id="chart-reactions-birth" fields="loves,wows,hahas,sads,angrys" type="live" birth="" post-id="{{ $post->id }}"></graph-view>
+                                    <graph-view id="chart-reactions-birth" fields="loves,wows,hahas,sads,angrys" type="live" birth="true" post-id="{{ $post->id }}"></graph-view>
                                 </div>
                                 <h3>Reactions <small>Post lifetime</small></h3>
                                 <div class="chart">
-                                    <graph-view id="chart-reactions" fields="loves,wows,hahas,sads,angrys" type="live" birth="true" post-id="{{ $post->id }}"></graph-view>
+                                    <graph-view id="chart-reactions" fields="loves,wows,hahas,sads,angrys" type="live" birth="false" post-id="{{ $post->id }}"></graph-view>
                                 </div>
                             </div>
                             <div class="tab-pane" id="views">
                                 <h3>Views <small>Everyone</small></h3>
                                 <div class="chart">
                                     <graph-view id="chart-views" birth="" fields="impressions,uniques" type="delayed" post-id="{{ $post->id }}"></graph-view>
+                                </div>
+                                <h3>Video Views <small>Everyone</small></h3>
+                                <div class="chart">
+                                    <graph-view id="chart-video-views" birth="" fields="total_video_views,total_video_views_autoplayed,total_video_views_clicked_to_play,total_video_complete_views" type="video" post-id="{{ $post->id }}"></graph-view>
                                 </div>
                             </div>
 

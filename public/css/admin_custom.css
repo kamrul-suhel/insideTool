@@ -39,3 +39,23 @@ tr.deleted-post.error a:hover {
 [v-cloak] {
     display: none;
 }
+
+.badge.video-label a, .badge.creator a {
+    color: #fff;
+}
+
+.bg-gray.video-label a {
+    color: #666;
+}
+
+.vertical-center {
+    min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+    min-height: 100vh; /* These two lines are counted as one :-)       */
+  
+    display: flex;
+    align-items: center;
+  }
+
+.box-tools.pull-right.video-tags {
+    max-width: 90%;
+}

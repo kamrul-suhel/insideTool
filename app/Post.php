@@ -11,6 +11,8 @@ class Post extends Model
 
     protected $fillable = ['facebook_id'];
 
+    public $latestSnapshot;
+
     /**
      * Return pages associated with this post
      */
@@ -36,6 +38,22 @@ class Post extends Model
     }
 
     /**
+     * Return video labels
+     */
+    public function videoLabels()
+    {
+        return $this->belongsToMany('App\VideoLabel');
+    }
+
+    /**
+     * Post creator
+     */
+    public function creator()
+    {
+        return $this->belongsTo('App\Creator');
+    }
+
+    /**
      * Static method to set hidden fields when serialising
      */
     public static function setHiddenFields($fields = []) {
@@ -48,6 +66,23 @@ class Post extends Model
     public function toJson($options = 0) {
         $this->setHidden(static::$hiddenFields);
         return parent::toJson($options);
+    }
+
+    /**
+     * Get latest stat snapshot
+     */
+    public function latestStatSnapshot()
+    {
+        if (!is_null($this->latestSnapshot)) {
+            return $this->latestSnapshot;
+        } else {
+            $this->latestSnapshot = \App\PostStatSnapshot::where('post_id', $this->id)
+                ->where('likes', '>', 0)
+                ->orderBy('id', 'DESC')
+                ->take(1)
+                ->firstOrNew([]);
+            return $this->latestSnapshot;
+        }
     }
  
 
