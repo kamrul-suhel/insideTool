@@ -74477,12 +74477,12 @@ var render = function() {
     _vm._v(" "),
     _c("span", { class: "badge " + _vm.commentsClass }, [
       _c("i", { staticClass: "fa fa-comment" }),
-      _vm._v(_vm._s(_vm.comments))
+      _vm._v(" " + _vm._s(_vm.comments))
     ]),
     _vm._v(" "),
     _c("span", { class: "badge " + _vm.sharesClass }, [
       _c("i", { staticClass: "fa fa-share" }),
-      _vm._v(_vm._s(_vm.shares))
+      _vm._v(" " + _vm._s(_vm.shares))
     ])
   ])
 }

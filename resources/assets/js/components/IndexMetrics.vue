@@ -1,8 +1,8 @@
 <template>
         <td>
             <span :class="'badge ' + likesClass"><i class="fa fa-thumbs-up"></i> {{ likes }}</span>
-            <span :class="'badge ' + commentsClass"><i class="fa fa-comment"></i>{{ comments }}</span>
-            <span :class="'badge ' + sharesClass"><i class="fa fa-share"></i>{{ shares }}</span>
+            <span :class="'badge ' + commentsClass"><i class="fa fa-comment"></i> {{ comments }}</span>
+            <span :class="'badge ' + sharesClass"><i class="fa fa-share"></i> {{ shares }}</span>
         </td>
 </template>
 
