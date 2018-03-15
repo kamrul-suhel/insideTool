@@ -74408,9 +74408,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = (Vue.extend({
     props: {
         postId: 0,
-        likes: '',
-        shares: '',
-        comments: ''
+        postLikes: 0,
+        postShares: 0,
+        postComments: 0,
+        defaultClass: 'bg-gray'
     },
 
     mounted: function mounted() {
@@ -74422,7 +74423,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     data: function data() {
         return {
-            errors: []
+            errors: [],
+            likes: this.postLikes,
+            shares: this.postShares,
+            comments: this.postComments,
+            likesClass: this.defaultClass,
+            sharesClass: this.defaultClass,
+            commentsClass: this.defaultClass
         };
     },
 

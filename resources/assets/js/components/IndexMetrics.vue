@@ -10,9 +10,10 @@
     export default Vue.extend({
         props:{
             postId: 0,
-            likes: '',
-            shares: '',
-            comments: ''
+            postLikes: 0,
+            postShares: 0,
+            postComments: 0,
+            defaultClass: 'bg-gray'
         },
 
         mounted(){
@@ -26,7 +27,13 @@
 
         data(){
             return {
-                errors: []
+                errors: [],
+                likes: this.postLikes,
+                shares: this.postShares,
+                comments: this.postComments,
+                likesClass: this.defaultClass,
+                sharesClass: this.defaultClass,
+                commentsClass: this.defaultClass
             };
         },
 
