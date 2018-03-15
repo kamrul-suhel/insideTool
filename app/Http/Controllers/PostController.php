@@ -31,7 +31,7 @@ class PostController extends Controller
             ->with(['page', 'creator']);
         $labelFilter = false;
         $creatorFilter = false;
-        
+
         if ($label) {
             $posts = $posts->whereHas('videoLabels', function ($q) use ($label) {
                 $q->where('id', (int) $label);
@@ -85,7 +85,7 @@ class PostController extends Controller
 
         //if ($metric == "all") {
             if ($type == 'live') {
-                //$fields = ['likes', 'shares', 'comments', 'loves', 'hahas', 'wows', 'sads', 'angrys'];
+                    //$fields = ['likes', 'shares', 'comments', 'loves', 'hahas', 'wows', 'sads', 'angrys'];
 
                 if ($birth) {
                     $birthEndDate = new \Carbon\Carbon($post->posted);

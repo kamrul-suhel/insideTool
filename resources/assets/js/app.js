@@ -16,6 +16,7 @@ window.Vue = require('vue');
  */
 
 Vue.component('graph-view', require('./components/Graph.vue'));
+Vue.component('index-metrics', require('./components/IndexMetrics.vue'));
 
 const app = new Vue({
     el: '#app',
@@ -38,11 +39,13 @@ const app = new Vue({
     },
 
     mounted: function () {
-        this.loadData();
-
-        setInterval(function () {
+        if ($('body').data('page') == 'show') {
             this.loadData();
-        }.bind(this),5000); 
+
+            setInterval(function () {
+                this.loadData();
+            }.bind(this),5000);
+        }
     },
 
     methods: {

@@ -5,7 +5,7 @@
 @stop
 
 @section('content')
-    <div id="app" class="row" data-post-id="{{ $post->id }}">
+    <div id="app" class="row" data-page="show" data-post-id="{{ $post->id }}">
         <div class="col-md-9">
             <div class="row">
                 <div class="col-md-12">

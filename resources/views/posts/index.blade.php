@@ -30,7 +30,8 @@
                 <div class="box-tools"><p>Showing posts by: <span class="badge bg-red creator"><a href="{{ route('posts.index') }}">{{ $creatorFilter->name }} <i class="fa fa-times"></i></a></p></div>
             </div>
         @endif
-        <div class="box-body table-responsive no-padding">
+        <div id="app" class="box-body table-responsive no-padding" data-average-likes="{{ $averages->get('likes')->average }}"
+         data-average-comments="{{ $averages->get('comments')->average }}"  data-average-shares="{{ $averages->get('shares')->average }}">
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
@@ -41,9 +42,7 @@
                         <th></th>
                         <th>Message</th>
                         <th>Link name</th>
-                        <th><i class="fa fa-thumbs-up"></i></th>
-                        <th><i class="fa fa-comment"></i></th>
-                        <th><i class="fa fa-share"></i></th>
+                        <th class="col-sm-2">Stats</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -64,39 +63,8 @@
                             <td><a href="/posts/{{ $post->id }}"><img src="{{ $post->picture }}" width="50"></a></td>
                             <td><a href="/posts/{{ $post->id }}">{{ $post->message }}</a></td>
                             <td>{{ $post->name }}</td>
-                            <td>
-                                <span class="badge
-                                @if ($post->latestStatSnapshot()->likes > $averages->get('likes')->average)
-                                    bg-green
-                                @else
-                                    bg-red
-                                @endif
-                                ">
-                                    {{ $post->latestStatSnapshot()->likes }}
-                                </span>
-                            </td>
-                            <td>
-                                <span class="badge
-                                @if ($post->latestStatSnapshot()->comments > $averages->get('comments')->average)
-                                    bg-green
-                                @else
-                                    bg-red
-                                @endif
-                                ">
-                                    {{ $post->latestStatSnapshot()->comments }}
-                                </span>
-                            </td>
-                            <td>
-                                <span class="badge
-                                @if ($post->latestStatSnapshot()->shares > $averages->get('shares')->average)
-                                    bg-green
-                                @else
-                                    bg-red
-                                @endif
-                                ">
-                                    {{ $post->latestStatSnapshot()->shares }}
-                                </span>
-                            </td>
+                            <td is="index-metrics" birth="false" fields="likes,shares,comments" type="latest" post-id="{{ $post->id }}">{{ $post->name }}</td>
+
                         </tr>
                     @endforeach
                 </tbody>
@@ -109,3 +77,7 @@
         </div>
     </div>
 @stop
+
+@push('js')
+    <script src="{{ asset('js/app.js') }}"></script>
+@endpush
