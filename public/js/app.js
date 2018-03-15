@@ -19666,7 +19666,7 @@ var app = new Vue({
     },
 
     mounted: function mounted() {
-        if ($('body').data('page') == 'show') {
+        if ($('#app').data('page') == 'show') {
             this.loadData();
 
             setInterval(function () {

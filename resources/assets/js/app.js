@@ -39,7 +39,7 @@ const app = new Vue({
     },
 
     mounted: function () {
-        if ($('body').data('page') == 'show') {
+        if ($('#app').data('page') == 'show') {
             this.loadData();
 
             setInterval(function () {
