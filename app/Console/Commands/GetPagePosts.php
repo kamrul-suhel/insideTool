@@ -100,6 +100,12 @@ class GetPagePosts extends Command
                         $published->save();
                     }
                 }
+                $instantArticle = PublishedInstantArticle::where('canonical_url', $post->link)->first();
+                var_dump($instantArticle);
+                if ($instantArticle) {
+                    $post->instant_article = true;
+                    $post->save();
+                }
             }
             
             if ($newPost) {
