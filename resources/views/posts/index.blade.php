@@ -61,7 +61,14 @@
                                 <td>Unknown</td>
                             @endif
                             <td><a href="/posts/{{ $post->id }}"><img src="{{ $post->picture }}" width="50"></a></td>
-                            <td><a href="/posts/{{ $post->id }}">{{ $post->message }}</a></td>
+                            <td>
+                                @if ($post->instant_article)
+                                    <i class="fa fa-bolt"></i>&nbsp; 
+                                @endif
+                                <a href="/posts/{{ $post->id }}">
+                                    {{ $post->message }}
+                                </a>
+                            </td>
                             <td>{{ $post->name }}</td>
                             <td is="index-metrics" birth="false" fields="likes,shares,comments" type="latest" post-id="{{ $post->id }}">{{ $post->name }}</td>
 
