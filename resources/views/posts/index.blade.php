@@ -16,7 +16,7 @@
                         @if ($iaFilter)
                             bg-aqua
                         @else
-                            bg-gray
+                            bg-yellow
                         @endif
                         video-label"><a href="{{ route('posts.index', ['ia' => true]) }}">Instant Articles</a></span>
 
