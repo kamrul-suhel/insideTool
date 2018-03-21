@@ -6,12 +6,20 @@
             <h3 class="box-title">Posts</h3>
             <div class="box-tools pull-right video-tags">
                 <span class="badge 
-                        @if (!$labelFilter)
+                        @if (!$labelFilter && !$iaFilter)
                             bg-aqua
                         @else
                             bg-gray
                         @endif
                     video-label"><a href="{{ route('posts.index') }}">All</a></span>
+                    <span class="badge 
+                        @if ($iaFilter)
+                            bg-aqua
+                        @else
+                            bg-gray
+                        @endif
+                        video-label"><a href="{{ route('posts.index', ['ia' => true]) }}">Instant Articles</a></span>
+
                 @if (!$creatorFilter)
                     @foreach ($labels as $label)
                         <span class="badge 

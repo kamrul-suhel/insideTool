@@ -18,6 +18,7 @@ class PostController extends Controller
     {
         $label = false;
         $creator = false;
+        $instantArticles = false;
 
         if (\Request::get('creator')) {
             $creator = \Request::get('creator');
@@ -25,12 +26,16 @@ class PostController extends Controller
         if (\Request::get('label')) {
             $label = \Request::get('label');
         }
+        if (\Request::get('ia')) {
+            $instantArticles = \Request::get('ia');
+        }
         
         $posts = Post::withTrashed()
             ->orderBy('posted', 'desc')
             ->with(['page', 'creator']);
         $labelFilter = false;
         $creatorFilter = false;
+        $iaFilter = false;
 
         if ($label) {
             $posts = $posts->whereHas('videoLabels', function ($q) use ($label) {
@@ -44,11 +49,15 @@ class PostController extends Controller
             });
             $creatorFilter = Creator::find($creator);
         }
+        if ($instantArticles) {
+            $posts->where('instant_article', true);
+            $iaFilter = true;
+        }
         $labels = VideoLabel::all();
         $posts = $posts->paginate(20);
         $averages = AverageMetric::all()->keyBy('key');
         return view('posts.index', ['posts' => $posts, 'averages' => $averages, 'labelFilter' => $labelFilter, 
-            'labels' => $labels, 'creatorFilter' => $creatorFilter]);
+            'labels' => $labels, 'creatorFilter' => $creatorFilter, 'iaFilter' => $iaFilter]);
     }
 
     public function show(Post $post)
