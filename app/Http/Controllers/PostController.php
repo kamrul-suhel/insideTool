@@ -19,6 +19,7 @@ class PostController extends Controller
         $label = false;
         $creator = false;
         $instantArticles = false;
+        $day = 0;
 
         if (\Request::get('creator')) {
             $creator = \Request::get('creator');
@@ -28,6 +29,9 @@ class PostController extends Controller
         }
         if (\Request::get('ia')) {
             $instantArticles = \Request::get('ia');
+        }
+        if (\Request::get('day')) {
+            $day = (int) \Request::get('day');
         }
         
         $posts = Post::withTrashed()
@@ -53,11 +57,45 @@ class PostController extends Controller
             $posts->where('instant_article', true);
             $iaFilter = true;
         }
+        
+        $posts->whereDate('posted', \Carbon\Carbon::now('Europe/London')->subDays($day)->format('Y-m-d'));
+
+        $paginationLinks = [];
+        $paginationLinks["days"] = [];
+
+        $prevLink = "";
+        if ($day > 0) {
+            $prevLink = route('posts.index', ['day' => $day - 1]);
+        }
+        $paginationLinks["prevLink"] = $prevLink;
+
+        for ($i = 0; $i < $day; $i++) {
+            $date = \Carbon\Carbon::now('Europe/London')->subDays($i);
+            $paginationLinks["days"][] = ['label' => $date->format('d/m'),
+                'link' => route('posts.index', ['day' => $i]),
+                'current' => false];
+        }
+        $paginationLinks["days"][] = ['label' => \Carbon\Carbon::now('Europe/London')->subDays($day)->format('d/m'),
+            'link' => route('posts.index', ['day' => $i]),
+            'current' => true];
+
+        $prevDays = count($paginationLinks["days"]);
+        for ($i = $prevDays; $i < 10 - $prevDays; $i++) {
+            $date = \Carbon\Carbon::now('Europe/London')->subDays($i);
+            $paginationLinks["days"][] = ['label' => $date->format('d/m'),
+                'link' => route('posts.index', ['day' => $i]),
+                'current' => false];
+        }
+
+        $paginationLinks["nextLink"] = route('posts.index', ['day' => $day + 1]);
+
+        var_dump($paginationLinks);
+
         $labels = VideoLabel::all();
-        $posts = $posts->paginate(20);
+        $posts = $posts->get();
         $averages = AverageMetric::all()->keyBy('key');
         return view('posts.index', ['posts' => $posts, 'averages' => $averages, 'labelFilter' => $labelFilter, 
-            'labels' => $labels, 'creatorFilter' => $creatorFilter, 'iaFilter' => $iaFilter]);
+            'labels' => $labels, 'creatorFilter' => $creatorFilter, 'iaFilter' => $iaFilter, 'paginationLinks' => $paginationLinks]);
     }
 
     public function show(Post $post)
