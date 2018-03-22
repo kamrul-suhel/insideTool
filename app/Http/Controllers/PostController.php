@@ -89,8 +89,6 @@ class PostController extends Controller
 
         $paginationLinks["nextLink"] = route('posts.index', ['day' => $day + 1]);
 
-        var_dump($paginationLinks);
-
         $labels = VideoLabel::all();
         $posts = $posts->get();
         $averages = AverageMetric::all()->keyBy('key');
