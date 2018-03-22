@@ -58,7 +58,7 @@ class PostController extends Controller
             $iaFilter = true;
         }
         
-        if (!$label && !$creator && $instantArticles) {
+        if (!$label && !$creator && !$instantArticles) {
             $posts->whereDate('posted', \Carbon\Carbon::now('Europe/London')->subDays($day)->format('Y-m-d'));
         }
 
