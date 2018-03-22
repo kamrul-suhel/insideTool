@@ -58,7 +58,9 @@ class PostController extends Controller
             $iaFilter = true;
         }
         
-        $posts->whereDate('posted', \Carbon\Carbon::now('Europe/London')->subDays($day)->format('Y-m-d'));
+        if (!$label && !$creator && $instantArticles) {
+            $posts->whereDate('posted', \Carbon\Carbon::now('Europe/London')->subDays($day)->format('Y-m-d'));
+        }
 
         $paginationLinks = [];
         $paginationLinks["days"] = [];
