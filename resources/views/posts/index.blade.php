@@ -31,7 +31,7 @@
 
                                     @else
                                         <div class="progress">
-                                            <div class="progress-bar" style="width:100%"></div>
+                                            <div class="progress-bar bg-lime" style="width:100%"></div>
                                         </div>
                                         <span class="progress-description">
                                             {{ round(($videoReach - $averages->get('daily_reach_video')->average) / $averages->get('daily_reach_video')->average * 100) }}% above average
@@ -57,7 +57,7 @@
                                         </span>
                                     @else
                                         <div class="progress">
-                                            <div class="progress-bar" style="width:100%"></div>
+                                            <div class="progress-bar bg-lime" style="width:100%"></div>
                                         </div>
                                         <span class="progress-description">
                                             {{ round(($videoReactions - $averages->get('daily_reactions_video')->average) / $averages->get('daily_reactions_video')->average * 100) }}% above average
@@ -84,7 +84,7 @@
 
                                     @else
                                         <div class="progress">
-                                            <div class="progress-bar" style="width:100%"></div>
+                                            <div class="progress-bar bg-lime" style="width:100%"></div>
                                         </div>
                                         <span class="progress-description">
                                             {{ round(($videoShares - $averages->get('daily_shares_video')->average) / $averages->get('daily_shares_video')->average * 100) }}% above average
@@ -108,10 +108,9 @@
                                         <span class="progress-description">
                                             {{ round(($averages->get('daily_comments_video')->average - $videoComments) / $averages->get('daily_comments_video')->average * 100) }}% below average
                                         </span>
-
                                     @else
                                         <div class="progress">
-                                            <div class="progress-bar" style="width:100%"></div>
+                                            <div class="progress-bar bg-lime" style="width:100%"></div>
                                         </div>
                                         <span class="progress-description">
                                             {{ round(($videoComments - $averages->get('daily_comments_video')->average) / $averages->get('daily_comments_video')->average * 100) }}% above average
@@ -149,7 +148,7 @@
 
                                     @else
                                         <div class="progress">
-                                            <div class="progress-bar" style="width:100%"></div>
+                                            <div class="progress-bar bg-lime" style="width:100%"></div>
                                         </div>
                                         <span class="progress-description">
                                             {{ round(($articleReach - $averages->get('daily_reach_article')->average) / $averages->get('daily_reach_article')->average * 100) }}% above average
@@ -175,7 +174,7 @@
                                         </span>
                                     @else
                                         <div class="progress">
-                                            <div class="progress-bar" style="width:100%"></div>
+                                            <div class="progress-bar bg-lime" style="width:100%"></div>
                                         </div>
                                         <span class="progress-description">
                                             {{ round(($articleReactions - $averages->get('daily_reactions_article')->average) / $averages->get('daily_reactions_article')->average * 100) }}% above average
@@ -202,7 +201,7 @@
 
                                     @else
                                         <div class="progress">
-                                            <div class="progress-bar" style="width:100%"></div>
+                                            <div class="progress-bar bg-lime" style="width:100%"></div>
                                         </div>
                                         <span class="progress-description">
                                             {{ round(($articleShares - $averages->get('daily_shares_article')->average) / $averages->get('daily_shares_article')->average * 100) }}% above average
@@ -229,7 +228,7 @@
 
                                     @else
                                         <div class="progress">
-                                            <div class="progress-bar" style="width:100%"></div>
+                                            <div class="progress-bar bg-lime" style="width:100%"></div>
                                         </div>
                                         <span class="progress-description">
                                             {{ round(($articleComments - $averages->get('daily_comments_article')->average) / $averages->get('daily_comments_article')->average * 100) }}% above average
