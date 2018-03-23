@@ -1,53 +1,116 @@
 @extends('layouts.app')
 
+@section('content_header')
+    <h1>{{ $date->format('l, jS F Y') }}</h1>
+@stop
+
 @section('content')
-    <div class="box box-primary">
-        <div class="box-header">
-            <h3 class="box-title">{{ $date->format('l, jS F Y') }}</h3>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h3 class="box-title">Videos</h3>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-aqua"><i class="fa fa-eye"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Reach</span>
+                                    <span class="info-box-number info-box-number-medium">
+                                        {{ number_format($videoReach) }}
+                                    </span>                        
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-teal"><i class="fa fa-thumbs-up"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Reactions</span>
+                                    <span class="info-box-number info-box-number-medium">
+                                        {{ number_format($videoReactions) }}
+                                    </span>                        
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-green"><i class="fa fa-share"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Shares</span>
+                                    <span class="info-box-number info-box-number-medium">
+                                        {{ number_format($videoShares) }}
+                                    </span>                        
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-yellow"><i class="fa fa-comment"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Comments</span>
+                                    <span class="info-box-number info-box-number-medium">
+                                        {{ number_format($videoComments) }}
+                                    </span>                        
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="box-body">
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="info-box">
-                        <span class="info-box-icon bg-aqua"><i class="fa fa-eye"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Reach</span>
-                            <span class="info-box-number info-box-number-medium">
-                                {{ number_format($reach) }}
-                            </span>                        
-                        </div>
-                    </div>
+        <div class="col-md-6">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h3 class="box-title">Articles</h3>
                 </div>
-                <div class="col-md-3">
-                    <div class="info-box">
-                        <span class="info-box-icon bg-teal"><i class="fa fa-thumbs-up"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Reactions</span>
-                            <span class="info-box-number info-box-number-medium">
-                                {{ number_format($reactions) }}
-                            </span>                        
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-aqua"><i class="fa fa-eye"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Reach</span>
+                                    <span class="info-box-number info-box-number-medium">
+                                        {{ number_format($articleReach) }}
+                                    </span>                        
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="info-box">
-                        <span class="info-box-icon bg-green"><i class="fa fa-share"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Shares</span>
-                            <span class="info-box-number info-box-number-medium">
-                                {{ number_format($shares) }}
-                            </span>                        
+                        <div class="col-md-6">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-teal"><i class="fa fa-thumbs-up"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Reactions</span>
+                                    <span class="info-box-number info-box-number-medium">
+                                        {{ number_format($articleReactions) }}
+                                    </span>                        
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="info-box">
-                        <span class="info-box-icon bg-yellow"><i class="fa fa-comment"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text">Comments</span>
-                            <span class="info-box-number info-box-number-medium">
-                                {{ number_format($comments) }}
-                            </span>                        
+                        <div class="col-md-6">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-green"><i class="fa fa-share"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Shares</span>
+                                    <span class="info-box-number info-box-number-medium">
+                                        {{ number_format($articleShares) }}
+                                    </span>                        
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-yellow"><i class="fa fa-comment"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Comments</span>
+                                    <span class="info-box-number info-box-number-medium">
+                                        {{ number_format($articleComments) }}
+                                    </span>                        
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

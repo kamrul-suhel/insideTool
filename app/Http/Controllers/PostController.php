@@ -93,31 +93,52 @@ class PostController extends Controller
         $labels = VideoLabel::all();
         $posts = $posts->get();
 
-        $impressions = 0;
-        $reactions = 0;
-        $shares = 0;
-        $comments = 0;
+        $articleImpressions = 0;
+        $articleReactions = 0;
+        $articleShares = 0;
+        $articleComments = 0;
+
+        $videoImpressions = 0;
+        $videoReactions = 0;
+        $videoShares = 0;
+        $videoComments = 0;
 
         foreach ($posts as $post) {
             if ($delayed = $post->latestDelayedStatSnapshot()) {
-                $impressions += $delayed->impressions;
+                if ($post->type == 'video') {
+                    $videoImpressions += $delayed->impressions;
+                } else if ($post->type == 'link') {
+                    $articleImpressions += $delayed->impressions;
+                }
             }
             if ($live = $post->latestStatSnapshot()) {
-                $reactions += $live->likes;
-                $reactions += $live->loves;
-                $reactions += $live->wows;
-                $reactions += $live->hahas;
-                $reactions += $live->sads;
-                $reactions += $live->angrys;
-                $shares += $live->shares;
-                $comments += $live->comments;
+                if ($post->type == 'video') {
+                    $videoReactions += $live->likes;
+                    $videoReactions += $live->loves;
+                    $videoReactions += $live->wows;
+                    $videoReactions += $live->hahas;
+                    $videoReactions += $live->sads;
+                    $videoReactions += $live->angrys;
+                    $videoShares += $live->shares;
+                    $videoComments += $live->comments;
+                } else if ($post->type == 'link') {
+                    $articleReactions += $live->likes;
+                    $articleReactions += $live->loves;
+                    $articleReactions += $live->wows;
+                    $articleReactions += $live->hahas;
+                    $articleReactions += $live->sads;
+                    $articleReactions += $live->angrys;
+                    $articleShares += $live->shares;
+                    $articleComments += $live->comments;
+                }
             }
         }
 
         $averages = AverageMetric::all()->keyBy('key');
         return view('posts.index', ['posts' => $posts, 'averages' => $averages, 'labelFilter' => $labelFilter, 
             'labels' => $labels, 'creatorFilter' => $creatorFilter, 'iaFilter' => $iaFilter, 'paginationLinks' => $paginationLinks,
-            'reach' => $impressions, 'reactions' => $reactions, 'shares' => $shares, 'comments' => $comments, 
+            'videoReach' => $videoImpressions, 'videoReactions' => $videoReactions, 'videoShares' => $videoShares, 'videoComments' => $videoComments,
+            'articleReach' => $articleImpressions, 'articleReactions' => $articleReactions, 'articleShares' => $articleShares, 'articleComments' => $articleComments, 
             'date' => \Carbon\Carbon::now('Europe/London')->subDays($day)]);
     }
 
