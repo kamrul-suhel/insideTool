@@ -95,5 +95,89 @@ class AverageMetric extends Model
         $metric->average = round($result[0]->avgcomments);
         $metric->save();
 
+        // Average daily reactions/shares/comments (video)
+        $query = "
+            SELECT
+                ROUND(AVG(dailyreactions)) AS reactions,
+                ROUND(AVG(dailyshares)) AS shares,
+                ROUND(AVG(dailycomments)) AS comments
+            FROM (
+                SELECT
+                    SUM(maxreactions) AS dailyreactions,
+                    SUM(maxshares) AS dailyshares,
+                    SUM(maxcomments) AS dailycomments
+                FROM (
+                    SELECT
+                        post_id, (MAX(likes) + MAX(loves) + MAX(wows) + MAX(hahas) + MAX(sads) + MAX(angrys)) AS maxreactions,
+                        MAX(shares) AS maxshares,
+                        MAX(comments) AS maxcomments,
+                        DATE(posted) AS dateposted
+                    FROM
+                        post_stat_snapshots
+                    LEFT JOIN posts ON posts.id = post_id
+                WHERE
+                    post_stat_snapshots.created_at < DATE_ADD(posted, INTERVAL 24 hour)
+                AND
+                    posts.type = 'video'
+                GROUP BY
+                    post_id) posts
+            GROUP BY
+                dateposted) daily
+        ";
+        $result = \DB::select($query);
+        $metric = $metric->firstOrNew(['key' => 'daily_reactions_video']);
+        $metric->average = $result[0]->reactions;
+        $metric->save();
+
+        $metric = $metric->firstOrNew(['key' => 'daily_shares_video']);
+        $metric->average = $result[0]->shares;
+        $metric->save();
+
+        $metric = $metric->firstOrNew(['key' => 'daily_comments_video']);
+        $metric->average = $result[0]->comments;
+        $metric->save();
+
+        // Average daily reactions/shares/comments (articles)
+        $query = "
+            SELECT
+                ROUND(AVG(dailyreactions)) AS reactions,
+                ROUND(AVG(dailyshares)) AS shares,
+                ROUND(AVG(dailycomments)) AS comments
+            FROM (
+                SELECT
+                    SUM(maxreactions) AS dailyreactions,
+                    SUM(maxshares) AS dailyshares,
+                    SUM(maxcomments) AS dailycomments
+                FROM (
+                    SELECT
+                        post_id, (MAX(likes) + MAX(loves) + MAX(wows) + MAX(hahas) + MAX(sads) + MAX(angrys)) AS maxreactions,
+                        MAX(shares) AS maxshares,
+                        MAX(comments) AS maxcomments,
+                        DATE(posted) AS dateposted
+                    FROM
+                        post_stat_snapshots
+                    LEFT JOIN posts ON posts.id = post_id
+                WHERE
+                    post_stat_snapshots.created_at < DATE_ADD(posted, INTERVAL 24 hour)
+                AND
+                    posts.type = 'link'
+                GROUP BY
+                    post_id) posts
+            GROUP BY
+                dateposted) daily
+        ";
+        $result = \DB::select($query);
+        $metric = $metric->firstOrNew(['key' => 'daily_reactions_article']);
+        $metric->average = $result[0]->reactions;
+        $metric->save();
+
+        $metric = $metric->firstOrNew(['key' => 'daily_shares_article']);
+        $metric->average = $result[0]->shares;
+        $metric->save();
+
+        $metric = $metric->firstOrNew(['key' => 'daily_comments_article']);
+        $metric->average = $result[0]->comments;
+        $metric->save();
+        
     }
 }
