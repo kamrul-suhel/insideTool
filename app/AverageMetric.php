@@ -178,6 +178,59 @@ class AverageMetric extends Model
         $metric = $metric->firstOrNew(['key' => 'daily_comments_article']);
         $metric->average = $result[0]->comments;
         $metric->save();
-        
+
+        // Daily reach (videos)
+        $query = "
+        SELECT
+            ROUND(AVG(dailyimpressions)) AS impressions
+        FROM (
+            SELECT
+                SUM(maximpressions) AS dailyimpressions
+            FROM (
+                SELECT
+                    MAX(impressions) AS maximpressions,
+                    DATE(posted) AS dateposted
+                FROM
+                    post_delayed_stat_snapshots
+                LEFT JOIN posts ON posts.id = post_id
+            WHERE
+                post_delayed_stat_snapshots.created_at < DATE_ADD(posted, INTERVAL 24 hour)
+                AND posts.type = 'video'
+            GROUP BY
+                post_id) posts
+        GROUP BY
+            dateposted) daily
+        ";
+        $result = \DB::select($query);
+        $metric = $metric->firstOrNew(['key' => 'daily_reach_video']);
+        $metric->average = $result[0]->impressions;
+        $metric->save();
+
+        // Daily reach (articles)
+        $query = "
+        SELECT
+            ROUND(AVG(dailyimpressions)) AS impressions
+        FROM (
+            SELECT
+                SUM(maximpressions) AS dailyimpressions
+            FROM (
+                SELECT
+                    MAX(impressions) AS maximpressions,
+                    DATE(posted) AS dateposted
+                FROM
+                    post_delayed_stat_snapshots
+                LEFT JOIN posts ON posts.id = post_id
+            WHERE
+                post_delayed_stat_snapshots.created_at < DATE_ADD(posted, INTERVAL 24 hour)
+                AND posts.type = 'link'
+            GROUP BY
+                post_id) posts
+        GROUP BY
+            dateposted) daily
+        ";
+        $result = \DB::select($query);
+        $metric = $metric->firstOrNew(['key' => 'daily_reach_article']);
+        $metric->average = $result[0]->impressions;
+        $metric->save();
     }
 }
