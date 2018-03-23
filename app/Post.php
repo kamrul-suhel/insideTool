@@ -13,6 +13,8 @@ class Post extends Model
 
     public $latestSnapshot;
 
+    public $latestDelayedSnapshot;
+
     /**
      * Return pages associated with this post
      */
@@ -84,6 +86,22 @@ class Post extends Model
             return $this->latestSnapshot;
         }
     }
- 
+
+    /**
+     * Get latest delayed stat snapshot
+     */
+    public function latestDelayedStatSnapshot()
+    {
+        if (!is_null($this->latestDelayedSnapshot)) {
+            return $this->latestDelayedSnapshot;
+        } else {
+            $this->latestDelayedSnapshot = \App\PostDelayedStatSnapshot::where('post_id', $this->id)
+                ->where('impressions', '>', 0)
+                ->orderBy('id', 'DESC')
+                ->take(1)
+                ->firstOrNew([]);
+            return $this->latestDelayedSnapshot;
+        }
+    }
 
 }

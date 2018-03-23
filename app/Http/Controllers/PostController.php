@@ -58,10 +58,8 @@ class PostController extends Controller
             $iaFilter = true;
         }
         
-        if (!$label && !$creator && !$instantArticles) {
-            $posts->whereDate('posted', \Carbon\Carbon::now('Europe/London')->subDays($day)->format('Y-m-d'));
-        }
-
+        $posts->whereDate('posted', \Carbon\Carbon::now('Europe/London')->subDays($day)->format('Y-m-d'));
+        
         $paginationLinks = [];
         $paginationLinks["days"] = [];
 
@@ -77,6 +75,7 @@ class PostController extends Controller
                 'link' => route('posts.index', ['day' => $i]),
                 'current' => false];
         }
+
         $paginationLinks["days"][] = ['label' => \Carbon\Carbon::now('Europe/London')->subDays($day)->format('d/m'),
             'link' => route('posts.index', ['day' => $i]),
             'current' => true];
@@ -93,9 +92,33 @@ class PostController extends Controller
 
         $labels = VideoLabel::all();
         $posts = $posts->get();
+
+        $impressions = 0;
+        $reactions = 0;
+        $shares = 0;
+        $comments = 0;
+
+        foreach ($posts as $post) {
+            if ($delayed = $post->latestDelayedStatSnapshot()) {
+                $impressions += $delayed->impressions;
+            }
+            if ($live = $post->latestStatSnapshot()) {
+                $reactions += $live->likes;
+                $reactions += $live->loves;
+                $reactions += $live->wows;
+                $reactions += $live->hahas;
+                $reactions += $live->sads;
+                $reactions += $live->angrys;
+                $shares += $live->shares;
+                $comments += $live->comments;
+            }
+        }
+
         $averages = AverageMetric::all()->keyBy('key');
         return view('posts.index', ['posts' => $posts, 'averages' => $averages, 'labelFilter' => $labelFilter, 
-            'labels' => $labels, 'creatorFilter' => $creatorFilter, 'iaFilter' => $iaFilter, 'paginationLinks' => $paginationLinks]);
+            'labels' => $labels, 'creatorFilter' => $creatorFilter, 'iaFilter' => $iaFilter, 'paginationLinks' => $paginationLinks,
+            'reach' => $impressions, 'reactions' => $reactions, 'shares' => $shares, 'comments' => $comments, 
+            'date' => \Carbon\Carbon::now('Europe/London')->subDays($day)]);
     }
 
     public function show(Post $post)

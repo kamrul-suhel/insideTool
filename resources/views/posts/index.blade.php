@@ -3,6 +3,59 @@
 @section('content')
     <div class="box box-primary">
         <div class="box-header">
+            <h3 class="box-title">{{ $date->format('l, jS F Y') }}</h3>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-aqua"><i class="fa fa-eye"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Reach</span>
+                            <span class="info-box-number info-box-number-medium">
+                                {{ number_format($reach) }}
+                            </span>                        
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-teal"><i class="fa fa-thumbs-up"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Reactions</span>
+                            <span class="info-box-number info-box-number-medium">
+                                {{ number_format($reactions) }}
+                            </span>                        
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-green"><i class="fa fa-share"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Shares</span>
+                            <span class="info-box-number info-box-number-medium">
+                                {{ number_format($shares) }}
+                            </span>                        
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-yellow"><i class="fa fa-comment"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Comments</span>
+                            <span class="info-box-number info-box-number-medium">
+                                {{ number_format($comments) }}
+                            </span>                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="box box-primary">
+        <div class="box-header">
             <h3 class="box-title">Posts</h3>
             <div class="box-tools pull-right video-tags">
                 <span class="badge 
@@ -18,7 +71,8 @@
                         @else
                             bg-yellow
                         @endif
-                        video-label"><a href="{{ route('posts.index', ['ia' => true]) }}">Instant Articles</a></span>
+                        video-label"><a href="{{ route('posts.index', ['ia' => true, 'creator' => \Request::get('creator'),
+                            'label' => \Request::get('label'), 'day' => \Request::get('day')]) }}">Instant Articles</a></span>
 
                 @if (!$creatorFilter)
                     @foreach ($labels as $label)
@@ -28,7 +82,8 @@
                             @else
                                 bg-gray
                             @endif
-                        video-label"><a href="{{ route('posts.index', ['label' => $label->id]) }}">{{$label->label}}</a></span>
+                        video-label"><a href="{{ route('posts.index', ['label' => $label->id, 'ia' => \Request::get('ia'),
+                        'creator' => \Request::get('creator'), 'day' => \Request::get('day')]) }}">{{$label->label}}</a></span>
                     @endforeach
                 @endif
             </div>
