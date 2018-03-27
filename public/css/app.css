@@ -8350,3 +8350,34 @@ button.close {
   }
 }
 
+.circle-roi {
+  position: relative;
+  left: 5px;
+}
+
+.circle-roi > span {
+  width: 100%;
+}
+
+.circle-roi:after {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 7px 5px 0 5px;
+  content: '';
+  position: relative;
+}
+
+.circle-roi.positive:after {
+  border-width: 0 5px 7px 5px;
+  border-color: transparent transparent #00cc33 transparent;
+  bottom: 38px;
+  left: -26%;
+}
+
+.circle-roi.negative:after {
+  border-color: #cc0000 transparent transparent transparent;
+  bottom: -40px;
+  left: -26%;
+}
+
