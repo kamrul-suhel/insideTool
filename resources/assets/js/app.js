@@ -9,6 +9,9 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+import Chart from 'chart.js';
+import ChartAnnotation from 'chartjs-plugin-annotation';
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -16,6 +19,7 @@ window.Vue = require('vue');
  */
 
 Vue.component('graph-view', require('./components/Graph.vue'));
+Vue.component('graph-metric', require('./components/GraphMetric.vue'));
 Vue.component('index-metrics', require('./components/IndexMetrics.vue'));
 
 const app = new Vue({

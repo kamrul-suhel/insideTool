@@ -1,9 +1,69 @@
+
+.info-box.info-box-graph{
+    position: relative;
+}
+
+.info-box.info-box-graph .info-box-content{
+    padding-right: 100px;
+}
+
+.info-box-right{
+    position: absolute;
+    right: 0;
+    top:0;
+    height: 90px;
+    width: 90px;
+    text-align: center;
+    font-size: 45px;
+    line-height: 90px;
+    background: rgba(0,0,0,0.2)
+}
+
 .info-box-number-big {
     font-size: 36px;
 }
 
 .info-box-number-medium {
     font-size: 20px;
+}
+
+.icon-roi{
+    position:relative;
+    left:5px;
+}
+
+.icon-roi  > span{
+    width: 100%;
+}
+
+.icon-roi:after{
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 7px 5px 0 5px;
+    content: '';
+    position: relative;
+}
+
+.icon-roi.positive{
+    color: rgb(110, 215, 85);
+}
+
+.icon-roi.positive:after{
+    border-width: 0 5px 7px 5px;
+    border-color: transparent transparent rgb(110, 215, 85) transparent;
+    bottom: 32px;
+    left: -26px;
+}
+
+.icon-roi.negative{
+    color: rgb(215, 85, 85);
+}
+
+.icon-roi.negative:after{
+    border-color: rgb(215, 85, 85) transparent transparent transparent;
+    bottom: -32px;
+    left: -26px;
 }
 
 .post-image {

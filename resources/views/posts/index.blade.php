@@ -5,243 +5,90 @@
 @stop
 
 @section('content')
+<div id="app">
+    <?php $day_percentage = $date->isToday() ? (date('H') / 24 + date('i') / (60 * 24)) : 1;?>
     <div class="row">
         <div class="col-md-6">
             <div class="box box-primary">
                 <div class="box-header">
                     <h3 class="box-title">Videos</h3>
                 </div>
+
                 <div class="box-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="info-box bg-aqua">
-                                <span class="info-box-icon"><i class="fa fa-eye"></i></span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Reach</span>
-                                    <span class="info-box-number info-box-number-medium">
-                                        {{ number_format($videoReach) }}
-                                    </span>                 
-                                    @if ($videoReach < $averages->get('daily_reach_video')->average)
-                                        <div class="progress">
-                                            <div class="progress-bar" style="width: {{ round(($videoReach / $averages->get('daily_reach_video')->average) * 100) }}%"></div>
-                                        </div>
-                                        <span class="progress-description">
-                                            {{ round(($averages->get('daily_reach_video')->average - $videoReach) / $averages->get('daily_reach_video')->average * 100) }}% below average
-                                        </span>
-
-                                    @else
-                                        <div class="progress">
-                                            <div class="progress-bar bg-lime" style="width:100%"></div>
-                                        </div>
-                                        <span class="progress-description">
-                                            {{ round(($videoReach - $averages->get('daily_reach_video')->average) / $averages->get('daily_reach_video')->average * 100) }}% above average
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="info-box bg-teal">
-                                <span class="info-box-icon"><i class="fa fa-thumbs-up"></i></span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Reactions</span>
-                                    <span class="info-box-number info-box-number-medium">
-                                        {{ number_format($videoReactions) }}
-                                    </span>
-                                    @if ($videoReactions < $averages->get('daily_reactions_video')->average)
-                                        <div class="progress">
-                                            <div class="progress-bar" style="width: {{ round(($videoReactions / $averages->get('daily_reactions_video')->average) * 100) }}%"></div>
-                                        </div>
-                                        <span class="progress-description">
-                                            {{ round(($averages->get('daily_reactions_video')->average - $videoReactions) / $averages->get('daily_reactions_video')->average * 100) }}% below average
-                                        </span>
-                                    @else
-                                        <div class="progress">
-                                            <div class="progress-bar bg-lime" style="width:100%"></div>
-                                        </div>
-                                        <span class="progress-description">
-                                            {{ round(($videoReactions - $averages->get('daily_reactions_video')->average) / $averages->get('daily_reactions_video')->average * 100) }}% above average
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="info-box bg-green">
-                                <span class="info-box-icon"><i class="fa fa-share"></i></span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Shares</span>
-                                    <span class="info-box-number info-box-number-medium">
-                                        {{ number_format($videoShares) }}
-                                    </span>
-                                    @if ($videoShares < $averages->get('daily_shares_video')->average)
-                                        <div class="progress">
-                                            <div class="progress-bar" style="width: {{ round(($videoShares / $averages->get('daily_shares_video')->average) * 100) }}%"></div>
-                                        </div>
-                                        <span class="progress-description">
-                                            {{ round(($averages->get('daily_shares_video')->average - $videoShares) / $averages->get('daily_shares_video')->average * 100) }}% below average
-                                        </span>
-
-                                    @else
-                                        <div class="progress">
-                                            <div class="progress-bar bg-lime" style="width:100%"></div>
-                                        </div>
-                                        <span class="progress-description">
-                                            {{ round(($videoShares - $averages->get('daily_shares_video')->average) / $averages->get('daily_shares_video')->average * 100) }}% above average
-                                        </span>
-                                    @endif   
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="info-box bg-yellow">
-                                <span class="info-box-icon"><i class="fa fa-comment"></i></span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Comments</span>
-                                    <span class="info-box-number info-box-number-medium">
-                                        {{ number_format($videoComments) }}
-                                    </span>
-                                    @if ($videoComments < $averages->get('daily_comments_video')->average)
-                                        <div class="progress">
-                                            <div class="progress-bar" style="width: {{ round(($videoComments / $averages->get('daily_comments_video')->average) * 100) }}%"></div>
-                                        </div>
-                                        <span class="progress-description">
-                                            {{ round(($averages->get('daily_comments_video')->average - $videoComments) / $averages->get('daily_comments_video')->average * 100) }}% below average
-                                        </span>
-                                    @else
-                                        <div class="progress">
-                                            <div class="progress-bar bg-lime" style="width:100%"></div>
-                                        </div>
-                                        <span class="progress-description">
-                                            {{ round(($videoComments - $averages->get('daily_comments_video')->average) / $averages->get('daily_comments_video')->average * 100) }}% above average
-                                        </span>
-                                    @endif               
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <graph-metric id="video-reach-metric" color="aqua" fa-icon="eye" actual="<?php echo $videoReach; ?>" target="<?php echo $averages->get('daily_reach_video')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                    <graph-metric id="video-comment-metric" color="yellow" fa-icon="comment" actual="<?php echo $videoComments; ?>" target="<?php echo $averages->get('daily_comments_video')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                    <graph-metric id="video-shares-metric" color="green" fa-icon="share" actual="<?php echo $videoShares; ?>" target="<?php echo $averages->get('daily_shares_video')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                    <graph-metric id="video-reactions-metric" color="teal" fa-icon="thumbs-up" actual="<?php echo $videoReactions; ?>" target="<?php echo $averages->get('daily_reactions_video')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
                 </div>
             </div>
         </div>
+
         <div class="col-md-6">
             <div class="box box-primary">
                 <div class="box-header">
                     <h3 class="box-title">Articles</h3>
                 </div>
+
                 <div class="box-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="info-box bg-aqua">
-                                <span class="info-box-icon"><i class="fa fa-eye"></i></span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Reach</span>
-                                    <span class="info-box-number info-box-number-medium">
-                                        {{ number_format($articleReach) }}
-                                    </span>                 
-                                    @if ($articleReach < $averages->get('daily_reach_article')->average)
-                                        <div class="progress">
-                                            <div class="progress-bar" style="width: {{ round(($articleReach / $averages->get('daily_reach_article')->average) * 100) }}%"></div>
-                                        </div>
-                                        <span class="progress-description">
-                                            {{ round(($averages->get('daily_reach_article')->average - $articleReach) / $averages->get('daily_reach_article')->average * 100) }}% below average
-                                        </span>
-
-                                    @else
-                                        <div class="progress">
-                                            <div class="progress-bar bg-lime" style="width:100%"></div>
-                                        </div>
-                                        <span class="progress-description">
-                                            {{ round(($articleReach - $averages->get('daily_reach_article')->average) / $averages->get('daily_reach_article')->average * 100) }}% above average
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="info-box bg-teal">
-                                <span class="info-box-icon"><i class="fa fa-thumbs-up"></i></span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Reactions</span>
-                                    <span class="info-box-number info-box-number-medium">
-                                        {{ number_format($articleReactions) }}
-                                    </span>
-                                    @if ($articleReactions < $averages->get('daily_reactions_article')->average)
-                                        <div class="progress">
-                                            <div class="progress-bar" style="width: {{ round(($articleReactions / $averages->get('daily_reactions_article')->average) * 100) }}%"></div>
-                                        </div>
-                                        <span class="progress-description">
-                                            {{ round(($averages->get('daily_reactions_article')->average - $articleReactions) / $averages->get('daily_reactions_article')->average * 100) }}% below average
-                                        </span>
-                                    @else
-                                        <div class="progress">
-                                            <div class="progress-bar bg-lime" style="width:100%"></div>
-                                        </div>
-                                        <span class="progress-description">
-                                            {{ round(($articleReactions - $averages->get('daily_reactions_article')->average) / $averages->get('daily_reactions_article')->average * 100) }}% above average
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="info-box bg-green">
-                                <span class="info-box-icon"><i class="fa fa-share"></i></span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Shares</span>
-                                    <span class="info-box-number info-box-number-medium">
-                                        {{ number_format($articleShares) }}
-                                    </span>
-                                    @if ($articleShares < $averages->get('daily_shares_article')->average)
-                                        <div class="progress">
-                                            <div class="progress-bar" style="width: {{ round(($articleShares / $averages->get('daily_shares_article')->average) * 100) }}%"></div>
-                                        </div>
-                                        <span class="progress-description">
-                                            {{ round(($averages->get('daily_shares_article')->average - $articleShares) / $averages->get('daily_shares_article')->average * 100) }}% below average
-                                        </span>
-
-                                    @else
-                                        <div class="progress">
-                                            <div class="progress-bar bg-lime" style="width:100%"></div>
-                                        </div>
-                                        <span class="progress-description">
-                                            {{ round(($articleShares - $averages->get('daily_shares_article')->average) / $averages->get('daily_shares_article')->average * 100) }}% above average
-                                        </span>
-                                    @endif   
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="info-box bg-yellow">
-                                <span class="info-box-icon"><i class="fa fa-comment"></i></span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Comments</span>
-                                    <span class="info-box-number info-box-number-medium">
-                                        {{ number_format($articleComments) }}
-                                    </span>
-                                    @if ($articleComments < $averages->get('daily_comments_article')->average)
-                                        <div class="progress">
-                                            <div class="progress-bar" style="width: {{ round(($articleComments / $averages->get('daily_comments_article')->average) * 100) }}%"></div>
-                                        </div>
-                                        <span class="progress-description">
-                                            {{ round(($averages->get('daily_comments_article')->average - $articleComments) / $averages->get('daily_comments_article')->average * 100) }}% below average
-                                        </span>
-
-                                    @else
-                                        <div class="progress">
-                                            <div class="progress-bar bg-lime" style="width:100%"></div>
-                                        </div>
-                                        <span class="progress-description">
-                                            {{ round(($articleComments - $averages->get('daily_comments_article')->average) / $averages->get('daily_comments_article')->average * 100) }}% above average
-                                        </span>
-                                    @endif               
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <graph-metric id="article-reach-metric" color="aqua" fa-icon="eye" actual="<?php echo $articleReach; ?>" target="<?php echo $averages->get('daily_reach_article')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                    <graph-metric id="article-comment-metric" color="yellow" fa-icon="comment" actual="<?php echo $articleComments; ?>" target="<?php echo $averages->get('daily_comments_article')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                    <graph-metric id="article-shares-metric" color="green" fa-icon="share" actual="<?php echo $articleShares; ?>" target="<?php echo $averages->get('daily_shares_article')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                    <graph-metric id="article-reactions-metric" color="teal" fa-icon="thumbs-up" actual="<?php echo $articleReactions; ?>" target="<?php echo $averages->get('daily_reactions_article')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="info-box">
+                <span class="info-box-icon"><i class="fa fa-thumb-tack"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Posts</span>
+                    <span class="info-box-number info-box-number-medium">
+                        {{ count($posts) }}
+                    </span>             
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="info-box">
+                <span class="info-box-icon"><i class="fa fa-bolt"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">IA</span>
+                    <span class="info-box-number info-box-number-medium">
+                        {{ count($posts->where('instant_article', true)) }}
+                    </span>             
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="info-box">
+                <span class="info-box-icon"><i class="fa fa-question"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Something</span>
+                    <span class="info-box-number info-box-number-medium">
+                        {{ 0 }}
+                    </span>             
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="info-box">
+                <span class="info-box-icon"><i class="fa fa-question"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Something</span>
+                    <span class="info-box-number info-box-number-medium">
+                        {{ 0 }}
+                    </span>             
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="box box-primary">
         <div class="box-header">
             <h3 class="box-title">Posts</h3>
@@ -281,7 +128,7 @@
                 <div class="box-tools"><p>Showing posts by: <span class="badge bg-red creator"><a href="{{ route('posts.index') }}">{{ $creatorFilter->name }} <i class="fa fa-times"></i></a></p></div>
             </div>
         @endif
-        <div id="app" class="box-body table-responsive no-padding" data-average-likes="{{ $averages->get('likes')->average }}"
+        <div class="box-body table-responsive no-padding" data-average-likes="{{ $averages->get('likes')->average }}"
          data-average-comments="{{ $averages->get('comments')->average }}"  data-average-shares="{{ $averages->get('shares')->average }}">
             <table class="table table-striped table-hover">
                 <thead>
@@ -362,6 +209,7 @@
             </div>
         </div>
     </div>
+</div>
 @stop
 
 @push('js')

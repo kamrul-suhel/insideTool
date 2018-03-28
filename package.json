@@ -19,6 +19,7 @@
         "vue": "^2.5.7"
     },
     "dependencies": {
-        "chart.js": "^2.7.2"
+        "chart.js": "^2.7.2",
+        "chartjs-plugin-annotation": "^0.5.7"
     }
 }

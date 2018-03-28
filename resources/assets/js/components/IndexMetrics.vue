@@ -18,7 +18,9 @@
         
         filters: {
             number_format(number) {
-                return number.toLocaleString('en');
+                if(number){
+                    return number.toLocaleString('en');
+                }
             }
         },
 
