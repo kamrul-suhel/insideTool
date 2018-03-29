@@ -44,9 +44,33 @@
             <div class="info-box">
                 <span class="info-box-icon"><i class="fa fa-thumb-tack"></i></span>
                 <div class="info-box-content">
-                    <span class="info-box-text">Posts</span>
+                    <span class="info-box-text">Total Posts</span>
                     <span class="info-box-number info-box-number-medium">
                         {{ count($posts) }}
+                    </span>             
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="info-box">
+                <span class="info-box-icon"><i class="fa fa-play"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Videos</span>
+                    <span class="info-box-number info-box-number-medium">
+                        {{ count($posts->where('type', 'video')) }}
+                    </span>             
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="info-box">
+                <span class="info-box-icon"><i class="fa fa-list"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Articles</span>
+                    <span class="info-box-number info-box-number-medium">
+                        {{ count($posts->where('type', 'link'))-count($posts->where('instant_article', true)) }}
                     </span>             
                 </div>
             </div>
@@ -59,30 +83,6 @@
                     <span class="info-box-text">IA</span>
                     <span class="info-box-number info-box-number-medium">
                         {{ count($posts->where('instant_article', true)) }}
-                    </span>             
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="info-box">
-                <span class="info-box-icon"><i class="fa fa-question"></i></span>
-                <div class="info-box-content">
-                    <span class="info-box-text">Something</span>
-                    <span class="info-box-number info-box-number-medium">
-                        {{ 0 }}
-                    </span>             
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="info-box">
-                <span class="info-box-icon"><i class="fa fa-question"></i></span>
-                <div class="info-box-content">
-                    <span class="info-box-text">Something</span>
-                    <span class="info-box-number info-box-number-medium">
-                        {{ 0 }}
                     </span>             
                 </div>
             </div>
