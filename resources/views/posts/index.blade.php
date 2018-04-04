@@ -128,7 +128,7 @@
                 <div class="box-tools"><p>Showing posts by: <span class="badge bg-red creator"><a href="{{ route('posts.index') }}">{{ $creatorFilter->name }} <i class="fa fa-times"></i></a></p></div>
             </div>
         @endif
-        <div class="box-body table-responsive no-padding" data-average-likes="{{ $averages->get('likes')->average }}"
+        <div class="box-body table-responsive no-padding averages" data-average-likes="{{ $averages->get('likes')->average }}"
          data-average-comments="{{ $averages->get('comments')->average }}"  data-average-shares="{{ $averages->get('shares')->average }}">
             <table class="table table-striped table-hover">
                 <thead>

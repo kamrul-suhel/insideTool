@@ -54,19 +54,19 @@
                 })
                 .then(response => {
                     this.likes = response.data.likes;
-                    if (this.likes > $('#app').data('average-likes')) {
+                    if (this.likes > $('.averages').data('average-likes')) {
                         this.likesClass = 'bg-green';
                     } else {
                         this.likesClass = 'bg-red';
                     }
                     this.comments = response.data.comments;
-                    if (this.comments > $('#app').data('average-comments')) {
+                    if (this.comments > $('.averages').data('average-comments')) {
                         this.commentsClass = 'bg-green';
                     } else {
                         this.commentsClass = 'bg-red';
                     }
                     this.shares = response.data.shares;
-                    if (this.shares > $('#app').data('average-shares')) {
+                    if (this.shares > $('.averages').data('average-shares')) {
                         this.sharesClass = 'bg-green';
                     } else {
                         this.sharesClass = 'bg-red';
