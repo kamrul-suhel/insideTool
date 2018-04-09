@@ -51,7 +51,13 @@ class GetPostStats extends Command
             try {
                 // Like count
                 $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=LIKE&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
-                $snapshot->likes = $response->getDecodedBody()["summary"]["total_count"];
+                $likes = $response->getDecodedBody()["summary"]["total_count"];
+                $snapshot->likes = $likes;
+
+                if ($likes > 0) {
+                    $post->likes = $likes;
+                    $post->save(); 
+                }
 
                 // Love count
                 $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=LOVE&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
@@ -75,11 +81,24 @@ class GetPostStats extends Command
                 
                 // Comment count
                 $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/comments/?summary=1', env('FACEBOOK_ACCESS_TOKEN'));
-                $snapshot->comments = $response->getDecodedBody()["summary"]["total_count"];
+                $comments = $response->getDecodedBody()["summary"]["total_count"];
+                
+                $snapshot->comments = $comments;
+
+                if ($comments > 0) {
+                    $post->comments = $comments;
+                    $post->save();
+                }
 
                 // Share count
                 $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/?fields=shares', env('FACEBOOK_ACCESS_TOKEN'));
-                $snapshot->shares = $response->getDecodedBody()["shares"]["count"];
+                $shares = $response->getDecodedBody()["shares"]["count"];
+                $snapshot->shares = $shares;
+
+                if ($shares > 0) {
+                    $post->shares = $shares;
+                    $post->save();
+                }
 
             } catch(\Facebook\Exceptions\FacebookResponseException $e) {
                 if ($e->getCode() == 100 && $e->getSubErrorCode() == 33) {
