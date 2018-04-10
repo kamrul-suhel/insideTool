@@ -92,7 +92,15 @@
     <div class="box box-primary">
         <div class="box-header">
             <h3 class="box-title">Posts</h3>
-            <div class="box-tools pull-right video-tags">
+        </div>
+        @if ($creatorFilter)
+            <div class="box-header">
+                <div class="box-tools"><p>Showing posts by: <span class="badge bg-red creator"><a href="{{ route('posts.index') }}">{{ $creatorFilter->name }} <i class="fa fa-times"></i></a></p></div>
+            </div>
+        @endif
+        <div class="box-body averages" data-average-likes="{{ $averages->get('likes')->average }}"
+         data-average-comments="{{ $averages->get('comments')->average }}"  data-average-shares="{{ $averages->get('shares')->average }}">
+         <div class="box-tools pull-right video-tags">
                 <span class="badge 
                         @if (!$labelFilter && !$iaFilter)
                             bg-aqua
@@ -122,15 +130,8 @@
                     @endforeach
                 @endif
             </div>
-        </div>
-        @if ($creatorFilter)
-            <div class="box-header">
-                <div class="box-tools"><p>Showing posts by: <span class="badge bg-red creator"><a href="{{ route('posts.index') }}">{{ $creatorFilter->name }} <i class="fa fa-times"></i></a></p></div>
-            </div>
-        @endif
-        <div class="box-body averages" data-average-likes="{{ $averages->get('likes')->average }}"
-         data-average-comments="{{ $averages->get('comments')->average }}"  data-average-shares="{{ $averages->get('shares')->average }}">
-            <table class="table table-striped" id="posts-table">
+         <br />
+         <table class="table table-striped" id="posts-table">
                 <thead>
                     <tr>
                         <th>Page</th>
