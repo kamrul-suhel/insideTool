@@ -13,9 +13,9 @@ class AverageMetric extends Model
         // Lifetime averages
         $query = "SELECT AVG(posts.likespm) as likespm, AVG(posts.sharespm) as sharespm, AVG(posts.commentspm) AS commentspm
         FROM
-         (SELECT MAX(likes) / TIMESTAMPDIFF(MINUTE, MIN(post_stat_snapshots.created_at), NOW()) as likespm,
-         MAX(shares) / TIMESTAMPDIFF(MINUTE, MIN(post_stat_snapshots.created_at), NOW()) as sharespm,
-         MAX(comments) / TIMESTAMPDIFF(MINUTE, MIN(post_stat_snapshots.created_at), NOW()) as commentspm
+         (SELECT MAX(post_stat_snapshots.likes) / TIMESTAMPDIFF(MINUTE, MIN(post_stat_snapshots.created_at), NOW()) as likespm,
+         MAX(post_stat_snapshots.shares) / TIMESTAMPDIFF(MINUTE, MIN(post_stat_snapshots.created_at), NOW()) as sharespm,
+         MAX(post_stat_snapshots.comments) / TIMESTAMPDIFF(MINUTE, MIN(post_stat_snapshots.created_at), NOW()) as commentspm
            FROM post_stat_snapshots, posts 
            WHERE posts.id = post_stat_snapshots.post_id 
            AND posts.deleted_at IS NULL 
@@ -45,7 +45,7 @@ class AverageMetric extends Model
         $metric->save();
         
         $birthQuery = "SELECT AVG(likespm) AS likespm, AVG(sharespm) AS sharespm, AVG(commentspm) AS commentspm FROM (
-            SELECT MAX(likes) / 5 as likespm, MAX(shares) / 5 as sharespm, MAX(comments) / 5 as commentspm 
+            SELECT MAX(post_stat_snapshots.likes) / 5 as likespm, MAX(post_stat_snapshots.shares) / 5 as sharespm, MAX(post_stat_snapshots.comments) / 5 as commentspm 
                 FROM post_stat_snapshots, posts 
                 WHERE posts.id = post_stat_snapshots.post_id 
                 AND posts.deleted_at IS NULL 
@@ -75,21 +75,21 @@ class AverageMetric extends Model
         $metric->save();
 
         // Average likes
-        $query = "SELECT AVG(maxlikes) as avglikes FROM (SELECT MAX(likes) as maxlikes FROM post_stat_snapshots GROUP BY post_id) posts";
+        $query = "SELECT AVG(maxlikes) as avglikes FROM (SELECT MAX(post_stat_snapshots.likes) as maxlikes FROM post_stat_snapshots GROUP BY post_id) posts";
         $metric = $metric->firstOrNew(['key' => 'likes']);
         $result = \DB::select($query);
         $metric->average = round($result[0]->avglikes);
         $metric->save();
 
         // Average shares
-        $query = "SELECT AVG(maxshares) as avgshares FROM (SELECT MAX(shares) as maxshares FROM post_stat_snapshots GROUP BY post_id) posts";
+        $query = "SELECT AVG(maxshares) as avgshares FROM (SELECT MAX(post_stat_snapshots.shares) as maxshares FROM post_stat_snapshots GROUP BY post_id) posts";
         $metric = $metric->firstOrNew(['key' => 'shares']);
         $result = \DB::select($query);
         $metric->average = round($result[0]->avgshares);
         $metric->save();
 
         // Average shares
-        $query = "SELECT AVG(maxcomments) as avgcomments FROM (SELECT MAX(comments) as maxcomments FROM post_stat_snapshots GROUP BY post_id) posts";
+        $query = "SELECT AVG(maxcomments) as avgcomments FROM (SELECT MAX(post_stat_snapshots.comments) as maxcomments FROM post_stat_snapshots GROUP BY post_id) posts";
         $metric = $metric->firstOrNew(['key' => 'comments']);
         $result = \DB::select($query);
         $metric->average = round($result[0]->avgcomments);
@@ -108,9 +108,9 @@ class AverageMetric extends Model
                     SUM(maxcomments) AS dailycomments
                 FROM (
                     SELECT
-                        post_id, (MAX(likes) + MAX(loves) + MAX(wows) + MAX(hahas) + MAX(sads) + MAX(angrys)) AS maxreactions,
-                        MAX(shares) AS maxshares,
-                        MAX(comments) AS maxcomments,
+                        post_id, (MAX(post_stat_snapshots.likes) + MAX(post_stat_snapshots.loves) + MAX(post_stat_snapshots.wows) + MAX(post_stat_snapshots.hahas) + MAX(post_stat_snapshots.sads) + MAX(post_stat_snapshots.angrys)) AS maxreactions,
+                        MAX(post_stat_snapshots.shares) AS maxshares,
+                        MAX(post_stat_snapshots.comments) AS maxcomments,
                         DATE(posted) AS dateposted
                     FROM
                         post_stat_snapshots
@@ -150,9 +150,9 @@ class AverageMetric extends Model
                     SUM(maxcomments) AS dailycomments
                 FROM (
                     SELECT
-                        post_id, (MAX(likes) + MAX(loves) + MAX(wows) + MAX(hahas) + MAX(sads) + MAX(angrys)) AS maxreactions,
-                        MAX(shares) AS maxshares,
-                        MAX(comments) AS maxcomments,
+                        post_id, (MAX(post_stat_snapshots.likes) + MAX(post_stat_snapshots.loves) + MAX(post_stat_snapshots.wows) + MAX(post_stat_snapshots.hahas) + MAX(post_stat_snapshots.sads) + MAX(post_stat_snapshots.angrys)) AS maxreactions,
+                        MAX(post_stat_snapshots.shares) AS maxshares,
+                        MAX(post_stat_snapshots.comments) AS maxcomments,
                         DATE(posted) AS dateposted
                     FROM
                         post_stat_snapshots
