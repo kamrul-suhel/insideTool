@@ -193,7 +193,7 @@
                                     {{ $post->comments }}
                                 </span>
                             </td>
-                            <td>
+                            <td data-sort="{{ $post->shares }}">
                                 <span class="badge
                                     @if ($post->shares > $averages->get('shares')->average)
                                         bg-green
