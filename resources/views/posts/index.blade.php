@@ -131,7 +131,7 @@
                 @endif
             </div>
          <br />
-         <table class="table table-bordered table-striped" id="posts-table">
+         <table class="table table-striped" id="posts-table">
                 <thead>
                     <tr>
                         <th>Page</th>
