@@ -100,7 +100,7 @@
         @endif
         <div class="box-body averages" data-average-likes="{{ $averages->get('likes')->average }}"
          data-average-comments="{{ $averages->get('comments')->average }}"  data-average-shares="{{ $averages->get('shares')->average }}">
-         <div class="box-tools pull-right video-tags">
+         <div class="pull-right video-tags">
                 <span class="badge 
                         @if (!$labelFilter && !$iaFilter)
                             bg-aqua
@@ -139,6 +139,7 @@
                         <th>Type</th>
                         <th>Posted by</th>
                         <th data-orderable="false"></th>
+                        <th>IA</th>
                         <th data-orderable="false">Message</th>
                         <th data-orderable="false">Link name</th>
                         <th><i class="fa fa-thumbs-up"></i></th>
@@ -162,10 +163,12 @@
                                 <td>Unknown</td>
                             @endif
                             <td><a href="/posts/{{ $post->id }}"><img src="{{ $post->picture }}" width="50"></a></td>
-                            <td>
+                            <td data-sort="{{ $post->instant_article }}">
                                 @if ($post->instant_article)
                                     <i class="fa fa-bolt"></i>&nbsp; 
                                 @endif
+                            </td>
+                            <td>
                                 <a href="/posts/{{ $post->id }}">
                                     {{ $post->message }}
                                 </a>
