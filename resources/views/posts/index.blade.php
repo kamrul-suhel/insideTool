@@ -128,19 +128,21 @@
                 <div class="box-tools"><p>Showing posts by: <span class="badge bg-red creator"><a href="{{ route('posts.index') }}">{{ $creatorFilter->name }} <i class="fa fa-times"></i></a></p></div>
             </div>
         @endif
-        <div class="box-body table-responsive no-padding averages" data-average-likes="{{ $averages->get('likes')->average }}"
+        <div class="box-body averages" data-average-likes="{{ $averages->get('likes')->average }}"
          data-average-comments="{{ $averages->get('comments')->average }}"  data-average-shares="{{ $averages->get('shares')->average }}">
-            <table class="table table-striped table-hover">
+            <table class="table table-striped" id="posts-table">
                 <thead>
                     <tr>
                         <th>Page</th>
                         <th>Posted</th>
                         <th>Type</th>
                         <th>Posted by</th>
-                        <th></th>
-                        <th>Message</th>
-                        <th>Link name</th>
-                        <th class="col-sm-2">Stats</th>
+                        <th data-orderable="false"></th>
+                        <th data-orderable="false">Message</th>
+                        <th data-orderable="false">Link name</th>
+                        <th><i class="fa fa-thumbs-up"></i></th>
+                        <th><i class="fa fa-comment"></i></th>
+                        <th><i class="fa fa-share"></i></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -168,8 +170,39 @@
                                 </a>
                             </td>
                             <td>{{ $post->name }}</td>
-                            <td is="index-metrics" birth="false" fields="likes,shares,comments" type="latest" post-id="{{ $post->id }}">{{ $post->name }}</td>
-
+                            <td data-sort="{{ $post->likes }}">
+                                <span class="badge
+                                    @if ($post->likes > $averages->get('likes')->average)
+                                        bg-green
+                                    @else
+                                        bg-red
+                                    @endif
+                                     ">
+                                    {{ $post->likes }}
+                                </span>
+                            </td>
+                            <td data-sort="{{ $post->comments }}">
+                                <span class="badge
+                                    @if ($post->comments > $averages->get('comments')->average)
+                                        bg-green
+                                    @else
+                                        bg-red
+                                    @endif
+                                     ">
+                                    {{ $post->comments }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge
+                                    @if ($post->shares > $averages->get('shares')->average)
+                                        bg-green
+                                    @else
+                                        bg-red
+                                    @endif
+                                     ">
+                                    {{ $post->shares }}
+                                </span>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -214,4 +247,11 @@
 
 @push('js')
     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script>
+        $('#posts-table').dataTable({
+            "paging": false
+        });
+    </script>
+
 @endpush

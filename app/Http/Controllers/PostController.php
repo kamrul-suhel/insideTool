@@ -11,6 +11,7 @@ use App\VideoStatSnapshot;
 use App\VideoLabel;
 use App\PostDelayedStatSnapshot;
 use App\AverageMetric;
+use Yajra\Datatables\Datatables;
 
 class PostController extends Controller
 {
@@ -140,6 +141,14 @@ class PostController extends Controller
             'videoReach' => $videoImpressions, 'videoReactions' => $videoReactions, 'videoShares' => $videoShares, 'videoComments' => $videoComments,
             'articleReach' => $articleImpressions, 'articleReactions' => $articleReactions, 'articleShares' => $articleShares, 'articleComments' => $articleComments, 
             'date' => \Carbon\Carbon::now('Europe/London')->subDays($day)]);
+    }
+
+    public function indexDatatables() {
+        $posts = Post::withTrashed()
+            ->orderBy('posted', 'desc')
+            ->with(['page', 'creator']);
+        return Datatables::of($posts)
+            ->make(true);
     }
 
     public function show(Post $post)
