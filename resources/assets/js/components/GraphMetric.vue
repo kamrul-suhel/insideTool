@@ -1,12 +1,12 @@
 <template>
-    <div :class="'info-box info-box-graph bg-'+color">
-        <span class="info-box-icon"><i :class="'fa fa-'+faIcon"></i></span>
+    <div :class="'info-box info-box-graph'">
+        <span :class="'info-box-icon bg-'+color"><i :class="'fa fa-'+faIcon"></i></span>
         <div class="info-box-content">
             <div class="">
                 <canvas :id="id" height="80"></canvas> 
             </div>
         </div>
-        <div class="info-box-right">
+        <div :class="'info-box-right bg-'+color">
             <span :class="'info-box-number info-box-number-medium icon-roi '+(this.is_under ? 'negative':'positive')">
                 <span></span>{{ this.dayPercentage != 0 ? -Math.round((1-this.actual/(this.target*this.dayPercentage))*100) : Math.round((1-this.actual/(this.target))) }}%
             </span>    

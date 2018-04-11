@@ -75465,8 +75465,8 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { class: "info-box info-box-graph bg-" + _vm.color }, [
-    _c("span", { staticClass: "info-box-icon" }, [
+  return _c("div", { class: "info-box info-box-graph" }, [
+    _c("span", { class: "info-box-icon bg-" + _vm.color }, [
       _c("i", { class: "fa fa-" + _vm.faIcon })
     ]),
     _vm._v(" "),
@@ -75474,7 +75474,7 @@ var render = function() {
       _c("div", {}, [_c("canvas", { attrs: { id: _vm.id, height: "80" } })])
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "info-box-right" }, [
+    _c("div", { class: "info-box-right bg-" + _vm.color }, [
       _c(
         "span",
         {
@@ -75569,6 +75569,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = (Vue.extend({
     props: {
@@ -75649,20 +75655,26 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("td", [
-    _c("span", { class: "badge " + _vm.likesClass }, [
-      _c("i", { staticClass: "fa fa-thumbs-up" }),
-      _vm._v(" " + _vm._s(_vm._f("number_format")(_vm.likes)))
+  return _c("span", [
+    _c("td", [
+      _c("span", { class: "badge " + _vm.likesClass }, [
+        _c("i", { staticClass: "fa fa-thumbs-up" }),
+        _vm._v(" " + _vm._s(_vm._f("number_format")(_vm.likes)))
+      ])
     ]),
     _vm._v(" "),
-    _c("span", { class: "badge " + _vm.commentsClass }, [
-      _c("i", { staticClass: "fa fa-comment" }),
-      _vm._v(" " + _vm._s(_vm._f("number_format")(_vm.comments)))
+    _c("td", [
+      _c("span", { class: "badge " + _vm.commentsClass }, [
+        _c("i", { staticClass: "fa fa-comment" }),
+        _vm._v(" " + _vm._s(_vm._f("number_format")(_vm.comments)))
+      ])
     ]),
     _vm._v(" "),
-    _c("span", { class: "badge " + _vm.sharesClass }, [
-      _c("i", { staticClass: "fa fa-share" }),
-      _vm._v(" " + _vm._s(_vm._f("number_format")(_vm.shares)))
+    _c("td", [
+      _c("span", { class: "badge " + _vm.sharesClass }, [
+        _c("i", { staticClass: "fa fa-share" }),
+        _vm._v(" " + _vm._s(_vm._f("number_format")(_vm.shares)))
+      ])
     ])
   ])
 }

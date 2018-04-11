@@ -42,7 +42,7 @@
     <div class="row">
 
         <div class="col-md-4">
-            <div class="info-box">
+            <div class="info-box bg-teal">
                 <span class="info-box-icon"><i class="fa fa-eye"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Total Reach</span>
@@ -55,7 +55,7 @@
 
 
         <div class="col-md-4">
-            <div class="info-box">
+            <div class="info-box bg-purple">
                 <span class="info-box-icon"><i class="fa fa-thumb-tack"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Total Posts</span>
@@ -67,7 +67,7 @@
         </div>
 
         <div class="col-md-4">
-            <div class="info-box">
+            <div class="info-box bg-maroon">
                 <span class="info-box-icon"><i class="fa fa-play"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Videos</span>
@@ -82,7 +82,7 @@
         <div class="row">
 
         <div class="col-md-4">
-            <div class="info-box">
+            <div class="info-box bg-green">
                 <span class="info-box-icon"><i class="fa fa-list"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Articles</span>
@@ -94,7 +94,7 @@
         </div>
 
         <div class="col-md-4">
-            <div class="info-box">
+            <div class="info-box bg-orange">
                 <span class="info-box-icon"><i class="fa fa-bolt"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">IA</span>
