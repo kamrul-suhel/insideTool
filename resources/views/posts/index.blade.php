@@ -8,35 +8,47 @@
 <div id="app">
     <?php $day_percentage = $date->isToday() ? (date('H') / 24 + date('i') / (60 * 24)) : 1;?>
     <div class="row">
-        <div class="col-md-6">
-            <div class="box box-primary">
-                <div class="box-header">
-                    <h3 class="box-title">Videos</h3>
-                </div>
+        @if (!$type || $type == 'video')
+            @if ($type)
+            <div class="col-md-12">
+            @else
+            <div class="col-md-6">
+            @endif
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title">Videos</h3>
+                    </div>
 
-                <div class="box-body">
-                    <graph-metric id="video-reach-metric" color="aqua" fa-icon="eye" actual="<?php echo $videoReach; ?>" target="<?php echo $averages->get('daily_reach_video')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
-                    <graph-metric id="video-comment-metric" color="yellow" fa-icon="comment" actual="<?php echo $videoComments; ?>" target="<?php echo $averages->get('daily_comments_video')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
-                    <graph-metric id="video-shares-metric" color="green" fa-icon="share" actual="<?php echo $videoShares; ?>" target="<?php echo $averages->get('daily_shares_video')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
-                    <graph-metric id="video-reactions-metric" color="teal" fa-icon="thumbs-up" actual="<?php echo $videoReactions; ?>" target="<?php echo $averages->get('daily_reactions_video')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                    <div class="box-body">
+                        <graph-metric id="video-reach-metric" color="aqua" fa-icon="eye" actual="<?php echo $videoReach; ?>" target="<?php echo $averages->get('daily_reach_video')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                        <graph-metric id="video-comment-metric" color="yellow" fa-icon="comment" actual="<?php echo $videoComments; ?>" target="<?php echo $averages->get('daily_comments_video')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                        <graph-metric id="video-shares-metric" color="green" fa-icon="share" actual="<?php echo $videoShares; ?>" target="<?php echo $averages->get('daily_shares_video')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                        <graph-metric id="video-reactions-metric" color="teal" fa-icon="thumbs-up" actual="<?php echo $videoReactions; ?>" target="<?php echo $averages->get('daily_reactions_video')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
 
-        <div class="col-md-6">
-            <div class="box box-primary">
-                <div class="box-header">
-                    <h3 class="box-title">Articles</h3>
-                </div>
+        @if (!$type || $type == 'link')
+            @if ($type)
+            <div class="col-md-12">
+            @else
+            <div class="col-md-6">
+            @endif
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title">Articles</h3>
+                    </div>
 
-                <div class="box-body">
-                    <graph-metric id="article-reach-metric" color="aqua" fa-icon="eye" actual="<?php echo $articleReach; ?>" target="<?php echo $averages->get('daily_reach_article')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
-                    <graph-metric id="article-comment-metric" color="yellow" fa-icon="comment" actual="<?php echo $articleComments; ?>" target="<?php echo $averages->get('daily_comments_article')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
-                    <graph-metric id="article-shares-metric" color="green" fa-icon="share" actual="<?php echo $articleShares; ?>" target="<?php echo $averages->get('daily_shares_article')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
-                    <graph-metric id="article-reactions-metric" color="teal" fa-icon="thumbs-up" actual="<?php echo $articleReactions; ?>" target="<?php echo $averages->get('daily_reactions_article')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                    <div class="box-body">
+                        <graph-metric id="article-reach-metric" color="aqua" fa-icon="eye" actual="<?php echo $articleReach; ?>" target="<?php echo $averages->get('daily_reach_article')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                        <graph-metric id="article-comment-metric" color="yellow" fa-icon="comment" actual="<?php echo $articleComments; ?>" target="<?php echo $averages->get('daily_comments_article')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                        <graph-metric id="article-shares-metric" color="green" fa-icon="share" actual="<?php echo $articleShares; ?>" target="<?php echo $averages->get('daily_shares_article')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                        <graph-metric id="article-reactions-metric" color="teal" fa-icon="thumbs-up" actual="<?php echo $articleReactions; ?>" target="<?php echo $averages->get('daily_reactions_article')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
     </div>
 
     <div class="row">
