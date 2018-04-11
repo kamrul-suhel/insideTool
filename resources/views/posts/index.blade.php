@@ -198,7 +198,7 @@
                                         bg-red
                                     @endif
                                      ">
-                                    {{ number_format($post->reach) }}
+                                    {{ number_format($post->reach) }} / <span class="text-light">{{ round(($post->reach / $averages->get('reach')->average) * 100) }}%</span>
                                 </span>
                             </td>
                             <td data-sort="{{ $post->likes }}">
@@ -209,7 +209,7 @@
                                         bg-red
                                     @endif
                                      ">
-                                    {{ number_format($post->likes) }}
+                                    {{ number_format($post->likes) }} / <span class="text-light">{{ round(($post->likes / $averages->get('likes')->average) * 100) }}%</span>
                                 </span>
                             </td>
                             <td data-sort="{{ $post->comments }}">
@@ -220,7 +220,7 @@
                                         bg-red
                                     @endif
                                      ">
-                                    {{ number_format($post->comments) }}
+                                    {{ number_format($post->comments) }} / <span class="text-light">{{ round(($post->comments / $averages->get('comments')->average) * 100) }}%</span>
                                 </span>
                             </td>
                             <td data-sort="{{ $post->shares }}">
@@ -231,7 +231,7 @@
                                         bg-red
                                     @endif
                                      ">
-                                    {{ number_format($post->shares) }}
+                                    {{ number_format($post->shares) }} / <span class="text-light">{{ round(($post->shares / $averages->get('shares')->average) * 100) }}%</span>
                                 </span>
                             </td>
                         </tr>
