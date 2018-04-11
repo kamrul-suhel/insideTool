@@ -117,7 +117,6 @@
                         video-label"><a href="{{ route('posts.index', ['ia' => true, 'creator' => \Request::get('creator'),
                             'label' => \Request::get('label'), 'day' => \Request::get('day')]) }}">Instant Articles</a></span>
 
-                @if (!$creatorFilter)
                     @foreach ($labels as $label)
                         <span class="badge 
                             @if ($labelFilter && $label->id == $labelFilter->id)
@@ -128,7 +127,6 @@
                         video-label"><a href="{{ route('posts.index', ['label' => $label->id, 'ia' => \Request::get('ia'),
                         'creator' => \Request::get('creator'), 'day' => \Request::get('day')]) }}">{{$label->label}}</a></span>
                     @endforeach
-                @endif
             </div>
          <br />
          <table class="table table-striped" id="posts-table">
@@ -158,7 +156,7 @@
                             <td>{{ date("d/m/Y H:i:s", strtotime($post->posted)) }}
                             <td>{{ title_case($post->type) }}</td>
                             @if ($post->creator)
-                                <td><a href="{{ route('posts.index', ['creator' => $post->creator->id]) }}">{{ $post->creator->name }}</a></td>
+                                <td><a href="{{ route('posts.index', ['creator' => $post->creator->id, 'day' => \Request::get('day')]) }}">{{ $post->creator->name }}</a></td>
                             @else
                                 <td>Unknown</td>
                             @endif
