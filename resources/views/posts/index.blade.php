@@ -40,48 +40,65 @@
     </div>
 
     <div class="row">
-        <div class="col-md-3">
+
+        <div class="col-md-4">
+            <div class="info-box">
+                <span class="info-box-icon"><i class="fa fa-eye"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Total Reach</span>
+                    <span class="info-box-number info-box-number-big">
+                        {{ number_format($articleReach + $videoReach) }}
+                    </span>             
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-4">
             <div class="info-box">
                 <span class="info-box-icon"><i class="fa fa-thumb-tack"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Total Posts</span>
-                    <span class="info-box-number info-box-number-medium">
+                    <span class="info-box-number info-box-number-big">
                         {{ count($posts) }}
                     </span>             
                 </div>
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="info-box">
                 <span class="info-box-icon"><i class="fa fa-play"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Videos</span>
-                    <span class="info-box-number info-box-number-medium">
+                    <span class="info-box-number info-box-number-big">
                         {{ count($posts->where('type', 'video')) }}
                     </span>             
                 </div>
             </div>
         </div>
 
-        <div class="col-md-3">
+        </div>
+        <div class="row">
+
+        <div class="col-md-4">
             <div class="info-box">
                 <span class="info-box-icon"><i class="fa fa-list"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Articles</span>
-                    <span class="info-box-number info-box-number-medium">
+                    <span class="info-box-number info-box-number-big">
                         {{ count($posts->where('type', 'link'))-count($posts->where('instant_article', true)) }}
                     </span>             
                 </div>
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="info-box">
                 <span class="info-box-icon"><i class="fa fa-bolt"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">IA</span>
-                    <span class="info-box-number info-box-number-medium">
+                    <span class="info-box-number info-box-number-big">
                         {{ count($posts->where('instant_article', true)) }}
                     </span>             
                 </div>
