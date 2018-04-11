@@ -102,12 +102,28 @@
          data-average-comments="{{ $averages->get('comments')->average }}"  data-average-shares="{{ $averages->get('shares')->average }}">
          <div class="pull-right video-tags">
                 <span class="badge 
-                        @if (!$labelFilter && !$iaFilter)
+                        @if (!$labelFilter && !$iaFilter && !$typeFilter)
                             bg-aqua
                         @else
-                            bg-gray
+                            bg-green
                         @endif
                     video-label"><a href="{{ route('posts.index') }}">All</a></span>
+                    <span class="badge 
+                        @if ($type == 'video')
+                            bg-aqua
+                        @else
+                            bg-purple
+                        @endif
+                        video-label"><a href="{{ route('posts.index', ['ia' => false, 'creator' => \Request::get('creator'),
+                            'label' => \Request::get('label'), 'day' => \Request::get('day'), 'type' => 'video']) }}">Videos</a></span>
+                    <span class="badge 
+                        @if ($type == 'link')
+                            bg-aqua
+                        @else
+                            bg-maroon
+                        @endif
+                        video-label"><a href="{{ route('posts.index', ['ia' => false, 'creator' => \Request::get('creator'),
+                            'label' => \Request::get('label'), 'day' => \Request::get('day'), 'type' => 'link']) }}">Links</a></span>
                     <span class="badge 
                         @if ($iaFilter)
                             bg-aqua
@@ -115,7 +131,7 @@
                             bg-yellow
                         @endif
                         video-label"><a href="{{ route('posts.index', ['ia' => true, 'creator' => \Request::get('creator'),
-                            'label' => \Request::get('label'), 'day' => \Request::get('day')]) }}">Instant Articles</a></span>
+                            'label' => \Request::get('label'), 'day' => \Request::get('day'), 'type' => \Request::get('type')]) }}">Instant Articles</a></span>
 
                     @foreach ($labels as $label)
                         <span class="badge 
@@ -125,7 +141,7 @@
                                 bg-gray
                             @endif
                         video-label"><a href="{{ route('posts.index', ['label' => $label->id, 'ia' => \Request::get('ia'),
-                        'creator' => \Request::get('creator'), 'day' => \Request::get('day')]) }}">{{$label->label}}</a></span>
+                        'creator' => \Request::get('creator'), 'day' => \Request::get('day'), 'type' => \Request::get('type')]) }}">{{$label->label}}</a></span>
                     @endforeach
             </div>
          <br />
@@ -156,7 +172,8 @@
                             <td>{{ date("d/m/Y H:i:s", strtotime($post->posted)) }}
                             <td>{{ title_case($post->type) }}</td>
                             @if ($post->creator)
-                                <td><a href="{{ route('posts.index', ['creator' => $post->creator->id, 'day' => \Request::get('day')]) }}">{{ $post->creator->name }}</a></td>
+                                <td><a href="{{ route('posts.index', ['creator' => $post->creator->id, 'ia' => \Request::get('ia'), 
+                                    'day' => \Request::get('day'), 'type' => \Request::get('type')]) }}">{{ $post->creator->name }}</a></td>
                             @else
                                 <td>Unknown</td>
                             @endif
@@ -239,8 +256,6 @@
                         </li>
                     </ul>
                 </nav>
-
-                {{-- {{ $posts->links() }} --}}
             </div>
         </div>
     </div>

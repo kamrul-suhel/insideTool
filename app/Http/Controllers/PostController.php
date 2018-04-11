@@ -21,6 +21,7 @@ class PostController extends Controller
         $creator = false;
         $instantArticles = false;
         $day = 0;
+        $type = false;
 
         if (\Request::get('creator')) {
             $creator = \Request::get('creator');
@@ -34,6 +35,9 @@ class PostController extends Controller
         if (\Request::get('day')) {
             $day = (int) \Request::get('day');
         }
+        if (\Request::get('type')) {
+            $type = \Request::get('type');
+        }
         
         $posts = Post::withTrashed()
             ->orderBy('posted', 'desc')
@@ -41,6 +45,7 @@ class PostController extends Controller
         $labelFilter = false;
         $creatorFilter = false;
         $iaFilter = false;
+        $typeFilter = false;
 
         if ($label) {
             $posts = $posts->whereHas('videoLabels', function ($q) use ($label) {
@@ -58,6 +63,10 @@ class PostController extends Controller
             $posts->where('instant_article', true);
             $iaFilter = true;
         }
+        if ($type) {
+            $posts->where('type', $type);
+            $typeFilter = true;
+        }
         
         $posts->whereDate('posted', \Carbon\Carbon::now('Europe/London')->subDays($day)->format('Y-m-d'));
         
@@ -66,30 +75,35 @@ class PostController extends Controller
 
         $prevLink = "";
         if ($day > 0) {
-            $prevLink = route('posts.index', ['day' => $day - 1]);
+            $prevLink = route('posts.index', ['day' => $day - 1, 'creator' => \Request::get('creator'), 
+                'ia' => \Request::get('ia'), 'type' => \Request::get('type')]);
         }
         $paginationLinks["prevLink"] = $prevLink;
 
         for ($i = 0; $i < $day; $i++) {
             $date = \Carbon\Carbon::now('Europe/London')->subDays($i);
             $paginationLinks["days"][] = ['label' => $date->format('d/m'),
-                'link' => route('posts.index', ['day' => $i]),
+                'link' => route('posts.index', ['day' => $i, 'creator' => \Request::get('creator'), 
+                    'ia' => \Request::get('ia'), 'type' => \Request::get('type')]),
                 'current' => false];
         }
 
         $paginationLinks["days"][] = ['label' => \Carbon\Carbon::now('Europe/London')->subDays($day)->format('d/m'),
-            'link' => route('posts.index', ['day' => $i]),
+            'link' =>route('posts.index', ['day' => $i, 'creator' => \Request::get('creator'), 
+                'ia' => \Request::get('ia'), 'type' => \Request::get('type')]),
             'current' => true];
 
         $prevDays = count($paginationLinks["days"]);
         for ($i = $prevDays; $i < 10 - $prevDays; $i++) {
             $date = \Carbon\Carbon::now('Europe/London')->subDays($i);
             $paginationLinks["days"][] = ['label' => $date->format('d/m'),
-                'link' => route('posts.index', ['day' => $i]),
+                'link' =>route('posts.index', ['day' => $i, 'creator' => \Request::get('creator'), 
+                    'ia' => \Request::get('ia'), 'type' => \Request::get('type')]),
                 'current' => false];
         }
 
-        $paginationLinks["nextLink"] = route('posts.index', ['day' => $day + 1]);
+        $paginationLinks["nextLink"] = route('posts.index', ['day' => $day + 1, 'creator' => \Request::get('creator'), 
+        'ia' => \Request::get('ia'), 'type' => \Request::get('type')]);
 
         $labels = VideoLabel::all();
         $posts = $posts->get();
@@ -137,10 +151,11 @@ class PostController extends Controller
 
         $averages = AverageMetric::all()->keyBy('key');
         return view('posts.index', ['posts' => $posts, 'averages' => $averages, 'labelFilter' => $labelFilter, 
-            'labels' => $labels, 'creatorFilter' => $creatorFilter, 'iaFilter' => $iaFilter, 'paginationLinks' => $paginationLinks,
-            'videoReach' => $videoImpressions, 'videoReactions' => $videoReactions, 'videoShares' => $videoShares, 'videoComments' => $videoComments,
-            'articleReach' => $articleImpressions, 'articleReactions' => $articleReactions, 'articleShares' => $articleShares, 'articleComments' => $articleComments, 
-            'date' => \Carbon\Carbon::now('Europe/London')->subDays($day)]);
+            'labels' => $labels, 'creatorFilter' => $creatorFilter, 'iaFilter' => $iaFilter, 'typeFilter' => $typeFilter,
+            'paginationLinks' => $paginationLinks, 'videoReach' => $videoImpressions, 'videoReactions' => $videoReactions, 
+            'videoShares' => $videoShares, 'videoComments' => $videoComments, 'articleReach' => $articleImpressions, 
+            'articleReactions' => $articleReactions, 'articleShares' => $articleShares, 'articleComments' => $articleComments, 
+            'date' => \Carbon\Carbon::now('Europe/London')->subDays($day), 'type' => $type]);
     }
 
     public function indexDatatables() {
