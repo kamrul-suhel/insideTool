@@ -88,11 +88,18 @@ class AverageMetric extends Model
         $metric->average = round($result[0]->avgshares);
         $metric->save();
 
-        // Average shares
+        // Average comments
         $query = "SELECT AVG(maxcomments) as avgcomments FROM (SELECT MAX(post_stat_snapshots.comments) as maxcomments FROM post_stat_snapshots GROUP BY post_id) posts";
         $metric = $metric->firstOrNew(['key' => 'comments']);
         $result = \DB::select($query);
         $metric->average = round($result[0]->avgcomments);
+        $metric->save();
+
+        // Average reach
+        $query = "SELECT AVG(maximpressions) as avgimpressions FROM (SELECT MAX(post_delayed_stat_snapshots.impressions) as maximpressions FROM post_delayed_stat_snapshots GROUP BY post_id) posts";
+        $metric = $metric->firstOrNew(['key' => 'reach']);
+        $result = \DB::select($query);
+        $metric->average = round($result[0]->avgimpressions);
         $metric->save();
 
         // Average daily reactions/shares/comments (video)

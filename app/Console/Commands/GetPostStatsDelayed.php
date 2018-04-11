@@ -52,6 +52,8 @@ class GetPostStatsDelayed extends Command
                 // Impressions
                 $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions', env('FACEBOOK_ACCESS_TOKEN'));
                 $snapshot->impressions = $response->getGraphEdge()[0]["values"][0]["value"];
+                $post->reach = $snapshot->impressions;
+                $post->save();
                 
                 // Unique impressions
                 $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_unique', env('FACEBOOK_ACCESS_TOKEN'));

@@ -156,6 +156,7 @@
                         <th>IA</th>
                         <th data-orderable="false">Message</th>
                         <th data-orderable="false">Link name</th>
+                        <th><i class="fa fa-eye"></i></th>
                         <th><i class="fa fa-thumbs-up"></i></th>
                         <th><i class="fa fa-comment"></i></th>
                         <th><i class="fa fa-share"></i></th>
@@ -189,6 +190,17 @@
                                 </a>
                             </td>
                             <td>{{ $post->name }}</td>
+                            <td data-sort="{{ $post->reach }}">
+                                <span class="badge
+                                    @if ($post->reach > $averages->get('reach')->average)
+                                        bg-green
+                                    @else
+                                        bg-red
+                                    @endif
+                                     ">
+                                    {{ number_format($post->reach) }}
+                                </span>
+                            </td>
                             <td data-sort="{{ $post->likes }}">
                                 <span class="badge
                                     @if ($post->likes > $averages->get('likes')->average)
@@ -197,7 +209,7 @@
                                         bg-red
                                     @endif
                                      ">
-                                    {{ $post->likes }}
+                                    {{ number_format($post->likes) }}
                                 </span>
                             </td>
                             <td data-sort="{{ $post->comments }}">
@@ -208,7 +220,7 @@
                                         bg-red
                                     @endif
                                      ">
-                                    {{ $post->comments }}
+                                    {{ number_format($post->comments) }}
                                 </span>
                             </td>
                             <td data-sort="{{ $post->shares }}">
@@ -219,7 +231,7 @@
                                         bg-red
                                     @endif
                                      ">
-                                    {{ $post->shares }}
+                                    {{ number_format($post->shares) }}
                                 </span>
                             </td>
                         </tr>
