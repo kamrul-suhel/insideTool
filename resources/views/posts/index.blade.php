@@ -131,7 +131,7 @@
                             bg-yellow
                         @endif
                         video-label"><a href="{{ route('posts.index', ['ia' => true, 'creator' => \Request::get('creator'),
-                            'label' => \Request::get('label'), 'day' => \Request::get('day'), 'type' => \Request::get('type')]) }}">Instant Articles</a></span>
+                            'label' => \Request::get('label'), 'day' => \Request::get('day')]) }}">Instant Articles</a></span>
 
                     @foreach ($labels as $label)
                         <span class="badge 
