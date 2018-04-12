@@ -86,7 +86,10 @@
                                 },
                                 ticks:{
                                     max: this.max,
-                                    beginAtZero:true
+                                    beginAtZero:true,
+                                    callback : function (value, index, values) {
+                                        return value.toLocaleString('en')
+                                    }
                                 }
                             }],
                             "yAxes":[{

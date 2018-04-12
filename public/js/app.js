@@ -75431,7 +75431,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                             },
                             ticks: {
                                 max: this.max,
-                                beginAtZero: true
+                                beginAtZero: true,
+                                callback: function callback(value, index, values) {
+                                    return value.toLocaleString('en');
+                                }
                             }
                         }],
                         "yAxes": [{

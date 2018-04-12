@@ -1,9 +1,15 @@
 <template>
-        <td>
-            <span :class="'badge ' + likesClass"><i class="fa fa-thumbs-up"></i> {{ likes | number_format }}</span>
-            <span :class="'badge ' + commentsClass"><i class="fa fa-comment"></i> {{ comments | number_format }}</span>
-            <span :class="'badge ' + sharesClass"><i class="fa fa-share"></i> {{ shares | number_format }}</span>
-        </td>
+        <span>
+            <td>
+                <span :class="'badge ' + likesClass"><i class="fa fa-thumbs-up"></i> {{ likes | number_format }}</span>
+            </td>
+            <td>
+                <span :class="'badge ' + commentsClass"><i class="fa fa-comment"></i> {{ comments | number_format }}</span>
+            </td>
+            <td>
+                <span :class="'badge ' + sharesClass"><i class="fa fa-share"></i> {{ shares | number_format }}</span>
+            </td>
+        </span>
 </template>
 
 <script>

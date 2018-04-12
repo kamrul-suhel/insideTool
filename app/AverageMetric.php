@@ -164,12 +164,12 @@ class AverageMetric extends Model
                     FROM
                         post_stat_snapshots
                     LEFT JOIN posts ON posts.id = post_id
-                WHERE
-                    post_stat_snapshots.created_at < DATE_ADD(posted, INTERVAL 24 hour)
-                AND
-                    posts.type = 'link'
-                GROUP BY
-                    post_id) posts
+                    WHERE
+                        post_stat_snapshots.created_at < DATE_ADD(posted, INTERVAL 24 hour)
+                    AND
+                        posts.type = 'link'
+                    GROUP BY
+                        post_id) posts
             GROUP BY
                 dateposted) daily
         ";
