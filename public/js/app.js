@@ -75479,28 +75479,39 @@ var render = function() {
       _c("div", {}, [_c("canvas", { attrs: { id: _vm.id, height: "80" } })])
     ]),
     _vm._v(" "),
-    _c("div", { class: "info-box-right bg-" + _vm.color }, [
-      _c(
-        "span",
-        {
-          class:
-            "info-box-number info-box-number-medium icon-roi " +
-            (this.is_under ? "negative" : "positive")
-        },
-        [
-          _c("span"),
-          _vm._v(
-            _vm._s(
-              this.dayPercentage != 0
-                ? -Math.round(
-                    (1 - this.actual / (this.target * this.dayPercentage)) * 100
-                  )
-                : Math.round(1 - this.actual / this.target)
-            ) + "%\n        "
-          )
-        ]
-      )
-    ])
+    _c(
+      "div",
+      {
+        class:
+          "info-box-right average-indicator bg-" +
+          _vm.color +
+          " " +
+          (this.is_under ? "negative" : "positive")
+      },
+      [
+        _c(
+          "span",
+          {
+            class:
+              "info-box-number info-box-number-medium icon-roi " +
+              (this.is_under ? "negative" : "positive")
+          },
+          [
+            _c("span"),
+            _vm._v(
+              _vm._s(
+                this.dayPercentage != 0
+                  ? -Math.round(
+                      (1 - this.actual / (this.target * this.dayPercentage)) *
+                        100
+                    )
+                  : Math.round(1 - this.actual / this.target)
+              ) + "%\n        "
+            )
+          ]
+        )
+      ]
+    )
   ])
 }
 var staticRenderFns = []

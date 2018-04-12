@@ -45,25 +45,17 @@
     position: relative;
 }
 
-.icon-roi.positive{
-    color: rgb(110, 215, 85);
-}
-
 .icon-roi.positive:after{
     border-width: 0 5px 7px 5px;
-    border-color: transparent transparent rgb(110, 215, 85) transparent;
+    border-color: transparent transparent #fff transparent;
     bottom: 32px;
-    left: -26px;
-}
-
-.icon-roi.negative{
-    color: rgb(215, 85, 85);
+    left: -30px;
 }
 
 .icon-roi.negative:after{
-    border-color: rgb(215, 85, 85) transparent transparent transparent;
+    border-color: #fff transparent transparent transparent;
     bottom: -32px;
-    left: -26px;
+    left: -30px;
 }
 
 .post-image {
@@ -91,6 +83,8 @@ tr.deleted-post.error a {
 tr.deleted-post.error a:hover {
     color: #a23333 !important;
 }
+
+tr.deleted-post td 
 
 .box-body.charts .charts-col {
     text-align: center;
@@ -122,4 +116,16 @@ tr.deleted-post.error a:hover {
 
 .box-tools.pull-right.video-tags {
     max-width: 90%;
+}
+
+.info-box-right.average-indicator.negative {
+    border: 3px solid #d33724;
+}
+
+.info-box-right.average-indicator.positive {
+    border: 3px solid #00a65a;
+}
+
+.info-box-right.average-indicator {
+    line-height: 81px;
 }

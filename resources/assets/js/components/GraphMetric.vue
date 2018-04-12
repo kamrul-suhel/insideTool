@@ -6,7 +6,7 @@
                 <canvas :id="id" height="80"></canvas> 
             </div>
         </div>
-        <div :class="'info-box-right bg-'+color">
+        <div :class="'info-box-right average-indicator bg-'+color+' '+(this.is_under ? 'negative':'positive')">
             <span :class="'info-box-number info-box-number-medium icon-roi '+(this.is_under ? 'negative':'positive')">
                 <span></span>{{ this.dayPercentage != 0 ? -Math.round((1-this.actual/(this.target*this.dayPercentage))*100) : Math.round((1-this.actual/(this.target))) }}%
             </span>    
