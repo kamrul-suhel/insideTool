@@ -126,6 +126,10 @@ tr.deleted-post td
     border: 3px solid #00a65a;
 }
 
+.info-box-right.average-indicator.positive.bg-green {
+    border: 3px solid #69c394;
+}
+
 .info-box-right.average-indicator {
     line-height: 81px;
 }
