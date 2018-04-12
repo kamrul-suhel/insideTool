@@ -46,7 +46,7 @@ const app = new Vue({
         if ($('#app').data('page') == 'show') {
             this.loadData();
 
-            setInterval(function () {
+            window.metricInterval = setInterval(function () {
                 this.loadData();
             }.bind(this),5000);
         }
@@ -56,7 +56,10 @@ const app = new Vue({
         loadData: function () {
             $.get('/posts/' + $('#app').data('post-id') + '/snapshots/latest/all', function (response) {
                 this.metrics = response;
-            }.bind(this));
+            }.bind(this))
+            .fail(function() {
+                clearInterval(window.metricInterval);  
+            });
         }
     },
 
