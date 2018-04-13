@@ -102,6 +102,7 @@
 @endtask
 
 @task('deployment_finish')
+	php {{ $release }}/artisan storage:link --quiet
 	ln -nfs {{ $release }} {{ $path }}/current
 	echo "Deployment ({{ $date }}) finished"
 @endtask
