@@ -9,6 +9,7 @@ use App\Page;
 use App\Post;
 use App\PublishedInstantArticle;
 use App\VideoLabel;
+use Illuminate\Support\Facades\Storage;
 
 class GetPagePosts extends Command
 {
@@ -66,6 +67,12 @@ class GetPagePosts extends Command
             $post->name = $postResponse->getGraphNode()->getField('name');
             $post->link = $postResponse->getGraphNode()->getField('link');
             $post->picture = $postResponse->getGraphNode()->getField('picture');
+
+            $image = file_get_contents($post->picture);
+            $filename = uniqid('post_') . '.jpg';
+            Storage::disk('public')->put('post_images/' . $filename, $image);
+            $post->picture = asset('storage/post_images/' . $filename);
+
             $post->type = $postResponse->getGraphNode()->getField('type');
             $post->posted = $postResponse->getGraphNode()->getField('created_time');
 
