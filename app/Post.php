@@ -140,7 +140,7 @@ class Post extends Model
                 if ($postAge >= 2880) {
                     return round(($this->$metric / $average) * 100);
                 } else {
-                    $timePercent = 2880 / $postAge;
+                    $timePercent = ($postAge / 2800) * 100;
                     $adjustedAverage = ($timePercent / 100) * $average;
                     return round(($this->$metric / $adjustedAverage) * 100);
                 }
