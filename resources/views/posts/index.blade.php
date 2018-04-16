@@ -221,46 +221,46 @@
                             <td>{{ $post->name }}</td>
                             <td data-sort="{{ $post->reach }}">
                                 <span class="badge
-                                    @if ($post->reach > $averages->get('reach')->average)
+                                    @if (!$post->isUnderAverage('reach'))
                                         bg-green
                                     @else
                                         bg-red
                                     @endif
                                      ">
-                                    {{ number_format($post->reach) }} / <span class="text-light">{{ round(($post->reach / $averages->get('reach')->average) * 100) }}%</span>
+                                    {{ number_format($post->reach) }} / <span class="text-light">{{ number_format($post->percentOfAverage('reach')) }}%</span>
                                 </span>
                             </td>
                             <td data-sort="{{ $post->likes }}">
                                 <span class="badge
-                                    @if ($post->likes > $averages->get('likes')->average)
+                                    @if (!$post->isUnderAverage('likes'))
                                         bg-green
                                     @else
                                         bg-red
                                     @endif
                                      ">
-                                    {{ number_format($post->likes) }} / <span class="text-light">{{ round(($post->likes / $averages->get('likes')->average) * 100) }}%</span>
+                                    {{ number_format($post->likes) }} / <span class="text-light">{{ number_format($post->percentOfAverage('likes')) }}%</span>
                                 </span>
                             </td>
                             <td data-sort="{{ $post->comments }}">
                                 <span class="badge
-                                    @if ($post->comments > $averages->get('comments')->average)
+                                    @if (!$post->isUnderAverage('comments'))
                                         bg-green
                                     @else
                                         bg-red
                                     @endif
                                      ">
-                                    {{ number_format($post->comments) }} / <span class="text-light">{{ round(($post->comments / $averages->get('comments')->average) * 100) }}%</span>
+                                    {{ number_format($post->comments) }} / <span class="text-light">{{ number_format($post->percentOfAverage('comments')) }}%</span>
                                 </span>
                             </td>
                             <td data-sort="{{ $post->shares }}">
                                 <span class="badge
-                                    @if ($post->shares > $averages->get('shares')->average)
+                                    @if (!$post->isUnderAverage('shares'))
                                         bg-green
                                     @else
                                         bg-red
                                     @endif
                                      ">
-                                    {{ number_format($post->shares) }} / <span class="text-light">{{ round(($post->shares / $averages->get('shares')->average) * 100) }}%</span>
+                                    {{ number_format($post->shares) }} / <span class="text-light">{{ number_format($post->percentOfAverage('shares')) }}%</span>
                                 </span>
                             </td>
                         </tr>
