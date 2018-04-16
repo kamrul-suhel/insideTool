@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\AverageMetric;
 
 class Post extends Model
 {
@@ -104,4 +105,46 @@ class Post extends Model
         }
     }
 
+    /**
+     * Is a post's metric under the average?
+     */
+    public function isUnderAverage($metric, $timeAdjusted = true) 
+    {
+        $averageMetric = AverageMetric::where(['key' => $metric])->first();
+        if ($averageMetric) {
+            $average = $averageMetric->average;
+            if ($timeAdjusted) {
+                $postAge = \Carbon\Carbon::parse($this->posted)->diffInMinutes();
+                if ($postAge >= 2880) {
+                    return ($average > $this->$metric) ? true : false;
+                } else {
+                    $timePercent = ($postAge / 2880) * 100;
+                    $adjustedAverage = ($timePercent / 100) * $average;
+
+                    return ($adjustedAverage > $this->$metric) ? true : false;
+                }
+            }
+        }
+    }
+
+    /**
+     * Percent of average
+     */
+    public function percentOfAverage($metric, $timeAdjusted = true)
+    {
+        $averageMetric = AverageMetric::where(['key' => $metric])->first();
+        if ($averageMetric) {
+            $average = $averageMetric->average;
+            if ($timeAdjusted) {
+                $postAge = \Carbon\Carbon::parse($this->posted)->diffInMinutes();
+                if ($postAge >= 2880) {
+                    return round(($this->$metric / $average) * 100);
+                } else {
+                    $timePercent = 2880 / $postAge;
+                    $adjustedAverage = ($timePercent / 100) * $average;
+                    return round(($this->$metric / $adjustedAverage) * 100);
+                }
+            }
+        }
+    }
 }
