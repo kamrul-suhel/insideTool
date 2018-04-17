@@ -253,7 +253,7 @@
                             <td class="dt-center">{{ $post->name }}</td>
                             <td class="dt-center" data-sort="{{ $post->reach }}">
                                 <span class="badge
-                                    @if (!$post->isUnderAverage('reach'))
+                                    @if (!$post->isUnderAverage('reach', true, 'reach'))
                                         bg-green
                                     @else
                                         bg-red
@@ -265,7 +265,7 @@
                             </td>
                             <td class="dt-center" data-sort="{{ $post->likes }}">
                                 <span class="badge
-                                    @if (!$post->isUnderAverage('likes'))
+                                    @if (!$post->isUnderAverage('likes', true, 'likes'))
                                         bg-green
                                     @else
                                         bg-red
@@ -277,7 +277,7 @@
                             </td>
                             <td class="dt-center" data-sort="{{ $post->comments }}">
                                 <span class="badge
-                                    @if (!$post->isUnderAverage('comments'))
+                                    @if (!$post->isUnderAverage('comments', true, 'comments'))
                                         bg-green
                                     @else
                                         bg-red
@@ -289,7 +289,7 @@
                             </td>
                             <td class="dt-center" data-sort="{{ $post->shares }}">
                                 <span class="badge
-                                    @if (!$post->isUnderAverage('shares'))
+                                    @if (!$post->isUnderAverage('shares', true, 'shares'))
                                         bg-green
                                     @else
                                         bg-red

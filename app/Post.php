@@ -108,8 +108,12 @@ class Post extends Model
     /**
      * Is a post's metric under the average?
      */
-    public function isUnderAverage($metric, $timeAdjusted = true) 
+    public function isUnderAverage($metric, $timeAdjusted = true, $type = false) 
     {
+        if ($type) {
+            $metric = $metric . "_{$type}";
+        }
+        
         $averageMetric = AverageMetric::where(['key' => $metric])->first();
         if ($averageMetric) {
             $average = $averageMetric->average;
