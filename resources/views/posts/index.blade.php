@@ -185,10 +185,42 @@
                         <th class="dt-center">IA</th>
                         <th class="dt-center" class="dt-center" data-orderable="false">Message</th>
                         <th class="dt-center" class="dt-center" data-orderable="false">Link name</th>
-                        <th class="dt-center"><i class="fa fa-eye"></i> <em>({{ number_format($averages->get('reach')->average) }})</em></th>
-                        <th class="dt-center"><i class="fa fa-thumbs-up"></i> <em>({{ number_format($averages->get('likes')->average) }})</em></th>
-                        <th class="dt-center"><i class="fa fa-comment"></i> <em>({{ number_format($averages->get('comments')->average) }})</em></th>                                                 </th>
-                        <th class="dt-center"><i class="fa fa-share"></i> <em>({{ number_format($averages->get('shares')->average) }})</em></th>
+                        <th class="dt-center"><i class="fa fa-eye"></i> 
+                            @if ($type == 'link')
+                                <em>({{ number_format($averages->get('reach_link')->average) }})</em>
+                            @elseif ($type == 'video')
+                                <em>({{ number_format($averages->get('reach_video')->average) }})</em>
+                            @else
+                                <em>({{ number_format($averages->get('reach')->average) }})</em>
+                            @endif
+                        </th>
+                        <th class="dt-center"><i class="fa fa-thumbs-up"></i> 
+                            @if ($type == 'link')
+                                <em>({{ number_format($averages->get('likes_link')->average) }})</em>
+                            @elseif ($type == 'video')
+                                <em>({{ number_format($averages->get('likes_video')->average) }})</em>
+                            @else
+                                <em>({{ number_format($averages->get('likes')->average) }})</em>
+                            @endif
+                        </th>
+                        <th class="dt-center"><i class="fa fa-comment"></i> 
+                           @if ($type == 'link')
+                                <em>({{ number_format($averages->get('comments_link')->average) }})</em>
+                            @elseif ($type == 'video')
+                                <em>({{ number_format($averages->get('comments_video')->average) }})</em>
+                            @else
+                                <em>({{ number_format($averages->get('comments')->average) }})</em>
+                            @endif
+                        </th>                                                 </th>
+                        <th class="dt-center"><i class="fa fa-share"></i>
+                             @if ($type == 'link')
+                                <em>({{ number_format($averages->get('shares_link')->average) }})</em>
+                            @elseif ($type == 'video')
+                                <em>({{ number_format($averages->get('shares_video')->average) }})</em>
+                            @else
+                                <em>({{ number_format($averages->get('shares')->average) }})</em>
+                            @endif
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
