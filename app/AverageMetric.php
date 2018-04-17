@@ -102,6 +102,62 @@ class AverageMetric extends Model
         $metric->average = round($result[0]->avgimpressions);
         $metric->save();
 
+        // Average likes (video)
+        $query = "SELECT AVG(likes) as avglikes FROM posts WHERE type='video'";
+        $metric = $metric->firstOrNew(['key' => 'likes_video']);
+        $result = \DB::select($query);
+        $metric->average = round($result[0]->avglikes);
+        $metric->save();
+
+        // Average comments (video)
+        $query = "SELECT AVG(comments) as avgcomments FROM posts WHERE type='video'";
+        $metric = $metric->firstOrNew(['key' => 'comments_video']);
+        $result = \DB::select($query);
+        $metric->average = round($result[0]->avgcomments);
+        $metric->save();
+        
+        // Average shares (video)
+        $query = "SELECT AVG(shares) as avgshares FROM posts WHERE type='video'";
+        $metric = $metric->firstOrNew(['key' => 'shares_video']);
+        $result = \DB::select($query);
+        $metric->average = round($result[0]->avgshares);
+        $metric->save();
+
+        // Average reach (video)
+        $query = "SELECT AVG(reach) as avgreach FROM posts WHERE type='video'";
+        $metric = $metric->firstOrNew(['key' => 'reach_video']);
+        $result = \DB::select($query);
+        $metric->average = round($result[0]->avgreach);
+        $metric->save();
+
+        // Average likes (link)
+        $query = "SELECT AVG(likes) as avglikes FROM posts WHERE type='link'";
+        $metric = $metric->firstOrNew(['key' => 'likes_link']);
+        $result = \DB::select($query);
+        $metric->average = round($result[0]->avglikes);
+        $metric->save();
+
+        // Average comments (link)
+        $query = "SELECT AVG(comments) as avgcomments FROM posts WHERE type='link'";
+        $metric = $metric->firstOrNew(['key' => 'comments_link']);
+        $result = \DB::select($query);
+        $metric->average = round($result[0]->avgcomments);
+        $metric->save();
+        
+        // Average shares (link)
+        $query = "SELECT AVG(shares) as avgshares FROM posts WHERE type='link'";
+        $metric = $metric->firstOrNew(['key' => 'shares_link']);
+        $result = \DB::select($query);
+        $metric->average = round($result[0]->avgshares);
+        $metric->save();
+
+        // Average reach (link)
+        $query = "SELECT AVG(reach) as avgreach FROM posts WHERE type='link'";
+        $metric = $metric->firstOrNew(['key' => 'reach_link']);
+        $result = \DB::select($query);
+        $metric->average = round($result[0]->avgreach);
+        $metric->save();
+        
         // Average daily reactions/shares/comments (video)
         $query = "
             SELECT
