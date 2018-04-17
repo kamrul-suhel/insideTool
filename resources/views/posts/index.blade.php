@@ -185,10 +185,10 @@
                         <th>IA</th>
                         <th data-orderable="false">Message</th>
                         <th data-orderable="false">Link name</th>
-                        <th><i class="fa fa-eye"></i></th>
-                        <th><i class="fa fa-thumbs-up"></i></th>
-                        <th><i class="fa fa-comment"></i></th>
-                        <th><i class="fa fa-share"></i></th>
+                        <th><i class="fa fa-eye"></i> <em>({{ number_format($averages->get('reach')->average) }})</em></th>
+                        <th><i class="fa fa-thumbs-up"></i> <em>({{ number_format($averages->get('likes')->average) }})</em></th>
+                        <th><i class="fa fa-comment"></i> <em>({{ number_format($averages->get('comments')->average) }})</em></th>                                                 </th>
+                        <th><i class="fa fa-share"></i> <em>({{ number_format($averages->get('shares')->average) }})</em></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -199,7 +199,7 @@
                         @endif
                         >
                             <td><strong>{{ $post->page->name }}</strong></td>
-                            <td>{{ date("d/m/Y H:i:s", strtotime($post->posted)) }}
+                            <td>{{ \Carbon\Carbon::parse($post->posted)->diffForHumans() }}
                             <td>{{ title_case($post->type) }}</td>
                             @if ($post->creator)
                                 <td><a href="{{ route('posts.index', ['creator' => $post->creator->id, 'ia' => \Request::get('ia'), 
@@ -227,7 +227,7 @@
                                         bg-red
                                     @endif
                                      ">
-                                    {{ number_format($post->reach) }} / <span class="text-light">{{ number_format($post->percentOfAverage('reach')) }}%</span>
+                                    {{ number_format($post->reach) }}</span>
                                 </span>
                             </td>
                             <td data-sort="{{ $post->likes }}">
@@ -238,7 +238,7 @@
                                         bg-red
                                     @endif
                                      ">
-                                    {{ number_format($post->likes) }} / <span class="text-light">{{ number_format($post->percentOfAverage('likes')) }}%</span>
+                                    {{ number_format($post->likes) }}</span>
                                 </span>
                             </td>
                             <td data-sort="{{ $post->comments }}">
@@ -249,7 +249,7 @@
                                         bg-red
                                     @endif
                                      ">
-                                    {{ number_format($post->comments) }} / <span class="text-light">{{ number_format($post->percentOfAverage('comments')) }}%</span>
+                                    {{ number_format($post->comments) }} </span>
                                 </span>
                             </td>
                             <td data-sort="{{ $post->shares }}">
@@ -260,7 +260,7 @@
                                         bg-red
                                     @endif
                                      ">
-                                    {{ number_format($post->shares) }} / <span class="text-light">{{ number_format($post->percentOfAverage('shares')) }}%</span>
+                                    {{ number_format($post->shares) }}</span>
                                 </span>
                             </td>
                         </tr>
