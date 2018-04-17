@@ -96,7 +96,7 @@ class AverageMetric extends Model
         $metric->save();
 
         // Average reach
-        $query = "SELECT AVG(maximpressions) as avgimpressions FROM (SELECT MAX(post_delayed_stat_snapshots.impressions) as maximpressions FROM post_delayed_stat_snapshots GROUP BY post_id) posts";
+        $query = "SELECT AVG(maximpressions) as avgimpressions FROM (SELECT MAX(post_delayed_stat_snapshots.impressions) as maximpressions FROM post_delayed_stat_snapshots WHERE post_delayed_stat_snapshots.impressions > 0 GROUP BY post_id) posts";
         $metric = $metric->firstOrNew(['key' => 'reach']);
         $result = \DB::select($query);
         $metric->average = round($result[0]->avgimpressions);
