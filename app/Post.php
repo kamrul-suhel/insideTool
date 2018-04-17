@@ -152,7 +152,11 @@ class Post extends Model
     /**
      * Returns the target, time adjusted
      */
-    public function getTarget($metric, $timeAdjusted = true) {
+    public function getTarget($metric, $timeAdjusted = true, $type = false) {
+        if ($type) {
+            $metric = $metric . "_{$type}";
+        }
+
         $averageMetric = AverageMetric::where(['key' => $metric])->first();
         if ($averageMetric) {
             $average = $averageMetric->average;

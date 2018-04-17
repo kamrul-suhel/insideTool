@@ -260,7 +260,7 @@
                                     @endif
                                      ">
                                     {{ number_format($post->reach) }}</span><br />
-                                <em><i class="fa fa-bullseye"></i> {{ number_format($post->getTarget('reach')) }}</em>
+                                <em><i class="fa fa-bullseye"></i> {{ number_format($post->getTarget('reach', true, $type)) }}</em>
                                 </span>
                             </td>
                             <td class="dt-center" data-sort="{{ $post->likes }}">
@@ -272,7 +272,7 @@
                                     @endif
                                      ">
                                     {{ number_format($post->likes) }}</span><br />
-                                <em><i class="fa fa-bullseye"></i> {{ number_format($post->getTarget('likes')) }}</em>
+                                <em><i class="fa fa-bullseye"></i> {{ number_format($post->getTarget('likes', true, $type)) }}</em>
                                 </span>
                             </td>
                             <td class="dt-center" data-sort="{{ $post->comments }}">
@@ -284,7 +284,7 @@
                                     @endif
                                      ">
                                     {{ number_format($post->comments) }} </span><br />
-                                <em><i class="fa fa-bullseye"></i> {{ number_format($post->getTarget('comments')) }}</em>
+                                <em><i class="fa fa-bullseye"></i> {{ number_format($post->getTarget('comments', true, $type)) }}</em>
                                 </span>
                             </td>
                             <td class="dt-center" data-sort="{{ $post->shares }}">
@@ -296,7 +296,7 @@
                                     @endif
                                      ">
                                     {{ number_format($post->shares) }}</span><br />
-                                <em><i class="fa fa-bullseye"></i> {{ number_format($post->getTarget('shares')) }}</em>
+                                <em><i class="fa fa-bullseye"></i> {{ number_format($post->getTarget('shares', true, $type)) }}</em>
                                 </span>
                             </td>
                         </tr>
