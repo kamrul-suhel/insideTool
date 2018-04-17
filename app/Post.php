@@ -145,6 +145,27 @@ class Post extends Model
                     return round(($this->$metric / $adjustedAverage) * 100);
                 }
             }
+            return round(($this->$metric / $averagcccce) * 100);
+        }
+    }
+
+    /**
+     * Returns the target, time adjusted
+     */
+    public function getTarget($metric, $timeAdjusted = true) {
+        $averageMetric = AverageMetric::where(['key' => $metric])->first();
+        if ($averageMetric) {
+            $average = $averageMetric->average;
+            if ($timeAdjusted) {
+                $postAge = \Carbon\Carbon::parse($this->posted)->diffInMinutes();
+                if ($postAge >= 2880) {
+                    return rounde($average);
+                } else {
+                    $timePercent = ($postAge / 2880) * 100;
+                    $adjustedAverage = ($timePercent / 100) * $average;
+                    return round($adjustedAverage);
+                }
+            }
         }
     }
 }

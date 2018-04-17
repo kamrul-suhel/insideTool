@@ -128,7 +128,7 @@
             </div>
         @endif
         <div class="box-body averages" data-average-likes="{{ $averages->get('likes')->average }}"
-         data-average-comments="{{ $averages->get('comments')->average }}"  data-average-shares="{{ $averages->get('shares')->average }}">
+         data-average-comments="{{ $averages->get('comments')->average }}" data-average-shares="{{ $averages->get('shares')->average }}">
          <div class="pull-right video-tags">
                 <span class="badge 
                         @if (!$labelFilter && !$iaFilter && !$typeFilter)
@@ -175,20 +175,20 @@
             </div>
          <br />
          <table class="table table-striped" id="posts-table">
-                <thead>
+                <thead class="dt-center">
                     <tr>
-                        <th>Page</th>
-                        <th>Posted</th>
-                        <th>Type</th>
-                        <th>Posted by</th>
-                        <th data-orderable="false"></th>
-                        <th>IA</th>
-                        <th data-orderable="false">Message</th>
-                        <th data-orderable="false">Link name</th>
-                        <th><i class="fa fa-eye"></i> <em>({{ number_format($averages->get('reach')->average) }})</em></th>
-                        <th><i class="fa fa-thumbs-up"></i> <em>({{ number_format($averages->get('likes')->average) }})</em></th>
-                        <th><i class="fa fa-comment"></i> <em>({{ number_format($averages->get('comments')->average) }})</em></th>                                                 </th>
-                        <th><i class="fa fa-share"></i> <em>({{ number_format($averages->get('shares')->average) }})</em></th>
+                        <th class="dt-center">Page</th>
+                        <th class="dt-center">Posted</th>
+                        <th class="dt-center">Type</th>
+                        <th class="dt-center">Posted by</th>
+                        <th class="dt-center" class="dt-center" data-orderable="false"></th>
+                        <th class="dt-center">IA</th>
+                        <th class="dt-center" class="dt-center" data-orderable="false">Message</th>
+                        <th class="dt-center" class="dt-center" data-orderable="false">Link name</th>
+                        <th class="dt-center"><i class="fa fa-eye"></i> <em>({{ number_format($averages->get('reach')->average) }})</em></th>
+                        <th class="dt-center"><i class="fa fa-thumbs-up"></i> <em>({{ number_format($averages->get('likes')->average) }})</em></th>
+                        <th class="dt-center"><i class="fa fa-comment"></i> <em>({{ number_format($averages->get('comments')->average) }})</em></th>                                                 </th>
+                        <th class="dt-center"><i class="fa fa-share"></i> <em>({{ number_format($averages->get('shares')->average) }})</em></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -198,28 +198,28 @@
                             class="error deleted-post"
                         @endif
                         >
-                            <td><strong>{{ $post->page->name }}</strong></td>
-                            <td>{{ \Carbon\Carbon::parse($post->posted)->diffForHumans() }}
-                            <td>{{ title_case($post->type) }}</td>
+                            <td class="dt-center"><strong>{{ $post->page->name }}</strong></td>
+                            <td class="dt-center">{{ \Carbon\Carbon::parse($post->posted)->diffForHumans(null, false, false, 2) }}
+                            <td class="dt-center">{{ title_case($post->type) }}</td>
                             @if ($post->creator)
-                                <td><a href="{{ route('posts.index', ['creator' => $post->creator->id, 'ia' => \Request::get('ia'), 
+                                <td class="dt-center"><a href="{{ route('posts.index', ['creator' => $post->creator->id, 'ia' => \Request::get('ia'), 
                                     'day' => \Request::get('day'), 'type' => \Request::get('type')]) }}">{{ $post->creator->name }}</a></td>
                             @else
-                                <td>Unknown</td>
+                                <td class="dt-center">Unknown</td>
                             @endif
-                            <td><a href="/posts/{{ $post->id }}"><img src="{{ $post->picture }}" width="50"></a></td>
-                            <td data-sort="{{ $post->instant_article }}">
+                            <td class="dt-center"><a href="/posts/{{ $post->id }}"><img src="{{ $post->picture }}" width="50"></a></td>
+                            <td class="dt-center" data-sort="{{ $post->instant_article }}">
                                 @if ($post->instant_article)
                                     <i class="fa fa-bolt"></i>&nbsp; 
                                 @endif
                             </td>
-                            <td>
+                            <td class="dt-center">
                                 <a href="/posts/{{ $post->id }}">
                                     {{ $post->message }}
                                 </a>
                             </td>
-                            <td>{{ $post->name }}</td>
-                            <td data-sort="{{ $post->reach }}">
+                            <td class="dt-center">{{ $post->name }}</td>
+                            <td class="dt-center" data-sort="{{ $post->reach }}">
                                 <span class="badge
                                     @if (!$post->isUnderAverage('reach'))
                                         bg-green
@@ -227,10 +227,11 @@
                                         bg-red
                                     @endif
                                      ">
-                                    {{ number_format($post->reach) }}</span>
+                                    {{ number_format($post->reach) }}</span><br />
+                                <em><i class="fa fa-bullseye"></i> {{ number_format($post->getTarget('reach')) }}</em>
                                 </span>
                             </td>
-                            <td data-sort="{{ $post->likes }}">
+                            <td class="dt-center" data-sort="{{ $post->likes }}">
                                 <span class="badge
                                     @if (!$post->isUnderAverage('likes'))
                                         bg-green
@@ -238,10 +239,11 @@
                                         bg-red
                                     @endif
                                      ">
-                                    {{ number_format($post->likes) }}</span>
+                                    {{ number_format($post->likes) }}</span><br />
+                                <em><i class="fa fa-bullseye"></i> {{ number_format($post->getTarget('likes')) }}</em>
                                 </span>
                             </td>
-                            <td data-sort="{{ $post->comments }}">
+                            <td class="dt-center" data-sort="{{ $post->comments }}">
                                 <span class="badge
                                     @if (!$post->isUnderAverage('comments'))
                                         bg-green
@@ -249,10 +251,11 @@
                                         bg-red
                                     @endif
                                      ">
-                                    {{ number_format($post->comments) }} </span>
+                                    {{ number_format($post->comments) }} </span><br />
+                                <em><i class="fa fa-bullseye"></i> {{ number_format($post->getTarget('comments')) }}</em>
                                 </span>
                             </td>
-                            <td data-sort="{{ $post->shares }}">
+                            <td class="dt-center" data-sort="{{ $post->shares }}">
                                 <span class="badge
                                     @if (!$post->isUnderAverage('shares'))
                                         bg-green
@@ -260,7 +263,8 @@
                                         bg-red
                                     @endif
                                      ">
-                                    {{ number_format($post->shares) }}</span>
+                                    {{ number_format($post->shares) }}</span><br />
+                                <em><i class="fa fa-bullseye"></i> {{ number_format($post->getTarget('shares')) }}</em>
                                 </span>
                             </td>
                         </tr>
