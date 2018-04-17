@@ -53,3 +53,16 @@ $app->singleton(
 */
 
 return $app;
+
+/**
+ * Reformatting Carbon's human diffs
+ */
+function human_since ($date) 
+{
+    $carbonReadable = \Carbon\Carbon::parse($date)->diffForHumans(null, false, false, 2);
+    $carbonReadable = str_replace(" days", "d", $carbonReadable);
+    $carbonReadable = str_replace(" day", "d", $carbonReadable);
+    $carbonReadable = str_replace(" hours", "h", $carbonReadable);
+    $carbonReadable = str_replace(" minutes", "m", $carbonReadable);
+    return $carbonReadable;
+}

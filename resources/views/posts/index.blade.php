@@ -231,7 +231,7 @@
                         @endif
                         >
                             <td class="dt-center"><strong>{{ $post->page->name }}</strong></td>
-                            <td class="dt-center">{{ \Carbon\Carbon::parse($post->posted)->diffForHumans(null, false, false, 2) }}
+                            <td class="dt-center">{{ human_since($post->posted) }}
                             <td class="dt-center">{{ title_case($post->type) }}</td>
                             @if ($post->creator)
                                 <td class="dt-center"><a href="{{ route('posts.index', ['creator' => $post->creator->id, 'ia' => \Request::get('ia'), 
