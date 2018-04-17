@@ -75453,7 +75453,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                             mode: "vertical",
                             scaleID: "x-axis-0",
                             value: this.target,
-                            borderColor: "white"
+                            borderColor: "rgba(0,0,0,0.5)"
                         }]
                     }
                 }
