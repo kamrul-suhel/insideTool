@@ -66,5 +66,7 @@ function human_since ($date)
     $carbonReadable = str_replace(" hour", "h", $carbonReadable);
     $carbonReadable = str_replace(" minutes", "m", $carbonReadable);
     $carbonReadable = str_replace(" minute", "m", $carbonReadable);
+    $carbonReadable = str_replace(" seconds", "s", $carbonReadable);
+    $carbonReadable = str_replace(" second", "s", $carbonReadable);
     return $carbonReadable;
 }
