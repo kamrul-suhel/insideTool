@@ -113,51 +113,15 @@ class Post extends Model
         if ($type) {
             $metric = $metric . "_{$type}";
         }
-        
-        $averageMetric = AverageMetric::where(['key' => $metric])->first();
-        if ($averageMetric) {
-            $average = $averageMetric->average;
-            if ($timeAdjusted) {
-                $postAge = \Carbon\Carbon::parse($this->posted)->diffInMinutes();
-                if ($postAge >= 2880) {
-                    return ($average > $this->$metric) ? true : false;
-                } else {
-                    $timePercent = ($postAge / 2880) * 100;
-                    $adjustedAverage = ($timePercent / 100) * $average;
 
-                    return ($adjustedAverage > $this->$metric) ? true : false;
-                }
-            }
-        }
-    }
-
-    /**
-     * Percent of average
-     */
-    public function percentOfAverage($metric, $timeAdjusted = true)
-    {
-        $averageMetric = AverageMetric::where(['key' => $metric])->first();
-        if ($averageMetric) {
-            $average = $averageMetric->average;
-            if ($timeAdjusted) {
-                $postAge = \Carbon\Carbon::parse($this->posted)->diffInMinutes();
-                if ($postAge >= 2880) {
-                    return round(($this->$metric / $average) * 100);
-                } else {
-                    $timePercent = ($postAge / 2800) * 100;
-                    $adjustedAverage = ($timePercent / 100) * $average;
-                    return round(($this->$metric / $adjustedAverage) * 100);
-                }
-            }
-            return round(($this->$metric / $averagcccce) * 100);
-        }
+        return ($this->getTarget($metric, $timeAdjusted, $type) > $this->$metric) ? true : false;
     }
 
     /**
      * Returns the target, time adjusted
      */
     public function getTarget($metric, $timeAdjusted = true, $type = false) {
-        if ($type) {
+        if ($type && strpos("_", $metric)) {
             $metric = $metric . "_{$type}";
         }
 
@@ -175,5 +139,14 @@ class Post extends Model
                 }
             }
         }
+    }
+
+    /**
+     * Gets the percentage from/above the target
+     */
+    public function percentageFromTarget($metric, $timeAdjusted = true, $type = false)
+    {
+        $target = $this->getTarget($metric, $timeAdjusted, $type);
+        return abs(100 - ($this->$metric / $target) * 100);
     }
 }
