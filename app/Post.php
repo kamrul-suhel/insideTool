@@ -110,10 +110,6 @@ class Post extends Model
      */
     public function isUnderAverage($metric, $timeAdjusted = true, $type = false) 
     {
-        if ($type) {
-            $metric = $metric . "_{$type}";
-        }
-
         return ($this->getTarget($metric, $timeAdjusted, $type) > $this->$metric) ? true : false;
     }
 
@@ -121,7 +117,7 @@ class Post extends Model
      * Returns the target, time adjusted
      */
     public function getTarget($metric, $timeAdjusted = true, $type = false) {
-        if ($type && strpos("_", $metric)) {
+        if ($type) {
             $metric = $metric . "_{$type}";
         }
 
