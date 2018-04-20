@@ -69,7 +69,10 @@ class GetPostStatsDelayed extends Command
 
                 // Link clicks
                 $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_consumptions_by_type', env('FACEBOOK_ACCESS_TOKEN'));
-                $snapshot->link_clicks = $response->getGraphEdge()[0]->getField('values')->getField(0)->getField('value')->getField('link clicks');
+                $link_clicks = $response->getGraphEdge()[0]->getField('values')->getField(0)->getField('value')->getField('link clicks');
+                if ($link_clicks) {
+                    $snapshot->link_clicks = $link_clicks;
+                }
 
                 $snapshot->impressions_paid = 0;
                 $snapshot->uniques_paid = 0;
