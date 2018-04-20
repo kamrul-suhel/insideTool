@@ -213,13 +213,16 @@
                             @endif
                         </th>                                                 </th>
                         <th class="dt-center"><i class="fa fa-share"></i>
-                             @if ($type == 'link')
+                            @if ($type == 'link')
                                 <em>({{ number_format($averages->get('shares_link')->average) }})</em>
                             @elseif ($type == 'video')
                                 <em>({{ number_format($averages->get('shares_video')->average) }})</em>
                             @else
                                 <em>({{ number_format($averages->get('shares')->average) }})</em>
                             @endif
+                        </th>
+                        <th class="dt-center"><i class="fa fa-hand-pointer-o"></i>
+                            <em>({{ number_format($averages->get('link_clicks')->average) }})</em>
                         </th>
                     </tr>
                 </thead>
@@ -253,73 +256,97 @@
                             <td class="dt-center">{{ $post->name }}</td>
                             <td class="dt-center" data-sort="{{ $post->reach }}">
                                 <span class="badge
-                                    @if (!$post->isUnderAverage('reach', true, $type))
+                                    @if (!$post->isUnderAverage('reach', true, $post->type))
                                         bg-green
                                     @else
                                         bg-red
                                     @endif
                                      ">
                                     {{ number_format($post->reach) }}</span><br />
-                                    @if (!$post->isUnderAverage('reach', true, $type))
+                                    @if (!$post->isUnderAverage('reach', true, $post->type))
                                         <span class="text-success"><i class="fa fa-caret-up"></i>
                                     @else
                                         <span class="text-danger"><i class="fa fa-caret-down"></i>
                                     @endif
                                     {{ number_format($post->percentageFromTarget('reach', true, $type)) }}%</span><br />
-                                <em><i class="fa fa-bullseye"></i> {{ number_format($post->getTarget('reach', true, $type)) }}</em>
+                                <em><i class="fa fa-bullseye"></i> {{ number_format($post->getTarget('reach', true, $post->type)) }}</em>
                             </td>
                             <td class="dt-center" data-sort="{{ $post->likes }}">
                                 <span class="badge
-                                    @if (!$post->isUnderAverage('likes', true, $type))
+                                    @if (!$post->isUnderAverage('likes', true, $post->type))
                                         bg-green
                                     @else
                                         bg-red
                                     @endif
                                      ">
                                     {{ number_format($post->likes) }}</span><br />
-                                    @if (!$post->isUnderAverage('likes', true, $type))
+                                    @if (!$post->isUnderAverage('likes', true, $post->type))
                                         <span class="text-success"><i class="fa fa-caret-up"></i>
                                     @else
                                         <span class="text-danger"><i class="fa fa-caret-down"></i>
                                     @endif
-                                    {{ number_format($post->percentageFromTarget('likes', true, $type)) }}%</span><br />
-                                <em><i class="fa fa-bullseye"></i> {{ number_format($post->getTarget('likes', true, $type)) }}</em>
+                                    {{ number_format($post->percentageFromTarget('likes', true, $post->type)) }}%</span><br />
+                                <em><i class="fa fa-bullseye"></i> {{ number_format($post->getTarget('likes', true, $post->type)) }}</em>
                             </td>
                             <td class="dt-center" data-sort="{{ $post->comments }}">
                                 <span class="badge
-                                    @if (!$post->isUnderAverage('comments', true, $type))
+                                    @if (!$post->isUnderAverage('comments', true, $post->type))
                                         bg-green
                                     @else
                                         bg-red
                                     @endif
                                      ">
                                     {{ number_format($post->comments) }} </span><br />
-                                @if (!$post->isUnderAverage('comments', true, $type))
+                                @if (!$post->isUnderAverage('comments', true, $post->type))
                                     <span class="text-success"><i class="fa fa-caret-up"></i>
                                 @else
                                     <span class="text-danger"><i class="fa fa-caret-down"></i>
                                 @endif
-                                {{ number_format($post->percentageFromTarget('comments', true, $type)) }}%</span><br />
+                                {{ number_format($post->percentageFromTarget('comments', true, $post->type)) }}%</span><br />
 
-                                <em><i class="fa fa-bullseye"></i> {{ number_format($post->getTarget('comments', true, $type)) }}</em>
+                                <em><i class="fa fa-bullseye"></i> {{ number_format($post->getTarget('comments', true, $post->type)) }}</em>
                             </td>
                             <td class="dt-center" data-sort="{{ $post->shares }}">
                                 <span class="badge
-                                    @if (!$post->isUnderAverage('shares', true, $type))
+                                    @if (!$post->isUnderAverage('shares', true, $post->type))
                                         bg-green
                                     @else
                                         bg-red
                                     @endif
                                      ">
                                     {{ number_format($post->shares) }}</span><br />
-                                @if (!$post->isUnderAverage('shares', true, $type))
+                                @if (!$post->isUnderAverage('shares', true, $post->type))
                                     <span class="text-success"><i class="fa fa-caret-up"></i>
                                 @else
                                     <span class="text-danger"><i class="fa fa-caret-down"></i>
                                 @endif
-                                {{ number_format($post->percentageFromTarget('shares', true, $type)) }}%</span><br />
+                                {{ number_format($post->percentageFromTarget('shares', true, $post->type)) }}%</span><br />
 
-                                <em><i class="fa fa-bullseye"></i> {{ number_format($post->getTarget('shares', true, $type)) }}</em>
+                                <em><i class="fa fa-bullseye"></i> {{ number_format($post->getTarget('shares', true, $post->type)) }}</em>
+                            </td>
+                            <td class="dt-center"
+                                @if ($post->type == 'link')
+                                    data-sort="{{ $post->link_clicks }}">
+                                    <span class="badge
+                                    @if (!$post->isUnderAverage('link_clicks', true))
+                                        bg-green
+                                    @else
+                                        bg-red
+                                    @endif
+                                     ">
+                                    {{ number_format($post->link_clicks) }}</span><br />
+                                    @if (!$post->isUnderAverage('link_clicks', true))
+                                        <span class="text-success"><i class="fa fa-caret-up"></i>
+                                    @else
+                                        <span class="text-danger"><i class="fa fa-caret-down"></i>
+                                    @endif
+                                    {{ number_format($post->percentageFromTarget('link_clicks', true)) }}%</span><br />
+
+                                    <em><i class="fa fa-bullseye"></i> {{ number_format($post->getTarget('link_clicks', true)) }}</em>
+                                @else
+                                    data-sort="0"></td>
+                                @endif
+                               
                             </td>
                         </tr>
                     @endforeach

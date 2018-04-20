@@ -64,6 +64,14 @@ class Post extends Model
     }
 
     /**
+     * Link clicks attribute
+     */
+    public function getLinkClicksAttribute()
+    {
+        return $this->latestDelayedStatSnapshot()->link_clicks;
+    }
+
+    /**
      * Set hidden fields when serialising
      */
     public function toJson($options = 0) {
@@ -122,6 +130,7 @@ class Post extends Model
         }
 
         $averageMetric = AverageMetric::where(['key' => $metric])->first();
+
         if ($averageMetric) {
             $average = $averageMetric->average;
             if ($timeAdjusted) {
@@ -142,7 +151,10 @@ class Post extends Model
      */
     public function percentageFromTarget($metric, $timeAdjusted = true, $type = false)
     {
-        $target = $this->getTarget($metric, $timeAdjusted, $type);
-        return abs(100 - ($this->$metric / $target) * 100);
+        if ($this->$metric > 0) {
+            $target = $this->getTarget($metric, $timeAdjusted, $type);
+            return abs(100 - ($this->$metric / $target) * 100);
+        }
+        return 100;
     }
 }
