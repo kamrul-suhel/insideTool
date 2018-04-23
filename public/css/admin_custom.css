@@ -133,3 +133,11 @@ tr.deleted-post td
 .info-box-right.average-indicator {
     line-height: 81px;
 }
+
+.post-header {
+    height: 4em;
+}
+
+.post-header.creator-filter {
+    height: 6em;
+}

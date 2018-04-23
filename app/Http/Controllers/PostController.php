@@ -68,8 +68,18 @@ class PostController extends Controller
             $typeFilter = true;
         }
         
-        $posts->whereDate('posted', \Carbon\Carbon::now('Europe/London')->subDays($day)->format('Y-m-d'));
+        if (\Request::get('from') && \Request::get('to')) {
+            $from = \Carbon\Carbon::parse(\Request::get('from'));
+            $to = \Carbon\Carbon::parse(\Request::get('to'))->endOfDay();
+        } else {
+            $from = \Carbon\Carbon::now()->startOfDay();
+            $to = \Carbon\Carbon::now()->endOfDay();
+        }
+
+        $posts->whereBetween('posted', [$from->toDateTimeString(), $to->toDateTimeString()]);
+        $daysInRange = $from->diffInDays($to) + 1;
         
+
         $paginationLinks = [];
         $paginationLinks["days"] = [];
 
@@ -155,7 +165,8 @@ class PostController extends Controller
             'paginationLinks' => $paginationLinks, 'videoReach' => $videoImpressions, 'videoReactions' => $videoReactions, 
             'videoShares' => $videoShares, 'videoComments' => $videoComments, 'articleReach' => $articleImpressions, 
             'articleReactions' => $articleReactions, 'articleShares' => $articleShares, 'articleComments' => $articleComments, 
-            'date' => \Carbon\Carbon::now('Europe/London')->subDays($day), 'type' => $type]);
+            'date' => \Carbon\Carbon::now('Europe/London')->subDays($day), 'type' => $type,
+            'daysInRange' => $daysInRange, 'from' => $from, 'to' => $to]);
     }
 
     public function indexDatatables() {

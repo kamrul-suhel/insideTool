@@ -75153,7 +75153,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\components\\Graph.vue"
+Component.options.__file = "resources/assets/js/components/Graph.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -75162,9 +75162,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-226d4d67", Component.options)
+    hotAPI.createRecord("data-v-016ff2a7", Component.options)
   } else {
-    hotAPI.reload("data-v-226d4d67", Component.options)
+    hotAPI.reload("data-v-016ff2a7", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -75291,7 +75291,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-226d4d67", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-016ff2a7", module.exports)
   }
 }
 
@@ -75321,7 +75321,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\components\\GraphMetric.vue"
+Component.options.__file = "resources/assets/js/components/GraphMetric.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -75330,9 +75330,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-22012ff7", Component.options)
+    hotAPI.createRecord("data-v-557a3592", Component.options)
   } else {
-    hotAPI.reload("data-v-22012ff7", Component.options)
+    hotAPI.reload("data-v-557a3592", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -75520,7 +75520,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-22012ff7", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-557a3592", module.exports)
   }
 }
 
@@ -75550,7 +75550,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\components\\IndexMetrics.vue"
+Component.options.__file = "resources/assets/js/components/IndexMetrics.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -75559,9 +75559,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5e98ee08", Component.options)
+    hotAPI.createRecord("data-v-138de0c8", Component.options)
   } else {
-    hotAPI.reload("data-v-5e98ee08", Component.options)
+    hotAPI.reload("data-v-138de0c8", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -75700,7 +75700,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-5e98ee08", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-138de0c8", module.exports)
   }
 }
 

@@ -1,12 +1,16 @@
 @extends('layouts.app')
 
 @section('content_header')
-    <h1>{{ $date->format('l, jS F Y') }}</h1>
+    @if ($from->format('Y-m-d') == $to->format('Y-m-d'))
+        <h1>{{ $from->format('l, jS F Y') }}</h1>
+    @else
+        <h1>{{ $from->format('l, jS F Y') }} &dash; {{ $to->format('l, jS F Y') }}</h1>
+    @endif
 @stop
 
 @section('content')
 <div id="app">
-    <?php $day_percentage = $date->isToday() ? (date('H') / 24 + date('i') / (60 * 24)) : 1;?>
+    <?php $day_percentage = $to->isToday() ? ((date('H') + (($daysInRange - 1) * 24)) / (24 + (($daysInRange - 1) * 24)) + date('i') / (60 * 24)) : 1;?>
     <div class="row">
         @if (!$type || $type == 'video')
             @if ($type)
@@ -20,10 +24,10 @@
                     </div>
 
                     <div class="box-body">
-                        <graph-metric id="video-reach-metric" color="aqua" fa-icon="eye" actual="<?php echo $videoReach; ?>" target="<?php echo $averages->get('daily_reach_video')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
-                        <graph-metric id="video-comment-metric" color="yellow" fa-icon="comment" actual="<?php echo $videoComments; ?>" target="<?php echo $averages->get('daily_comments_video')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
-                        <graph-metric id="video-shares-metric" color="green" fa-icon="share" actual="<?php echo $videoShares; ?>" target="<?php echo $averages->get('daily_shares_video')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
-                        <graph-metric id="video-reactions-metric" color="teal" fa-icon="thumbs-up" actual="<?php echo $videoReactions; ?>" target="<?php echo $averages->get('daily_reactions_video')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                        <graph-metric id="video-reach-metric" color="aqua" fa-icon="eye" actual="<?php echo $videoReach; ?>" target="<?php echo $averages->get('daily_reach_video')->average * (($daysInRange - 1) + $day_percentage); ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                        <graph-metric id="video-comment-metric" color="yellow" fa-icon="comment" actual="<?php echo $videoComments; ?>" target="<?php echo $averages->get('daily_comments_video')->average * (($daysInRange - 1) + $day_percentage); ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                        <graph-metric id="video-shares-metric" color="green" fa-icon="share" actual="<?php echo $videoShares; ?>" target="<?php echo $averages->get('daily_shares_video')->average * (($daysInRange - 1) + $day_percentage); ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                        <graph-metric id="video-reactions-metric" color="teal" fa-icon="thumbs-up" actual="<?php echo $videoReactions; ?>" target="<?php echo $averages->get('daily_reactions_video')->average * (($daysInRange - 1) + $day_percentage); ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
                     </div>
                 </div>
             </div>
@@ -41,10 +45,10 @@
                     </div>
 
                     <div class="box-body">
-                        <graph-metric id="article-reach-metric" color="aqua" fa-icon="eye" actual="<?php echo $articleReach; ?>" target="<?php echo $averages->get('daily_reach_article')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
-                        <graph-metric id="article-comment-metric" color="yellow" fa-icon="comment" actual="<?php echo $articleComments; ?>" target="<?php echo $averages->get('daily_comments_article')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
-                        <graph-metric id="article-shares-metric" color="green" fa-icon="share" actual="<?php echo $articleShares; ?>" target="<?php echo $averages->get('daily_shares_article')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
-                        <graph-metric id="article-reactions-metric" color="teal" fa-icon="thumbs-up" actual="<?php echo $articleReactions; ?>" target="<?php echo $averages->get('daily_reactions_article')->average; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                        <graph-metric id="article-reach-metric" color="aqua" fa-icon="eye" actual="<?php echo $articleReach; ?>" target="<?php echo $averages->get('daily_reach_article')->average * (($daysInRange - 1) + $day_percentage); ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                        <graph-metric id="article-comment-metric" color="yellow" fa-icon="comment" actual="<?php echo $articleComments; ?>" target="<?php echo $averages->get('daily_comments_article')->average * (($daysInRange - 1) + $day_percentage); ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                        <graph-metric id="article-shares-metric" color="green" fa-icon="share" actual="<?php echo $articleShares; ?>" target="<?php echo $averages->get('daily_shares_article')->average * (($daysInRange - 1) + $day_percentage); ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                        <graph-metric id="article-reactions-metric" color="teal" fa-icon="thumbs-up" actual="<?php echo $articleReactions; ?>" target="<?php echo $averages->get('daily_reactions_article')->average * (($daysInRange - 1) + $day_percentage); ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
                     </div>
                 </div>
             </div>
@@ -119,14 +123,23 @@
     </div>
 
     <div class="box box-primary">
-        <div class="box-header">
+        <div class="box-header clearfix post-header
+            @if ($creatorFilter)
+                creator-filter
+            @endif
+        ">
             <h3 class="box-title">Posts</h3>
-        </div>
-        @if ($creatorFilter)
-            <div class="box-header">
-                <div class="box-tools"><p>Showing posts by: <span class="badge bg-red creator"><a href="{{ route('posts.index') }}">{{ $creatorFilter->name }} <i class="fa fa-times"></i></a></p></div>
+            <div class="box-tools pull-right">
+                @if ($creatorFilter)
+                    <p>Showing posts by: <span class="badge bg-red creator"><a href="{{ route('posts.index') }}">{{ $creatorFilter->name }} <i class="fa fa-times"></i></a>&nbsp;</p>
+                @endif
+                <form>
+                    <label for="rangepicker">Date range:
+                        <input class="form-control input-sm" type="text" name="rangepicker">
+                    </label>
+                </form>
             </div>
-        @endif
+        </div>
         <div class="box-body averages" data-average-likes="{{ $averages->get('likes')->average }}"
          data-average-comments="{{ $averages->get('comments')->average }}" data-average-shares="{{ $averages->get('shares')->average }}">
          <div class="pull-right video-tags">
@@ -173,6 +186,7 @@
                         'creator' => \Request::get('creator'), 'day' => \Request::get('day'), 'type' => \Request::get('type')]) }}">{{$label->label}}</a></span>
                     @endforeach
             </div>
+         <br />
          <br />
          <table class="table table-striped" id="posts-table">
                 <thead class="dt-center">
@@ -450,48 +464,36 @@
                 </tfoot>
             </table>
         </div>
-        <div class="box-footer clearfix">
-            <div class="pull-right">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        <li class="page-item
-                            @if (!$paginationLinks["prevLink"])
-                                disabled
-                            @endif
-                        ">
-                            <a class="page-link" href="{{ $paginationLinks["prevLink"] }}" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                        </li>
-                        @foreach ($paginationLinks["days"] as $link)
-                            <li class="page-item
-                                @if ($link['current'])
-                                    active
-                                @endif
-                            "><a class="page-link" href="{{ $link['link'] }}">{{ $link["label"] }}</a></li>
-                        @endforeach
-                        <li class="page-item">
-                            <a class="page-link" href="{{ $paginationLinks["nextLink"] }}" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
     </div>
 </div>
 @stop
 
 @push('js')
     <script src="{{ asset('js/app.js') }}"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/js/dataTables.bootstrap.min.js"></script>
+    <!-- Include Date Range Picker -->
+    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+
     <script>
         $('#posts-table').dataTable({
             "paging": false
+        });
+        $('input[name="rangepicker"]').daterangepicker({
+            maxDate: moment(),
+            startDate: '{{ $from->format('d/m/Y') }}',
+            endDate: '{{ $to->format('d/m/Y') }}',
+            locale: {
+                format: 'DD/MM/YYYY'
+            },
+            dateLimit: {
+                "days" : 14
+            }
+        });
+        $('input[name="rangepicker"]').on('apply.daterangepicker', function (ev, picker) {
+            window.location.search += '&from=' + picker.startDate.format('YYYY-MM-DD') + '&to=' + picker.endDate.format('YYYY-MM-DD');
         });
     </script>
 
