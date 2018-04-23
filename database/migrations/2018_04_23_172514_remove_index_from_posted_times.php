@@ -14,7 +14,7 @@ class RemoveIndexFromPostedTimes extends Migration
     public function up()
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->dateTime('posted')->dropIndex('posted');
+            $table->dateTime('posted')->dropIndex('posted')->change();
         });
     }
 
