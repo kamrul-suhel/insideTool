@@ -164,6 +164,60 @@ class AverageMetric extends Model
         $result = \DB::select($query);
         $metric->average = round($result[0]->avgreach);
         $metric->save();
+
+        // Average daily reactions/shares/comments (all)
+        $query = "
+        SELECT
+            ROUND(AVG(dailyreactions)) AS reactions,
+            ROUND(AVG(dailyshares)) AS shares,
+            ROUND(AVG(dailycomments)) AS comments,
+            ROUND(AVG(dailyreach)) AS reach,
+            ROUND(AVG(dailylikes)) AS likes
+        FROM (
+            SELECT
+                SUM(maxreactions) AS dailyreactions,
+                SUM(maxshares) AS dailyshares,
+                SUM(maxcomments) AS dailycomments,
+                SUM(maxreach) AS dailyreach,
+                SUM(maxlikes) AS dailylikes
+            FROM (
+                SELECT
+                    post_id, (MAX(post_stat_snapshots.likes) + MAX(post_stat_snapshots.loves) + MAX(post_stat_snapshots.wows) + MAX(post_stat_snapshots.hahas) + MAX(post_stat_snapshots.sads) + MAX(post_stat_snapshots.angrys)) AS maxreactions,
+                    MAX(post_stat_snapshots.shares) AS maxshares,
+                    MAX(post_stat_snapshots.comments) AS maxcomments,
+                    MAX(posts.reach) AS maxreach,
+                    MAX(posts.likes) AS maxlikes,
+                    DATE(posted) AS dateposted
+                FROM
+                    post_stat_snapshots
+                LEFT JOIN posts ON posts.id = post_id
+            WHERE
+                post_stat_snapshots.created_at < DATE_ADD(posted, INTERVAL 24 hour)
+            GROUP BY
+                post_id) posts
+        GROUP BY
+            dateposted) daily
+        ";
+        $result = \DB::select($query);
+        $metric = $metric->firstOrNew(['key' => 'daily_reactions']);
+        $metric->average = $result[0]->reactions;
+        $metric->save();
+
+        $metric = $metric->firstOrNew(['key' => 'daily_shares']);
+        $metric->average = $result[0]->shares;
+        $metric->save();
+
+        $metric = $metric->firstOrNew(['key' => 'daily_comments']);
+        $metric->average = $result[0]->comments;
+        $metric->save();
+
+        $metric = $metric->firstOrNew(['key' => 'daily_reach']);
+        $metric->average = $result[0]->reach;
+        $metric->save();
+
+        $metric = $metric->firstOrNew(['key' => 'daily_likes']);
+        $metric->average = $result[0]->likes;
+        $metric->save();
         
         // Average daily reactions/shares/comments (video)
         $query = "

@@ -364,7 +364,7 @@
                                     bg-green
                                 @elseif ($type == 'video')
                                     bg-red
-                                @elseif ($posts->sum('reach') > $averages->get('reach')->average))
+                                @elseif ($posts->sum('reach') > $averages->get('daily_reach')->average))
                                     bg-green
                                 @else
                                     bg-red
@@ -375,13 +375,13 @@
                         </th>
                         <th>
                             <span class="badge
-                                @if ($posts->sum('link_clicks') > $averages->get('daily_link_clicks')->average)
+                                @if ($posts->sum('likes') > $averages->get('daily_likes')->average)
                                     bg-green
                                 @else
                                     bg-red
                                 @endif
                             ">
-                            {{ number_format($posts->sum('link_clicks')) }}<br />
+                            {{ number_format($posts->sum('likes')) }}<br />
                             </span>
                         </th>
                         <th>
@@ -394,7 +394,7 @@
                                     bg-green
                                 @elseif ($type == 'video')
                                     bg-red
-                                @elseif ($posts->sum('comments') > $averages->get('comments')->average))
+                                @elseif ($posts->sum('comments') > $averages->get('daily_comments')->average))
                                     bg-green
                                 @else
                                     bg-red
@@ -413,7 +413,7 @@
                                     bg-green
                                 @elseif ($type == 'video')
                                     bg-red
-                                @elseif ($posts->sum('shares') > $averages->get('shares')->average))
+                                @elseif ($posts->sum('shares') > $averages->get('daily_shares')->average))
                                     bg-green
                                 @else
                                     bg-red
@@ -424,13 +424,25 @@
                         </th>
                         <th>
                             <span class="badge
-                                @if ($posts->sum('link_clicks') > $averages->get('daily_link_clicks')->average))
+                                @if ($posts->sum(function ($post) {
+                                    if ($post->type == 'link') {
+                                        return $post->link_clicks;
+                                    }
+                                    return 0;
+                                    }) 
+                                > $averages->get('daily_link_clicks')->average))
                                     bg-green
                                 @else
                                     bg-red
                                 @endif
                             ">
-                            {{ number_format($posts->sum('link_clicks')) }}<br />
+                            {{ number_format($posts->sum(function ($post) {
+                                if ($post->type == 'link') {
+                                    return $post->link_clicks;
+                                }
+                                return 0;
+                                }) 
+                            )}}<br />
                             </span>
                         </th>
 
