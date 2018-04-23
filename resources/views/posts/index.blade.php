@@ -351,6 +351,91 @@
                         </tr>
                     @endforeach
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Totals</th>
+                        <th colspan="8" style="text-align: right;">
+                            <span class="badge
+                                @if ($type == 'link' && ($posts->sum('reach') > $averages->get('reach_link')->average))
+                                    bg-green
+                                @elseif ($type == 'link')
+                                    bg-red
+                                @elseif ($type == 'video' && ($posts->sum('reach') > $averages->get('reach_video')->average))
+                                    bg-green
+                                @elseif ($type == 'video')
+                                    bg-red
+                                @elseif ($posts->sum('reach') > $averages->get('reach')->average))
+                                    bg-green
+                                @else
+                                    bg-red
+                                @endif
+                            ">
+                            {{ number_format($posts->sum('reach')) }}<br />
+                            </span>
+                        </th>
+                        <th>
+                            <span class="badge
+                                @if ($posts->sum('link_clicks') > $averages->get('link_clicks')->average)
+                                    bg-green
+                                @else
+                                    bg-red
+                                @endif
+                            ">
+                            {{ number_format($posts->sum('link_clicks')) }}<br />
+                            </span>
+                        </th>
+                        <th>
+                            <span class="badge
+                                @if ($type == 'link' && ($posts->sum('comments') > $averages->get('comments_link')->average))
+                                    bg-green
+                                @elseif ($type == 'link')
+                                    bg-red
+                                @elseif ($type == 'video' && ($posts->sum('comments') > $averages->get('comments_video')->average))
+                                    bg-green
+                                @elseif ($type == 'video')
+                                    bg-red
+                                @elseif ($posts->sum('comments') > $averages->get('comments')->average))
+                                    bg-green
+                                @else
+                                    bg-red
+                                @endif
+                            ">
+                            {{ number_format($posts->sum('comments')) }}<br />
+                            </span>
+                        </th>
+                        <th>
+                            <span class="badge
+                                @if ($type == 'link' && ($posts->sum('shares') > $averages->get('shares_link')->average))
+                                    bg-green
+                                @elseif ($type == 'link')
+                                    bg-red
+                                @elseif ($type == 'video' && ($posts->sum('shares') > $averages->get('shares_video')->average))
+                                    bg-green
+                                @elseif ($type == 'video')
+                                    bg-red
+                                @elseif ($posts->sum('shares') > $averages->get('shares')->average))
+                                    bg-green
+                                @else
+                                    bg-red
+                                @endif
+                            ">
+                            {{ number_format($posts->sum('shares')) }}<br />
+                            </span>
+                        </th>
+                        <th>
+                            <span class="badge
+                                @if ($posts->sum('link_clicks') > $averages->get('link_clicks')->average))
+                                    bg-green
+                                @else
+                                    bg-red
+                                @endif
+                            ">
+                            {{ number_format($posts->sum('link_clicks')) }}<br />
+                            </span>
+                        </th>
+
+                    </tr>
+                </tfoot>
             </table>
         </div>
         <div class="box-footer clearfix">
