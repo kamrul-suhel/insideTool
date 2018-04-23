@@ -78,42 +78,6 @@ class PostController extends Controller
 
         $posts->whereBetween('posted', [$from->toDateTimeString(), $to->toDateTimeString()]);
         $daysInRange = $from->diffInDays($to) + 1;
-        
-
-        $paginationLinks = [];
-        $paginationLinks["days"] = [];
-
-        $prevLink = "";
-        if ($day > 0) {
-            $prevLink = route('posts.index', ['day' => $day - 1, 'creator' => \Request::get('creator'), 
-                'ia' => \Request::get('ia'), 'type' => \Request::get('type')]);
-        }
-        $paginationLinks["prevLink"] = $prevLink;
-
-        for ($i = 0; $i < $day; $i++) {
-            $date = \Carbon\Carbon::now('Europe/London')->subDays($i);
-            $paginationLinks["days"][] = ['label' => $date->format('d/m'),
-                'link' => route('posts.index', ['day' => $i, 'creator' => \Request::get('creator'), 
-                    'ia' => \Request::get('ia'), 'type' => \Request::get('type')]),
-                'current' => false];
-        }
-
-        $paginationLinks["days"][] = ['label' => \Carbon\Carbon::now('Europe/London')->subDays($day)->format('d/m'),
-            'link' =>route('posts.index', ['day' => $i, 'creator' => \Request::get('creator'), 
-                'ia' => \Request::get('ia'), 'type' => \Request::get('type')]),
-            'current' => true];
-
-        $prevDays = count($paginationLinks["days"]);
-        for ($i = $prevDays; $i < 10 - $prevDays; $i++) {
-            $date = \Carbon\Carbon::now('Europe/London')->subDays($i);
-            $paginationLinks["days"][] = ['label' => $date->format('d/m'),
-                'link' =>route('posts.index', ['day' => $i, 'creator' => \Request::get('creator'), 
-                    'ia' => \Request::get('ia'), 'type' => \Request::get('type')]),
-                'current' => false];
-        }
-
-        $paginationLinks["nextLink"] = route('posts.index', ['day' => $day + 1, 'creator' => \Request::get('creator'), 
-        'ia' => \Request::get('ia'), 'type' => \Request::get('type')]);
 
         $labels = VideoLabel::all();
         $posts = $posts->get();
@@ -162,7 +126,7 @@ class PostController extends Controller
         $averages = AverageMetric::all()->keyBy('key');
         return view('posts.index', ['posts' => $posts, 'averages' => $averages, 'labelFilter' => $labelFilter, 
             'labels' => $labels, 'creatorFilter' => $creatorFilter, 'iaFilter' => $iaFilter, 'typeFilter' => $typeFilter,
-            'paginationLinks' => $paginationLinks, 'videoReach' => $videoImpressions, 'videoReactions' => $videoReactions, 
+            'videoReach' => $videoImpressions, 'videoReactions' => $videoReactions, 
             'videoShares' => $videoShares, 'videoComments' => $videoComments, 'articleReach' => $articleImpressions, 
             'articleReactions' => $articleReactions, 'articleShares' => $articleShares, 'articleComments' => $articleComments, 
             'date' => \Carbon\Carbon::now('Europe/London')->subDays($day), 'type' => $type,
