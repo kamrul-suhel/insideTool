@@ -302,5 +302,34 @@ class AverageMetric extends Model
         $metric = $metric->firstOrNew(['key' => 'daily_reach_article']);
         $metric->average = $result[0]->impressions;
         $metric->save();
+
+        // Daily link clicks
+        $query = "
+        SELECT
+            ROUND(AVG(dailyclicks)) AS clicks
+        FROM (
+            SELECT
+                SUM(maxclicks) AS dailyclicks
+            FROM (
+                SELECT
+                    MAX(link_clicks) AS maxclicks,
+                    DATE(posted) AS dateposted
+                FROM
+                    post_delayed_stat_snapshots
+                LEFT JOIN posts ON posts.id = post_id
+            WHERE
+                post_delayed_stat_snapshots.created_at < DATE_ADD(posted, INTERVAL 24 hour)
+                AND posts.type = 'link'
+            GROUP BY
+                post_id) posts
+        GROUP BY
+            dateposted) daily
+        ";
+        $result = \DB::select($query);
+        $metric = $metric->firstOrNew(['key' => 'daily_link_clicks']);
+        $metric->average = $result[0]->clicks;
+        $metric->save();
+        
+        
     }
 }

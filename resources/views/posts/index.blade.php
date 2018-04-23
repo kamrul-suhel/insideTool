@@ -356,11 +356,11 @@
                         <th>Totals</th>
                         <th colspan="8" style="text-align: right;">
                             <span class="badge
-                                @if ($type == 'link' && ($posts->sum('reach') > $averages->get('reach_link')->average))
+                                @if ($type == 'link' && ($posts->sum('reach') > $averages->get('daily_reach_article')->average))
                                     bg-green
                                 @elseif ($type == 'link')
                                     bg-red
-                                @elseif ($type == 'video' && ($posts->sum('reach') > $averages->get('reach_video')->average))
+                                @elseif ($type == 'video' && ($posts->sum('reach') > $averages->get('daily_reach_video')->average))
                                     bg-green
                                 @elseif ($type == 'video')
                                     bg-red
@@ -375,7 +375,7 @@
                         </th>
                         <th>
                             <span class="badge
-                                @if ($posts->sum('link_clicks') > $averages->get('link_clicks')->average)
+                                @if ($posts->sum('link_clicks') > $averages->get('daily_link_clicks')->average)
                                     bg-green
                                 @else
                                     bg-red
@@ -386,11 +386,11 @@
                         </th>
                         <th>
                             <span class="badge
-                                @if ($type == 'link' && ($posts->sum('comments') > $averages->get('comments_link')->average))
+                                @if ($type == 'link' && ($posts->sum('comments') > $averages->get('daily_comments_article')->average))
                                     bg-green
                                 @elseif ($type == 'link')
                                     bg-red
-                                @elseif ($type == 'video' && ($posts->sum('comments') > $averages->get('comments_video')->average))
+                                @elseif ($type == 'video' && ($posts->sum('comments') > $averages->get('daily_comments_video')->average))
                                     bg-green
                                 @elseif ($type == 'video')
                                     bg-red
@@ -405,11 +405,11 @@
                         </th>
                         <th>
                             <span class="badge
-                                @if ($type == 'link' && ($posts->sum('shares') > $averages->get('shares_link')->average))
+                                @if ($type == 'link' && ($posts->sum('shares') > $averages->get('daily_shares_article')->average))
                                     bg-green
                                 @elseif ($type == 'link')
                                     bg-red
-                                @elseif ($type == 'video' && ($posts->sum('shares') > $averages->get('shares_video')->average))
+                                @elseif ($type == 'video' && ($posts->sum('shares') > $averages->get('daily_shares_video')->average))
                                     bg-green
                                 @elseif ($type == 'video')
                                     bg-red
@@ -424,7 +424,7 @@
                         </th>
                         <th>
                             <span class="badge
-                                @if ($posts->sum('link_clicks') > $averages->get('link_clicks')->average))
+                                @if ($posts->sum('link_clicks') > $averages->get('daily_link_clicks')->average))
                                     bg-green
                                 @else
                                     bg-red
