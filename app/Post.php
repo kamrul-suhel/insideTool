@@ -130,7 +130,7 @@ class Post extends Model
         }
 
         $averageMetric = AverageMetric::where(['key' => $metric])->first();
-
+        
         if ($averageMetric) {
             $average = $averageMetric->average;
             if ($timeAdjusted) {
@@ -140,8 +140,14 @@ class Post extends Model
                 } else {
                     $timePercent = ($postAge / 2880) * 100;
                     $adjustedAverage = ($timePercent / 100) * $average;
-                    return round($adjustedAverage);
+                    if ($adjustedAverage > 0) {
+                        return round($adjustedAverage);
+                    } else {
+                        return 1;
+                    }
                 }
+            } else {
+                return round($average);
             }
         }
     }
