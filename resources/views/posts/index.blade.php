@@ -195,48 +195,19 @@
                         <th class="dt-center">Posted</th>
                         <th class="dt-center">Type</th>
                         <th class="dt-center">Posted by</th>
-                        <th class="dt-center" class="dt-center" data-orderable="false"></th>
+                        <th class="dt-center" data-orderable="false"></th>
                         <th class="dt-center">IA</th>
-                        <th class="dt-center" class="dt-center" data-orderable="false">Message</th>
-                        <th class="dt-center" class="dt-center" data-orderable="false">Link name</th>
+                        <th class="dt-center" data-orderable="false">Message</th>
+                        <th class="dt-center" data-orderable="false">Link name</th>
                         <th class="dt-center"><i class="fa fa-eye"></i> 
-                            @if ($type == 'link')
-                                <em>({{ number_format($averages->get('reach_link')->average) }})</em>
-                            @elseif ($type == 'video')
-                                <em>({{ number_format($averages->get('reach_video')->average) }})</em>
-                            @else
-                                <em>({{ number_format($averages->get('reach')->average) }})</em>
-                            @endif
                         </th>
                         <th class="dt-center"><i class="fa fa-thumbs-up"></i> 
-                            @if ($type == 'link')
-                                <em>({{ number_format($averages->get('likes_link')->average) }})</em>
-                            @elseif ($type == 'video')
-                                <em>({{ number_format($averages->get('likes_video')->average) }})</em>
-                            @else
-                                <em>({{ number_format($averages->get('likes')->average) }})</em>
-                            @endif
                         </th>
                         <th class="dt-center"><i class="fa fa-comment"></i> 
-                           @if ($type == 'link')
-                                <em>({{ number_format($averages->get('comments_link')->average) }})</em>
-                            @elseif ($type == 'video')
-                                <em>({{ number_format($averages->get('comments_video')->average) }})</em>
-                            @else
-                                <em>({{ number_format($averages->get('comments')->average) }})</em>
-                            @endif
                         </th>                                                 </th>
                         <th class="dt-center"><i class="fa fa-share"></i>
-                            @if ($type == 'link')
-                                <em>({{ number_format($averages->get('shares_link')->average) }})</em>
-                            @elseif ($type == 'video')
-                                <em>({{ number_format($averages->get('shares_video')->average) }})</em>
-                            @else
-                                <em>({{ number_format($averages->get('shares')->average) }})</em>
-                            @endif
                         </th>
                         <th class="dt-center"><i class="fa fa-hand-pointer-o"></i>
-                            <em>({{ number_format($averages->get('link_clicks')->average) }})</em>
                         </th>
                     </tr>
                 </thead>
@@ -262,12 +233,12 @@
                                     <i class="fa fa-bolt"></i>&nbsp; 
                                 @endif
                             </td>
-                            <td class="dt-center">
+                            <td>
                                 <a href="/posts/{{ $post->id }}">
                                     {{ $post->message }}
                                 </a>
                             </td>
-                            <td class="dt-center">{{ $post->name }}</td>
+                            <td>{{ $post->name }}</td>
                             <td class="dt-center" data-sort="{{ $post->reach }}">
                                 <span class="badge
                                     @if (!$post->isUnderAverage('reach', true, $post->type))
