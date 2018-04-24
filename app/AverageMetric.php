@@ -366,7 +366,7 @@ class AverageMetric extends Model
                 SUM(maxclicks) AS dailyclicks
             FROM (
                 SELECT
-                    MAX(link_clicks) AS maxclicks,
+                    MAX(post_delayed_stat_snapshots.link_clicks) AS maxclicks,
                     DATE(posted) AS dateposted
                 FROM
                     post_delayed_stat_snapshots
