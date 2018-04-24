@@ -103,7 +103,7 @@ class AverageMetric extends Model
         $metric->save();
 
         // Average link clicks
-        $query = "SELECT AVG(maxclicks) as avgclicks FROM (SELECT MAX(post_delayed_stat_snapshots.link_clicks) as maxclicks FROM post_delayed_stat_snapshots LEFT JOIN posts ON posts.id = post_id WHERE posts.type = 'link' AND link_clicks > 0 GROUP BY post_id) posts";
+        $query = "SELECT AVG(maxclicks) as avgclicks FROM (SELECT MAX(post_delayed_stat_snapshots.link_clicks) as maxclicks FROM post_delayed_stat_snapshots LEFT JOIN posts ON posts.id = post_id WHERE posts.type = 'link' AND post_delayed_stat_snapshots.link_clicks > 0 GROUP BY post_id) posts";
         $metric = $metric->firstOrNew(['key' => 'link_clicks']);
         $result = \DB::select($query);
         $metric->average = round($result[0]->avgclicks);
