@@ -49,6 +49,8 @@ class GetPostStats extends Command
             $snapshot->post_id = $post->id;
             
             try {
+                $reactions = 0;
+
                 // Like count
                 $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=LIKE&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
                 $likes = $response->getDecodedBody()["summary"]["total_count"];
@@ -57,27 +59,33 @@ class GetPostStats extends Command
                 if ($likes > 0) {
                     $post->likes = $likes;
                     $post->save(); 
+                    $reactions += $likes;
                 }
 
                 // Love count
                 $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=LOVE&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
                 $snapshot->loves = $response->getDecodedBody()["summary"]["total_count"];
+                $reactions += $snapshot->loves;
                 
                 // Wow count
                 $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=WOW&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
                 $snapshot->wows = $response->getDecodedBody()["summary"]["total_count"];
+                $reactions += $snapshot->wows;
                 
                 // Haha count
                 $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=HAHA&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
                 $snapshot->hahas = $response->getDecodedBody()["summary"]["total_count"];
+                $reactions += $snapshot->hahas;
                 
                 // Sad count
                 $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=SAD&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
                 $snapshot->sads = $response->getDecodedBody()["summary"]["total_count"];
+                $reactions += $snapshot->sads;
                 
                 // Angry count
                 $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=ANGRY&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
                 $snapshot->angrys = $response->getDecodedBody()["summary"]["total_count"];
+                $reactions += $snapshot->angrys;
                 
                 // Comment count
                 $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/comments/?summary=1', env('FACEBOOK_ACCESS_TOKEN'));
@@ -87,6 +95,11 @@ class GetPostStats extends Command
 
                 if ($comments > 0) {
                     $post->comments = $comments;
+                    $post->save();
+                }
+
+                if ($reactions > 0) {
+                    $post->reactions = $reactions;
                     $post->save();
                 }
 

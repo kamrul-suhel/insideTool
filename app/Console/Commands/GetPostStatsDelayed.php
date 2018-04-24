@@ -72,6 +72,8 @@ class GetPostStatsDelayed extends Command
                 $link_clicks = $response->getGraphEdge()[0]->getField('values')->getField(0)->getField('value')->getField('link clicks');
                 if ($link_clicks) {
                     $snapshot->link_clicks = $link_clicks;
+                    $post->link_clicks = $link_clicks;
+                    $post->save();
                 }
 
                 $snapshot->impressions_paid = 0;

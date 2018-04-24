@@ -93,33 +93,20 @@ class PostController extends Controller
         $videoComments = 0;
 
         foreach ($posts as $post) {
-            if ($delayed = $post->latestDelayedStatSnapshot()) {
-                if ($post->type == 'video') {
-                    $videoImpressions += $delayed->impressions;
-                } else if ($post->type == 'link') {
-                    $articleImpressions += $delayed->impressions;
-                }
+            if ($post->type == 'video') {
+                $videoImpressions += $post->reach;
+            } else if ($post->type == 'link') {
+                $articleImpressions += $post->reach;
             }
-            if ($live = $post->latestStatSnapshot()) {
-                if ($post->type == 'video') {
-                    $videoReactions += $live->likes;
-                    $videoReactions += $live->loves;
-                    $videoReactions += $live->wows;
-                    $videoReactions += $live->hahas;
-                    $videoReactions += $live->sads;
-                    $videoReactions += $live->angrys;
-                    $videoShares += $live->shares;
-                    $videoComments += $live->comments;
-                } else if ($post->type == 'link') {
-                    $articleReactions += $live->likes;
-                    $articleReactions += $live->loves;
-                    $articleReactions += $live->wows;
-                    $articleReactions += $live->hahas;
-                    $articleReactions += $live->sads;
-                    $articleReactions += $live->angrys;
-                    $articleShares += $live->shares;
-                    $articleComments += $live->comments;
-                }
+
+            if ($post->type == 'video') {
+                $videoReactions += $post->reactions;
+                $videoShares += $post->shares;
+                $videoComments += $post->comments;
+            } else if ($post->type == 'link') {
+                $articleReactions += $post->reactions;
+                $articleShares += $post->shares;
+                $articleComments += $post->comments;
             }
         }
 
