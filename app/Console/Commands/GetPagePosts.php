@@ -52,7 +52,7 @@ class GetPagePosts extends Command
         }
         $response = $api->get('/' . $this->argument('pageid') . '/posts/?limit=' . $limit, env('FACEBOOK_ACCESS_TOKEN'));
         foreach ($response->getGraphEdge() as $node) {
-            $postResponse = $api->get('/' . $node->getField('id') . '?fields=message,name,link,picture,type,created_time,object_id', env('FACEBOOK_ACCESS_TOKEN'));
+            $postResponse = $api->get('/' . $node->getField('id') . '?fields=message,name,link,picture,type,created_time,object_id,admin_creator', env('FACEBOOK_ACCESS_TOKEN'));
             $postId = explode("_", $postResponse->getGraphNode()->getField('id'))[1];
             $newPost = false;
             $post = Post::withTrashed()->where('facebook_id', $postId)->first();
