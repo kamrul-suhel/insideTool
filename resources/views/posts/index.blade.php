@@ -466,7 +466,7 @@
                 format: 'DD/MM/YYYY'
             },
             dateLimit: {
-                "days" : 7
+                "days" : 14
             }
         });
         $('input[name="rangepicker"]').on('apply.daterangepicker', function (ev, picker) {
