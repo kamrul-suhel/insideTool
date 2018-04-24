@@ -20,7 +20,6 @@ class PostController extends Controller
         $label = false;
         $creator = false;
         $instantArticles = false;
-        $day = 0;
         $type = false;
 
         if (\Request::get('creator')) {
@@ -31,9 +30,6 @@ class PostController extends Controller
         }
         if (\Request::get('ia')) {
             $instantArticles = \Request::get('ia');
-        }
-        if (\Request::get('day')) {
-            $day = (int) \Request::get('day');
         }
         if (\Request::get('type')) {
             $type = \Request::get('type');
@@ -116,8 +112,7 @@ class PostController extends Controller
             'videoReach' => $videoImpressions, 'videoReactions' => $videoReactions, 
             'videoShares' => $videoShares, 'videoComments' => $videoComments, 'articleReach' => $articleImpressions, 
             'articleReactions' => $articleReactions, 'articleShares' => $articleShares, 'articleComments' => $articleComments, 
-            'date' => \Carbon\Carbon::now('Europe/London')->subDays($day), 'type' => $type,
-            'daysInRange' => $daysInRange, 'from' => $from, 'to' => $to]);
+            'type' => $type, 'daysInRange' => $daysInRange, 'from' => $from, 'to' => $to]);
     }
 
     public function indexDatatables() {

@@ -137,7 +137,7 @@
             <h3 class="box-title">Posts</h3>
             <div class="box-tools pull-right">
                 @if ($creatorFilter)
-                    <p>Showing posts by: <span class="badge bg-red creator"><a href="{{ route('posts.index') }}">{{ $creatorFilter->name }} <i class="fa fa-times"></i></a>&nbsp;</p>
+                    <p>Showing posts by: <span class="badge bg-red creator"><a href="{{ route('posts.index', ['from' => $from->format('Y-m-d'), 'to' => $to->format('Y-m-d'),]) }}">{{ $creatorFilter->name }} <i class="fa fa-times"></i></a>&nbsp;</p>
                 @endif
                 <form>
                     <label for="rangepicker">Date range:
@@ -155,7 +155,7 @@
                         @else
                             bg-green
                         @endif
-                    video-label"><a href="{{ route('posts.index') }}">All</a></span>
+                    video-label"><a href="{{ route('posts.index', ['from' => $from->format('Y-m-d'), 'to' => $to->format('Y-m-d')]) }}">All</a></span>
                     <span class="badge 
                         @if ($type == 'video')
                             bg-aqua
@@ -163,7 +163,7 @@
                             bg-purple
                         @endif
                         video-label"><a href="{{ route('posts.index', ['ia' => false, 'creator' => \Request::get('creator'),
-                            'label' => \Request::get('label'), 'day' => \Request::get('day'), 'type' => 'video']) }}">Videos</a></span>
+                            'label' => \Request::get('label'), 'day' => \Request::get('day'), 'type' => 'video', 'from' => $from->format('Y-m-d'), 'to' => $to->format('Y-m-d')]) }}">Videos</a></span>
                     <span class="badge 
                         @if ($type == 'link')
                             bg-aqua
@@ -171,7 +171,7 @@
                             bg-maroon
                         @endif
                         video-label"><a href="{{ route('posts.index', ['ia' => false, 'creator' => \Request::get('creator'),
-                            'label' => \Request::get('label'), 'day' => \Request::get('day'), 'type' => 'link']) }}">Links</a></span>
+                            'label' => \Request::get('label'), 'day' => \Request::get('day'), 'type' => 'link', 'from' => $from->format('Y-m-d'), 'to' => $to->format('Y-m-d')]) }}">Links</a></span>
                     <span class="badge 
                         @if ($iaFilter)
                             bg-aqua
@@ -179,7 +179,7 @@
                             bg-yellow
                         @endif
                         video-label"><a href="{{ route('posts.index', ['ia' => true, 'creator' => \Request::get('creator'),
-                            'label' => \Request::get('label'), 'day' => \Request::get('day')]) }}">Instant Articles</a></span>
+                            'label' => \Request::get('label'), 'day' => \Request::get('day'), 'from' => $from->format('Y-m-d'), 'to' => $to->format('Y-m-d')]) }}">Instant Articles</a></span>
 
                     @foreach ($labels as $label)
                         <span class="badge 
@@ -189,7 +189,7 @@
                                 bg-gray
                             @endif
                         video-label"><a href="{{ route('posts.index', ['label' => $label->id, 'ia' => \Request::get('ia'),
-                        'creator' => \Request::get('creator'), 'day' => \Request::get('day'), 'type' => \Request::get('type')]) }}">{{$label->label}}</a></span>
+                        'creator' => \Request::get('creator'), 'day' => \Request::get('day'), 'type' => \Request::get('type'), 'from' => $from->format('Y-m-d'), 'to' => $to->format('Y-m-d')]) }}">{{$label->label}}</a></span>
                     @endforeach
             </div>
          <br />
@@ -229,7 +229,7 @@
                             <td class="dt-center">{{ title_case($post->type) }}</td>
                             @if ($post->creator)
                                 <td class="dt-center"><a href="{{ route('posts.index', ['creator' => $post->creator->id, 'ia' => \Request::get('ia'), 
-                                    'day' => \Request::get('day'), 'type' => \Request::get('type')]) }}">{{ $post->creator->name }}</a></td>
+                                    'day' => \Request::get('day'), 'type' => \Request::get('type'), 'from' => $from->format('Y-m-d'), 'to' => $to->format('Y-m-d')]) }}">{{ $post->creator->name }}</a></td>
                             @else
                                 <td class="dt-center">Unknown</td>
                             @endif
