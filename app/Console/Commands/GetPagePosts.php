@@ -113,7 +113,7 @@ class GetPagePosts extends Command
                         if ($instantArticles) {
                             foreach ($instantArticles->getGraphEdge() as $article) {
                                 $article = $api->get('/' . $article->getField('id') . '/?fields=publish_status,canonical_url', env('FACEBOOK_ACCESS_TOKEN'));
-                                if ($article->getGraphNode()->getField('publish_status') == 'LIVE') {
+                                if ($article && $article->getGraphNode()->getField('publish_status') == 'LIVE') {
                                     $published = PublishedInstantArticle::firstOrNew(['facebook_id' => $article->getGraphNode()->getField('id')]);
                                     $published->canonical_url = $article->getGraphNode()->getField('canonical_url');
                                     $published->save();
