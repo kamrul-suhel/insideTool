@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/posts/{post}/snapshots/{type}/{birth?}', 'PostController@jsonSnapshots');
         //->where('metric', '(all|likes|loves|wows|hahas|sads|angrys|shares|comments)');
     
+    Route::get('/logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 });
 
 // Authentication Routes...
