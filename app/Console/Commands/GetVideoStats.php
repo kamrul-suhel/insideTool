@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Facebook\Facebook;
+use App\Facebook;
 use App\VideoStatSnapshot;
 use App\Post;
 
@@ -100,8 +100,8 @@ class GetVideoStats extends Command
             }
             $snapshot->post_id = $post->id;
         
-            try {
-                $response = $api->get('/' . $postId . '/video_insights', env('FACEBOOK_ACCESS_TOKEN'));
+            $response = $api->get('/' . $postId . '/video_insights', env('FACEBOOK_ACCESS_TOKEN'));
+            if ($response) {
                 foreach ($response->getGraphEdge() as $node) {
                     if (in_array($node["name"], $this->simpleFields)) {
                         $simpleStats[$node["name"]] = $node["values"][0]["value"];
@@ -110,8 +110,6 @@ class GetVideoStats extends Command
                 $snapshot->fill($simpleStats);
                 
                 $snapshot->save();
-            } catch (\Exception $e) {
-                // 
             }
         }
     }

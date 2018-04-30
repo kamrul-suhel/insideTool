@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Facebook\Facebook;
+use App\Facebook;
 use App\Page;
 
 class PageController extends Controller
