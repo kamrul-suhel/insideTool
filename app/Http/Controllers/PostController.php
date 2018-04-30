@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Facebook;
+use Facebook\Facebook;
 use App\Creator;
 use App\Post;
 use App\PostStatSnapshot;
