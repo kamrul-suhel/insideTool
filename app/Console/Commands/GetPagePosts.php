@@ -53,7 +53,7 @@ class GetPagePosts extends Command
         $response = $api->get('/' . $this->argument('pageid') . '/posts/?limit=' . $limit, env('FACEBOOK_ACCESS_TOKEN'));
         if ($response) {
             foreach ($response->getGraphEdge() as $node) {
-                $postResponse = $api->get('/' . $node->getField('id') . '?fields=message,name,link,picture,type,created_time,object_id,admin_creator', env('FACEBOOK_ACCESS_TOKEN'));
+                $postResponse = $api->get('/' . $node->getField('id') . '?fields=message,name,link,picture,type,created_time,object_id,admin_creator,parent_id', env('FACEBOOK_ACCESS_TOKEN'));
                 if ($postResponse) {
                     $postId = explode("_", $postResponse->getGraphNode()->getField('id'))[1];
                     $newPost = false;
@@ -68,7 +68,11 @@ class GetPagePosts extends Command
                     $post->message = $postResponse->getGraphNode()->getField('message');
                     $post->name = $postResponse->getGraphNode()->getField('name');
                     $post->link = $postResponse->getGraphNode()->getField('link');
-                    $post->picture = $postResponse->getGraphNode()->getField('picture'); 
+                    $post->picture = $postResponse->getGraphNode()->getField('picture');
+
+                    if ($parentId = $postResponse->getGraphNode()->getField('picture')) {
+                        $post->parent_id = $parentId;
+                    }
 
                     if ($post->picture) {
                         $image = file_get_contents($post->picture);

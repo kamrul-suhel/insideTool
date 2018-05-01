@@ -91,7 +91,7 @@ class GetPostStatsDelayed extends Command
                 
                 $snapshot->save();
 
-                if ($post->type == 'video') {
+                if ($post->type == 'video' && !$post->parent_id) {
                     \Artisan::call('stats:getvideostats', ['videoid' => $post->facebook_id]);
                 }
             } catch(\Facebook\Exceptions\FacebookResponseException $e) {
