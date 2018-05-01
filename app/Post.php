@@ -136,19 +136,26 @@ class Post extends Model
             if ($timeAdjusted) {
                 $postAge = \Carbon\Carbon::parse($this->posted)->diffInMinutes();
                 if ($postAge >= 2880) {
-                    return round($average);
+                    if (round($average) > 0) {
+                        return round($average);
+                    }
+                    return 1;
                 } else {
                     $timePercent = ($postAge / 2880) * 100;
                     $adjustedAverage = ($timePercent / 100) * $average;
                     if ($adjustedAverage > 0) {
                         return round($adjustedAverage);
-                    } else {
-                        return 1;
                     }
+                    return 1;
                 }
             } else {
-                return round($average);
+                if (round($average) > 0) {
+                    return round($average);
+                }
+                return 1;
             }
+        } else {
+            return 1;
         }
     }
 
