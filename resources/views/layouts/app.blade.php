@@ -12,7 +12,7 @@
 
 @section('css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" href="/css/admin_custom.css?201804241739">
+    <link rel="stylesheet" href="/css/admin_custom.css?201805021548">
 @stop
 
 @section('js')

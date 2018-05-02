@@ -16,6 +16,10 @@ class Post extends Model
 
     public $latestDelayedSnapshot;
 
+    public $birthSnapshot;
+
+    public $birthDelayedSnapshot;
+
     /**
      * Return pages associated with this post
      */
@@ -110,6 +114,22 @@ class Post extends Model
                 ->take(1)
                 ->firstOrNew([]);
             return $this->latestDelayedSnapshot;
+        }
+    }
+
+    /**
+     * Get the last available stat snapshot from the first 5 minutes of the post
+     */
+    public function birthStatSnapshot()
+    {
+        if (!is_null($this->birthSnapshot)) {
+            return $this->birthSnapshot;
+        } else {
+            $this->birthSnapshot = \App\PostStatSnapshot::where('post_id', $this->id)->where('likes', '>', 0)
+                ->where('created_at', '<', \Carbon\Carbon::parse($this->posted)->addMinutes(5))
+                ->orderBy('id', 'DESC')
+                ->firstOrNew([]);
+            return $this->birthSnapshot;
         }
     }
 

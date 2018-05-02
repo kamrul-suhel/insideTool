@@ -125,14 +125,9 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
-        $latestStats = PostStatSnapshot::where('post_id', $post->id)->where('likes', '>', 0)->orderBy('id', 'DESC')->first();
-        $birthStats = PostStatSnapshot::where('post_id', $post->id)->where('likes', '>', 0)
-            ->where('created_at', '<', \Carbon\Carbon::parse($post->posted)->addMinutes(5))
-            ->orderBy('id', 'DESC')
-            ->first();
-        if (!$latestStats) {
-            $latestStats = new PostStatSnapshot;
-        }
+        $latestStats = $post->latestStatSnapshot();
+        $latestDelayedStats = $post->latestDelayedStatSnapshot();
+        $birthStats = $post->birthStatSnapshot();
 
         $postAge = (time() - strtotime($post->posted)) / 60;
         $latestStats->likespm_lifetime = $latestStats ? ($latestStats->likes / $postAge) : 0;
@@ -141,9 +136,13 @@ class PostController extends Controller
         $latestStats->likespm_birth = $birthStats ? ($birthStats->likes / 5) : 0;
         $latestStats->sharespm_birth = $birthStats ? ($birthStats->shares / 5) : 0;
         $latestStats->commentspm_birth = $birthStats ? ($birthStats->comments / 5) : 0;
+        $latestStats->reactionspm_lifetime = $latestStats ? (($latestStats->reactions + $latestStats->likes + $latestStats->shares + $latestStats->comments) / $postAge) : 0;
+        $latestStats->reactionspm_birth = $birthStats ? (($birthStats->reactions + $birthStats->likes + $birthStats->shares + $birthStats->comments) / 5) : 0;
+
+        $latestDelayedStats->reachpm_lifetime = $latestDelayedStats ? ($latestDelayedStats->impressions / $postAge) : 0;
 
         $averages = AverageMetric::all()->keyBy('key');
-        return view('posts.show', ['post' => $post, 'liveLatest' => $latestStats, 
+        return view('posts.show', ['post' => $post, 'liveLatest' => $latestStats, 'delayedLatest' => $latestDelayedStats,
             'lastBirthStats' => $birthStats, 'averages' => $averages]);
     }
 

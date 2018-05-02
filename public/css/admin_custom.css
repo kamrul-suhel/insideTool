@@ -27,6 +27,10 @@
     font-size: 20px;
 }
 
+.info-box-number-largeish {
+    font-size: 27px;
+}
+
 .icon-roi{
     position:relative;
     left:5px;
@@ -141,3 +145,8 @@ tr.deleted-post td
 .post-header.creator-filter {
     height: 6em;
 }
+
+abbr[title] {
+    text-decoration: none;
+}
+  

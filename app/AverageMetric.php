@@ -11,11 +11,13 @@ class AverageMetric extends Model
     public static function updateAverages()
     {
         // Lifetime averages
-        $query = "SELECT AVG(posts.likespm) as likespm, AVG(posts.sharespm) as sharespm, AVG(posts.commentspm) AS commentspm
+        $query = "SELECT AVG(posts.likespm) as likespm, AVG(posts.sharespm) as sharespm, AVG(posts.commentspm) AS commentspm, AVG(posts.reactionspm) AS reactionspm
         FROM
          (SELECT MAX(post_stat_snapshots.likes) / TIMESTAMPDIFF(MINUTE, MIN(post_stat_snapshots.created_at), NOW()) as likespm,
          MAX(post_stat_snapshots.shares) / TIMESTAMPDIFF(MINUTE, MIN(post_stat_snapshots.created_at), NOW()) as sharespm,
-         MAX(post_stat_snapshots.comments) / TIMESTAMPDIFF(MINUTE, MIN(post_stat_snapshots.created_at), NOW()) as commentspm
+         MAX(post_stat_snapshots.comments) / TIMESTAMPDIFF(MINUTE, MIN(post_stat_snapshots.created_at), NOW()) as commentspm,
+         (MAX(post_stat_snapshots.likes) + MAX(post_stat_snapshots.loves) + MAX(post_stat_snapshots.wows) + MAX(post_stat_snapshots.hahas) + MAX(post_stat_snapshots.sads)
+                + MAX(post_stat_snapshots.angrys)) / TIMESTAMPDIFF(MINUTE, MIN(post_stat_snapshots.created_at), NOW()) as reactionspm
            FROM post_stat_snapshots, posts 
            WHERE posts.id = post_stat_snapshots.post_id 
            AND posts.deleted_at IS NULL 
@@ -43,12 +45,40 @@ class AverageMetric extends Model
         $metric = $metric->firstOrNew(['key' => 'comments_perminute_lifetime']);
         $metric->average = round($result[0]->commentspm);
         $metric->save();
+
+        // Reactions per minute (lifetime)
+        $metric = new static();
+        $metric = $metric->firstOrNew(['key' => 'reactions_perminute_lifetime']);
+        $metric->average = round($result[0]->reactionspm);
+        $metric->save();
+
+        // Lifetime averages (delayed)
+        $query = "SELECT AVG(posts.impressionspm) as impressionspm
+        FROM
+            (SELECT MAX(post_delayed_stat_snapshots.impressions) / TIMESTAMPDIFF(MINUTE, MIN(post_delayed_stat_snapshots.created_at), NOW()) as impressionspm
+            FROM post_delayed_stat_snapshots, posts 
+            WHERE posts.id = post_delayed_stat_snapshots.post_id 
+            AND posts.deleted_at IS NULL 
+            AND posted > DATE_SUB(NOW(), INTERVAL 48 HOUR) 
+            GROUP BY post_id) 
+            posts
+        ";
+
+        $result = \DB::select($query);
+
+        // Impressions per minute (lifetime)
+        $metric = new static();
+        $metric = $metric->firstOrNew(['key' => 'impressions_perminute_lifetime']);
+        $metric->average = round($result[0]->impressionspm);
+        $metric->save();        
         
-        $birthQuery = "SELECT AVG(likespm) AS likespm, AVG(sharespm) AS sharespm, AVG(commentspm) AS commentspm FROM (
-            SELECT MAX(post_stat_snapshots.likes) / 5 as likespm, MAX(post_stat_snapshots.shares) / 5 as sharespm, MAX(post_stat_snapshots.comments) / 5 as commentspm 
+        $birthQuery = "SELECT AVG(likespm) AS likespm, AVG(sharespm) AS sharespm, AVG(commentspm) AS commentspm, AVG(reactionspm) AS reactionspm FROM (
+            SELECT MAX(post_stat_snapshots.likes) / 5 as likespm, MAX(post_stat_snapshots.shares) / 5 as sharespm, MAX(post_stat_snapshots.comments) / 5 as commentspm,
+                (MAX(post_stat_snapshots.likes) + MAX(post_stat_snapshots.loves) + MAX(post_stat_snapshots.wows) + MAX(post_stat_snapshots.hahas) + MAX(post_stat_snapshots.sads)
+                    + MAX(post_stat_snapshots.angrys)) / 5 as reactionspm
                 FROM post_stat_snapshots, posts 
-                WHERE posts.id = post_stat_snapshots.post_id 
-                AND posts.deleted_at IS NULL 
+                WHERE posts.id = post_stat_snapshots.post_id
+                AND posts.deleted_at IS NULL
                 AND posted > DATE_SUB(NOW(), INTERVAL 48 HOUR) 
                 AND post_stat_snapshots.created_at < DATE_ADD(posts.posted, INTERVAL 5 MINUTE)
                 GROUP BY post_id
@@ -72,6 +102,12 @@ class AverageMetric extends Model
         $metric = new static();
         $metric = $metric->firstOrNew(['key' => 'comments_perminute_birth']);
         $metric->average = round($result[0]->commentspm);
+        $metric->save();
+
+        // Reactions per minute (first 5 minutes)
+        $metric = new static();
+        $metric = $metric->firstOrNew(['key' => 'reactions_perminute_birth']);
+        $metric->average = round($result[0]->reactionspm);
         $metric->save();
 
         // Average likes

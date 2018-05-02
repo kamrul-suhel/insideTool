@@ -89,7 +89,7 @@
                     <div class="info-box">
                         <span class="info-box-icon bg-aqua"><i class="fa fa-thumbs-up"></i></span>
                         <div class="info-box-content">
-                        <span class="info-box-text">LPM (Lifetime)</span>
+                        <span class="info-box-text"><abbr title="Likes per minute">LPM</abbr> (Lifetime)</span>
                             <span class="info-box-number info-box-number-big 
                                 @if ($liveLatest->likespm_lifetime > $averages->get('likes_perminute_lifetime')->average)
                                     text-green 
@@ -110,7 +110,7 @@
                     <div class="info-box">
                         <span class="info-box-icon bg-green"><i class="fa fa-share"></i></span>
                         <div class="info-box-content">
-                        <span class="info-box-text">SPM (Lifetime)</span>
+                        <span class="info-box-text"><abbr title="Shares per minute">SPM</abbr>  (Lifetime)</span>
                         <span class="info-box-number info-box-number-big 
                                 @if ($liveLatest->sharespm_lifetime > $averages->get('shares_perminute_lifetime')->average)
                                     text-green 
@@ -131,7 +131,7 @@
                     <div class="info-box">
                         <span class="info-box-icon bg-purple"><i class="fa fa-comment"></i></span>
                         <div class="info-box-content">
-                        <span class="info-box-text">CPM (Lifetime)</span>
+                        <span class="info-box-text"><abbr title="Comments per minute">CPM</abbr> (Lifetime)</span>
                             <span class="info-box-number info-box-number-big 
                                 @if ($liveLatest->commentspm_lifetime > $averages->get('comments_perminute_lifetime')->average)
                                     text-green 
@@ -154,7 +154,7 @@
                     <div class="info-box">
                         <span class="info-box-icon bg-aqua"><i class="fa fa-thumbs-up"></i></span>
                         <div class="info-box-content">
-                        <span class="info-box-text">LPM (First 5 minutes)</span>
+                        <span class="info-box-text"><abbr title="Likes per minute">LPM</abbr> (First 5 minutes)</span>
                             <span class="info-box-number info-box-number-big 
                                 @if ($liveLatest->likespm_birth > $averages->get('likes_perminute_birth')->average)
                                     text-green 
@@ -175,7 +175,7 @@
                     <div class="info-box">
                         <span class="info-box-icon bg-green"><i class="fa fa-share"></i></span>
                         <div class="info-box-content">
-                        <span class="info-box-text">SPM (First 5 minutes)</span>
+                        <span class="info-box-text"><abbr title="Shares per minute">SPM</abbr> (First 5 minutes)</span>
                         <span class="info-box-number info-box-number-big 
                                 @if ($liveLatest->sharespm_birth > $averages->get('shares_perminute_birth')->average)
                                     text-green 
@@ -196,7 +196,7 @@
                     <div class="info-box">
                         <span class="info-box-icon bg-purple"><i class="fa fa-comment"></i></span>
                         <div class="info-box-content">
-                        <span class="info-box-text">CPM (First 5 minutes)</span>
+                        <span class="info-box-text"><abbr title="Comments per minute">CPM</abbr> (First 5 minutes)</span>
                             <span class="info-box-number info-box-number-big 
                                 @if ($liveLatest->commentspm_birth > $averages->get('comments_perminute_birth')->average)
                                     text-green 
@@ -215,6 +215,71 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col-md-4">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-orange"><i class="fa fa-eye"></i></span>
+                            <div class="info-box-content">
+                            <span class="info-box-text"><abbr title="Impressions per minute">IPM</abbr> (Lifetime)</span>
+                            <span class="info-box-number info-box-number-largeish 
+                                    @if ($delayedLatest->reachpm_lifetime > $averages->get('impressions_perminute_lifetime')->average)
+                                        text-green 
+                                    @else
+                                        text-red 
+                                    @endif
+                                    ">
+                                    @if ($delayedLatest->reachpm_lifetime > $averages->get('impressions_perminute_lifetime')->average)
+                                        <i class="fa fa-angle-up"></i> {{ number_format(round($delayedLatest->reachpm_lifetime)) }} <em><sup><small>({{ number_format($averages->get('impressions_perminute_lifetime')->average) }})</small></sup></em>
+                                    @else
+                                        <i class="fa fa-angle-down"></i> {{ number_format(round($delayedLatest->reachpm_lifetime)) }} <em><sup><small>({{ number_format($averages->get('impressions_perminute_lifetime')->average) }})</small></sup></em>
+                                    @endif
+                                </span>                        
+                            </div>
+                        </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-blue"><i class="fa fa-user-circle"></i></span>
+                        <div class="info-box-content">
+                        <span class="info-box-text"><abbr title="Engagement per minute">EPM</abbr> (First 5 minutes)</span>
+                                <span class="info-box-number info-box-number-big 
+                                @if ($liveLatest->reactionspm_birth > $averages->get('reactions_perminute_birth')->average)
+                                    text-green 
+                                @else
+                                    text-red 
+                                @endif
+                                ">
+                                @if ($liveLatest->reactionspm_birth > $averages->get('reactions_perminute_birth')->average)
+                                    <i class="fa fa-angle-up"></i> {{ number_format(round($liveLatest->reactionspm_birth)) }} <em><sup><small>({{ number_format($averages->get('reactions_perminute_birth')->average) }})</small></sup></em>
+                                @else
+                                    <i class="fa fa-angle-down"></i> {{ number_format(round($liveLatest->reactionspm_birth)) }} <em><sup><small>({{ number_format($averages->get('reactions_perminute_birth')->average) }})</small></sup></em>
+                                @endif
+                            </span>                        
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-blue"><i class="fa fa-user-circle"></i></span>
+                        <div class="info-box-content">
+                        <span class="info-box-text"><abbr title="Engagement per minute">EPM</abbr> (Lifetime)</span>
+                                <span class="info-box-number info-box-number-big 
+                                @if ($liveLatest->reactionspm_lifetime > $averages->get('reactions_perminute_lifetime')->average)
+                                    text-green 
+                                @else
+                                    text-red 
+                                @endif
+                                ">
+                                @if ($liveLatest->reactionspm_lifetime > $averages->get('reactions_perminute_lifetime')->average)
+                                    <i class="fa fa-angle-up"></i> {{ number_format(round($liveLatest->reactionspm_lifetime)) }} <em><sup><small>({{ number_format($averages->get('reactions_perminute_lifetime')->average) }})</small></sup></em>
+                                @else
+                                    <i class="fa fa-angle-down"></i> {{ number_format(round($liveLatest->reactionspm_lifetime)) }} <em><sup><small>({{ number_format($averages->get('reactions_perminute_lifetime')->average) }})</small></sup></em>
+                                @endif
+                            </span>                        
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="nav-tabs-custom">
