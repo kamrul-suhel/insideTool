@@ -70,7 +70,7 @@ class GetPagePosts extends Command
                     $post->link = $postResponse->getGraphNode()->getField('link');
                     $post->picture = $postResponse->getGraphNode()->getField('picture');
 
-                    if ($parentId = $postResponse->getGraphNode()->getField('picture')) {
+                    if ($parentId = $postResponse->getGraphNode()->getField('parent_id')) {
                         $post->parent_id = $parentId;
                     }
 
