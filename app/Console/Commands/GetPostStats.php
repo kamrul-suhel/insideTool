@@ -101,11 +101,10 @@ class GetPostStats extends Command
                     $reactions += $snapshot->angrys;
                 }
                 
+                $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/comments/?summary=1', env('FACEBOOK_ACCESS_TOKEN'));
                 // Comment count
                 if ($response) {
-                    $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/comments/?summary=1', env('FACEBOOK_ACCESS_TOKEN'));
                     $comments = $response->getDecodedBody()["summary"]["total_count"];
-
                     $snapshot->comments = $comments;
                 }
 
