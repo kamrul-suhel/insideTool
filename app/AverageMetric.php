@@ -58,6 +58,7 @@ class AverageMetric extends Model
             (SELECT MAX(post_delayed_stat_snapshots.impressions) / TIMESTAMPDIFF(MINUTE, MIN(post_delayed_stat_snapshots.created_at), NOW()) as impressionspm
             FROM post_delayed_stat_snapshots, posts 
             WHERE posts.id = post_delayed_stat_snapshots.post_id 
+            AND post_delayed_stat_snapshots.impressions > 0
             AND posts.deleted_at IS NULL 
             AND posted > DATE_SUB(NOW(), INTERVAL 48 HOUR) 
             GROUP BY post_id) 
