@@ -121,7 +121,7 @@ class GetPostStats extends Command
 
                 // Share count
                 $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/?fields=shares', env('FACEBOOK_ACCESS_TOKEN'));
-                if ($response) {
+                if ($response && array_key_exists('shares', $response->getDecodedBody())) {
                     $shares = $response->getDecodedBody()["shares"]["count"];
                     $snapshot->shares = $shares;
                 }
