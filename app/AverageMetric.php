@@ -52,6 +52,93 @@ class AverageMetric extends Model
         $metric->average = round($result[0]->reactionspm);
         $metric->save();
 
+        // Lifetime averages (video)
+        $query = "SELECT AVG(posts.likespm) as likespm, AVG(posts.sharespm) as sharespm, AVG(posts.commentspm) AS commentspm, AVG(posts.reactionspm) AS reactionspm
+        FROM
+            (SELECT MAX(post_stat_snapshots.likes) / TIMESTAMPDIFF(MINUTE, MIN(post_stat_snapshots.created_at), NOW()) as likespm,
+            MAX(post_stat_snapshots.shares) / TIMESTAMPDIFF(MINUTE, MIN(post_stat_snapshots.created_at), NOW()) as sharespm,
+            MAX(post_stat_snapshots.comments) / TIMESTAMPDIFF(MINUTE, MIN(post_stat_snapshots.created_at), NOW()) as commentspm,
+            (MAX(post_stat_snapshots.likes) + MAX(post_stat_snapshots.loves) + MAX(post_stat_snapshots.wows) + MAX(post_stat_snapshots.hahas) + MAX(post_stat_snapshots.sads)
+                + MAX(post_stat_snapshots.angrys)) / TIMESTAMPDIFF(MINUTE, MIN(post_stat_snapshots.created_at), NOW()) as reactionspm
+            FROM post_stat_snapshots, posts 
+            WHERE posts.id = post_stat_snapshots.post_id 
+            AND posts.deleted_at IS NULL 
+            AND posts.type = 'video'
+            AND posted > DATE_SUB(NOW(), INTERVAL 48 HOUR) 
+            GROUP BY post_id) 
+            posts
+        ";
+
+        $result = \DB::select($query);
+
+        // Video likes per minute (lifetime)
+        $metric = new static();
+        $metric = $metric->firstOrNew(['key' => 'likes_perminute_video_lifetime']);
+        $metric->average = round($result[0]->likespm);
+        $metric->save();
+
+        // Video shares per minute (lifetime)
+        $metric = new static();
+        $metric = $metric->firstOrNew(['key' => 'shares_perminute_video_lifetime']);
+        $metric->average = round($result[0]->sharespm);
+        $metric->save();
+
+        // Video comments per minute (lifetime)
+        $metric = new static();
+        $metric = $metric->firstOrNew(['key' => 'comments_perminute_video_lifetime']);
+        $metric->average = round($result[0]->commentspm);
+        $metric->save();
+
+        // Video reactions per minute (lifetime)
+        $metric = new static();
+        $metric = $metric->firstOrNew(['key' => 'reactions_perminute_video_lifetime']);
+        $metric->average = round($result[0]->reactionspm);
+        $metric->save();
+        
+        // Lifetime averages (links)
+        $query = "SELECT AVG(posts.likespm) as likespm, AVG(posts.sharespm) as sharespm, AVG(posts.commentspm) AS commentspm, AVG(posts.reactionspm) AS reactionspm
+        FROM
+            (SELECT MAX(post_stat_snapshots.likes) / TIMESTAMPDIFF(MINUTE, MIN(post_stat_snapshots.created_at), NOW()) as likespm,
+            MAX(post_stat_snapshots.shares) / TIMESTAMPDIFF(MINUTE, MIN(post_stat_snapshots.created_at), NOW()) as sharespm,
+            MAX(post_stat_snapshots.comments) / TIMESTAMPDIFF(MINUTE, MIN(post_stat_snapshots.created_at), NOW()) as commentspm,
+            (MAX(post_stat_snapshots.likes) + MAX(post_stat_snapshots.loves) + MAX(post_stat_snapshots.wows) + MAX(post_stat_snapshots.hahas) + MAX(post_stat_snapshots.sads)
+                + MAX(post_stat_snapshots.angrys)) / TIMESTAMPDIFF(MINUTE, MIN(post_stat_snapshots.created_at), NOW()) as reactionspm
+            FROM post_stat_snapshots, posts 
+            WHERE posts.id = post_stat_snapshots.post_id 
+            AND posts.deleted_at IS NULL 
+            AND posts.type = 'link'
+            AND posted > DATE_SUB(NOW(), INTERVAL 48 HOUR) 
+            GROUP BY post_id) 
+            posts
+        ";
+
+        $result = \DB::select($query);
+
+        // Link likes per minute (lifetime)
+        $metric = new static();
+        $metric = $metric->firstOrNew(['key' => 'likes_perminute_link_lifetime']);
+        $metric->average = round($result[0]->likespm);
+        $metric->save();
+
+        // Link shares per minute (lifetime)
+        $metric = new static();
+        $metric = $metric->firstOrNew(['key' => 'shares_perminute_link_lifetime']);
+        $metric->average = round($result[0]->sharespm);
+        $metric->save();
+
+        // Link comments per minute (lifetime)
+        $metric = new static();
+        $metric = $metric->firstOrNew(['key' => 'comments_perminute_link_lifetime']);
+        $metric->average = round($result[0]->commentspm);
+        $metric->save();
+
+        // Link reactions per minute (lifetime)
+        $metric = new static();
+        $metric = $metric->firstOrNew(['key' => 'reactions_perminute_link_lifetime']);
+        $metric->average = round($result[0]->reactionspm);
+        $metric->save();
+
+
         // Lifetime averages (delayed)
         $query = "SELECT AVG(posts.impressionspm) as impressionspm
         FROM
@@ -111,7 +198,7 @@ class AverageMetric extends Model
 
         $result = \DB::select($query);
 
-        // Link impressions per minute (lifetime)
+        // Birth stats
         $metric = new static();
         $metric = $metric->firstOrNew(['key' => 'impressions_perminute_link_lifetime']);
         $metric->average = round($result[0]->impressionspm);
