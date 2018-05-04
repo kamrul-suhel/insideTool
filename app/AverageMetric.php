@@ -198,12 +198,13 @@ class AverageMetric extends Model
 
         $result = \DB::select($query);
 
-        // Birth stats
         $metric = new static();
         $metric = $metric->firstOrNew(['key' => 'impressions_perminute_link_lifetime']);
         $metric->average = round($result[0]->impressionspm);
         $metric->save();                
         
+        // Birth stats
+
         $birthQuery = "SELECT AVG(likespm) AS likespm, AVG(sharespm) AS sharespm, AVG(commentspm) AS commentspm, AVG(reactionspm) AS reactionspm FROM (
             SELECT MAX(post_stat_snapshots.likes) / 5 as likespm, MAX(post_stat_snapshots.shares) / 5 as sharespm, MAX(post_stat_snapshots.comments) / 5 as commentspm,
                 (MAX(post_stat_snapshots.likes) + MAX(post_stat_snapshots.loves) + MAX(post_stat_snapshots.wows) + MAX(post_stat_snapshots.hahas) + MAX(post_stat_snapshots.sads)
@@ -241,6 +242,87 @@ class AverageMetric extends Model
         $metric = $metric->firstOrNew(['key' => 'reactions_perminute_birth']);
         $metric->average = round($result[0]->reactionspm);
         $metric->save();
+
+        // Birth stats (video)
+        $birthQuery = "SELECT AVG(likespm) AS likespm, AVG(sharespm) AS sharespm, AVG(commentspm) AS commentspm, AVG(reactionspm) AS reactionspm FROM (
+            SELECT MAX(post_stat_snapshots.likes) / 5 as likespm, MAX(post_stat_snapshots.shares) / 5 as sharespm, MAX(post_stat_snapshots.comments) / 5 as commentspm,
+                (MAX(post_stat_snapshots.likes) + MAX(post_stat_snapshots.loves) + MAX(post_stat_snapshots.wows) + MAX(post_stat_snapshots.hahas) + MAX(post_stat_snapshots.sads)
+                    + MAX(post_stat_snapshots.angrys)) / 5 as reactionspm
+                FROM post_stat_snapshots, posts 
+                WHERE posts.id = post_stat_snapshots.post_id
+                AND posts.deleted_at IS NULL
+                AND posts.type = 'video'
+                AND posted > DATE_SUB(NOW(), INTERVAL 48 HOUR) 
+                AND post_stat_snapshots.created_at < DATE_ADD(posts.posted, INTERVAL 5 MINUTE)
+                GROUP BY post_id
+            ) posts";
+
+        $result = \DB::select($birthQuery);
+
+        // Video likes per minute (first 5 minutes)
+        $metric = new static();
+        $metric = $metric->firstOrNew(['key' => 'likes_perminute_video_birth']);
+        $metric->average = round($result[0]->likespm);
+        $metric->save();
+
+        // Video shares per minute (first 5 minutes)
+        $metric = new static();
+        $metric = $metric->firstOrNew(['key' => 'shares_perminute_video_birth']);
+        $metric->average = round($result[0]->sharespm);
+        $metric->save();
+
+        // Video comments per minute (first 5 minutes)
+        $metric = new static();
+        $metric = $metric->firstOrNew(['key' => 'comments_perminute_video_birth']);
+        $metric->average = round($result[0]->commentspm);
+        $metric->save();
+
+        // Video reactions per minute (first 5 minutes)
+        $metric = new static();
+        $metric = $metric->firstOrNew(['key' => 'reactions_perminute_video_birth']);
+        $metric->average = round($result[0]->reactionspm);
+        $metric->save();
+        
+        // Birth stats (links)
+        $birthQuery = "SELECT AVG(likespm) AS likespm, AVG(sharespm) AS sharespm, AVG(commentspm) AS commentspm, AVG(reactionspm) AS reactionspm FROM (
+            SELECT MAX(post_stat_snapshots.likes) / 5 as likespm, MAX(post_stat_snapshots.shares) / 5 as sharespm, MAX(post_stat_snapshots.comments) / 5 as commentspm,
+                (MAX(post_stat_snapshots.likes) + MAX(post_stat_snapshots.loves) + MAX(post_stat_snapshots.wows) + MAX(post_stat_snapshots.hahas) + MAX(post_stat_snapshots.sads)
+                    + MAX(post_stat_snapshots.angrys)) / 5 as reactionspm
+                FROM post_stat_snapshots, posts 
+                WHERE posts.id = post_stat_snapshots.post_id
+                AND posts.deleted_at IS NULL
+                AND posts.type = 'link'
+                AND posted > DATE_SUB(NOW(), INTERVAL 48 HOUR) 
+                AND post_stat_snapshots.created_at < DATE_ADD(posts.posted, INTERVAL 5 MINUTE)
+                GROUP BY post_id
+            ) posts";
+
+        $result = \DB::select($birthQuery);
+
+        // Link likes per minute (first 5 minutes)
+        $metric = new static();
+        $metric = $metric->firstOrNew(['key' => 'likes_perminute_link_birth']);
+        $metric->average = round($result[0]->likespm);
+        $metric->save();
+
+        // Link shares per minute (first 5 minutes)
+        $metric = new static();
+        $metric = $metric->firstOrNew(['key' => 'shares_perminute_link_birth']);
+        $metric->average = round($result[0]->sharespm);
+        $metric->save();
+
+        // Link comments per minute (first 5 minutes)
+        $metric = new static();
+        $metric = $metric->firstOrNew(['key' => 'comments_perminute_link_birth']);
+        $metric->average = round($result[0]->commentspm);
+        $metric->save();
+
+        // Link reactions per minute (first 5 minutes)
+        $metric = new static();
+        $metric = $metric->firstOrNew(['key' => 'reactions_perminute_link_birth']);
+        $metric->average = round($result[0]->reactionspm);
+        $metric->save();
+        
 
         // Average likes
         $query = "SELECT AVG(maxlikes) as avglikes FROM (SELECT MAX(post_stat_snapshots.likes) as maxlikes FROM post_stat_snapshots GROUP BY post_id) posts";
