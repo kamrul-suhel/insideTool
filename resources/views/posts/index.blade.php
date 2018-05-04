@@ -61,7 +61,7 @@
                                         return $post->link_clicks;
                                     }
                                     return 0;
-                                    }) }}" target="<?php echo $averages->get('daily_link_clicks')->average * $multiplier); ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                                    }) }}" target="<?php echo $averages->get('daily_link_clicks')->average * $multiplier; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
                     </div>
                 </div>
             </div>
