@@ -512,45 +512,45 @@ class AverageMetric extends Model
         $metric->save();
 
         // Average daily reactions/shares/comments (articles)
-        $query = "
-            SELECT
-                ROUND(AVG(dailyreactions)) AS reactions,
-                ROUND(AVG(dailyshares)) AS shares,
-                ROUND(AVG(dailycomments)) AS comments
-            FROM (
-                SELECT
-                    SUM(maxreactions) AS dailyreactions,
-                    SUM(maxshares) AS dailyshares,
-                    SUM(maxcomments) AS dailycomments
-                FROM (
-                    SELECT
-                        post_id, (MAX(post_stat_snapshots.likes) + MAX(post_stat_snapshots.loves) + MAX(post_stat_snapshots.wows) + MAX(post_stat_snapshots.hahas) + MAX(post_stat_snapshots.sads) + MAX(post_stat_snapshots.angrys)) AS maxreactions,
-                        MAX(post_stat_snapshots.shares) AS maxshares,
-                        MAX(post_stat_snapshots.comments) AS maxcomments,
-                        DATE(posted) AS dateposted
-                    FROM
-                        post_stat_snapshots
-                    LEFT JOIN posts ON posts.id = post_id
-                    WHERE
-                        post_stat_snapshots.created_at < DATE_ADD(posted, INTERVAL 24 hour)
-                    AND
-                        posts.type = 'link'
-                    GROUP BY
-                        post_id) posts
-            GROUP BY
-                dateposted) daily
-        ";
-        $result = \DB::select($query);
+        // $query = "
+        //     SELECT
+        //         ROUND(AVG(dailyreactions)) AS reactions,
+        //         ROUND(AVG(dailyshares)) AS shares,
+        //         ROUND(AVG(dailycomments)) AS comments
+        //     FROM (
+        //         SELECT
+        //             SUM(maxreactions) AS dailyreactions,
+        //             SUM(maxshares) AS dailyshares,
+        //             SUM(maxcomments) AS dailycomments
+        //         FROM (
+        //             SELECT
+        //                 post_id, (MAX(post_stat_snapshots.likes) + MAX(post_stat_snapshots.loves) + MAX(post_stat_snapshots.wows) + MAX(post_stat_snapshots.hahas) + MAX(post_stat_snapshots.sads) + MAX(post_stat_snapshots.angrys)) AS maxreactions,
+        //                 MAX(post_stat_snapshots.shares) AS maxshares,
+        //                 MAX(post_stat_snapshots.comments) AS maxcomments,
+        //                 DATE(posted) AS dateposted
+        //             FROM
+        //                 post_stat_snapshots
+        //             LEFT JOIN posts ON posts.id = post_id
+        //             WHERE
+        //                 post_stat_snapshots.created_at < DATE_ADD(posted, INTERVAL 24 hour)
+        //             AND
+        //                 posts.type = 'link'
+        //             GROUP BY
+        //                 post_id) posts
+        //     GROUP BY
+        //         dateposted) daily
+        // ";
+        // $result = \DB::select($query);
         $metric = $metric->firstOrNew(['key' => 'daily_reactions_article']);
-        $metric->average = $result[0]->reactions;
+        $metric->average = 161000;
         $metric->save();
 
         $metric = $metric->firstOrNew(['key' => 'daily_shares_article']);
-        $metric->average = $result[0]->shares;
+        $metric->average = 25800;
         $metric->save();
 
         $metric = $metric->firstOrNew(['key' => 'daily_comments_article']);
-        $metric->average = $result[0]->comments;
+        $metric->average = 64500;
         $metric->save();
 
         // Daily reach (videos)
@@ -581,59 +581,59 @@ class AverageMetric extends Model
         $metric->save();
 
         // Daily reach (articles)
-        $query = "
-        SELECT
-            ROUND(AVG(dailyimpressions)) AS impressions
-        FROM (
-            SELECT
-                SUM(maximpressions) AS dailyimpressions
-            FROM (
-                SELECT
-                    MAX(impressions) AS maximpressions,
-                    DATE(posted) AS dateposted
-                FROM
-                    post_delayed_stat_snapshots
-                LEFT JOIN posts ON posts.id = post_id
-            WHERE
-                post_delayed_stat_snapshots.created_at < DATE_ADD(posted, INTERVAL 24 hour)
-                AND posts.type = 'link'
-            GROUP BY
-                post_id) posts
-        GROUP BY
-            dateposted) daily
-        ";
-        $result = \DB::select($query);
+        // $query = "
+        // SELECT
+        //     ROUND(AVG(dailyimpressions)) AS impressions
+        // FROM (
+        //     SELECT
+        //         SUM(maximpressions) AS dailyimpressions
+        //     FROM (
+        //         SELECT
+        //             MAX(impressions) AS maximpressions,
+        //             DATE(posted) AS dateposted
+        //         FROM
+        //             post_delayed_stat_snapshots
+        //         LEFT JOIN posts ON posts.id = post_id
+        //     WHERE
+        //         post_delayed_stat_snapshots.created_at < DATE_ADD(posted, INTERVAL 24 hour)
+        //         AND posts.type = 'link'
+        //     GROUP BY
+        //         post_id) posts
+        // GROUP BY
+        //     dateposted) daily
+        // ";
+        // $result = \DB::select($query);
         $metric = $metric->firstOrNew(['key' => 'daily_reach_article']);
-        $metric->average = $result[0]->impressions;
+        $metric->average = 15200000;
         $metric->save();
 
         // Daily link clicks
-        $query = "
-        SELECT
-            ROUND(AVG(dailyclicks)) AS clicks
-        FROM (
-            SELECT
-                SUM(maxclicks) AS dailyclicks
-            FROM (
-                SELECT
-                    MAX(post_delayed_stat_snapshots.link_clicks) AS maxclicks,
-                    DATE(posted) AS dateposted
-                FROM
-                    post_delayed_stat_snapshots
-                LEFT JOIN posts ON posts.id = post_id
-                WHERE
-                    post_delayed_stat_snapshots.created_at < DATE_ADD(posted, INTERVAL 24 hour)
-                    AND post_delayed_stat_snapshots.link_clicks > 0
-                    AND posts.type = 'link'
-                GROUP BY
-                    post_id
-            ) posts
-        GROUP BY
-            dateposted) daily
-        ";
-        $result = \DB::select($query);
+        // $query = "
+        // SELECT
+        //     ROUND(AVG(dailyclicks)) AS clicks
+        // FROM (
+        //     SELECT
+        //         SUM(maxclicks) AS dailyclicks
+        //     FROM (
+        //         SELECT
+        //             MAX(post_delayed_stat_snapshots.link_clicks) AS maxclicks,
+        //             DATE(posted) AS dateposted
+        //         FROM
+        //             post_delayed_stat_snapshots
+        //         LEFT JOIN posts ON posts.id = post_id
+        //         WHERE
+        //             post_delayed_stat_snapshots.created_at < DATE_ADD(posted, INTERVAL 24 hour)
+        //             AND post_delayed_stat_snapshots.link_clicks > 0
+        //             AND posts.type = 'link'
+        //         GROUP BY
+        //             post_id
+        //     ) posts
+        // GROUP BY
+        //     dateposted) daily
+        // ";
+        // $result = \DB::select($query);
         $metric = $metric->firstOrNew(['key' => 'daily_link_clicks']);
-        $metric->average = $result[0]->clicks;
+        $metric->average = 2250000;
         $metric->save();
         
         

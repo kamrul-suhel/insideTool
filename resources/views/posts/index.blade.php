@@ -45,10 +45,17 @@
                     </div>
 
                     <div class="box-body">
-                        <graph-metric id="article-reach-metric" color="aqua" fa-icon="eye" actual="<?php echo $articleReach; ?>" target="<?php echo $averages->get('daily_reach_article')->average * (($daysInRange - 1) + $day_percentage); ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
-                        <graph-metric id="article-reactions-metric" color="teal" fa-icon="thumbs-up" actual="<?php echo $articleReactions; ?>" target="<?php echo $averages->get('daily_reactions_article')->average * (($daysInRange - 1) + $day_percentage); ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
-                        <graph-metric id="article-comment-metric" color="yellow" fa-icon="comment" actual="<?php echo $articleComments; ?>" target="<?php echo $averages->get('daily_comments_article')->average * (($daysInRange - 1) + $day_percentage); ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
-                        <graph-metric id="article-shares-metric" color="green" fa-icon="share" actual="<?php echo $articleShares; ?>" target="<?php echo $averages->get('daily_shares_article')->average * (($daysInRange - 1) + $day_percentage); ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                        <?php 
+                            if ($daysInRange > 1) {
+                                $multiplier = ($daysInRange - 1) + $day_percentage;
+                            } else {
+                                $multiplier = 1;
+                            }
+                        ?>
+                        <graph-metric id="article-reach-metric" color="aqua" fa-icon="eye" actual="<?php echo $articleReach; ?>" target="<?php echo $averages->get('daily_reach_article')->average * $multiplier; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                        <graph-metric id="article-reactions-metric" color="teal" fa-icon="thumbs-up" actual="<?php echo $articleReactions; ?>" target="<?php echo $averages->get('daily_reactions_article')->average * $multiplier; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                        <graph-metric id="article-comment-metric" color="yellow" fa-icon="comment" actual="<?php echo $articleComments; ?>" target="<?php echo $averages->get('daily_comments_article')->average * $multiplier; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                        <graph-metric id="article-shares-metric" color="green" fa-icon="share" actual="<?php echo $articleShares; ?>" target="<?php echo $averages->get('daily_shares_article')->average * $multiplier; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
                         <graph-metric id="article-clicks-metric" color="purple" fa-icon="hand-pointer-o" actual="{{ $posts->sum(function ($post) {
                                     if ($post->type == 'link') {
                                         return $post->link_clicks;
