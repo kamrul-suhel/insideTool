@@ -53,7 +53,7 @@ class GetPagePosts extends Command
         $response = $api->get('/' . $this->argument('pageid') . '/posts/?limit=' . $limit, env('FACEBOOK_ACCESS_TOKEN'));
         if ($response) {
             foreach ($response->getGraphEdge() as $node) {
-                $postResponse = $api->get('/' . $node->getField('id') . '?fields=message,name,link,picture,type,created_time,object_id,admin_creator,parent_id', env('FACEBOOK_ACCESS_TOKEN'));
+                $postResponse = $api->get('/' . $node->getField('id') . '?fields=story,message,name,link,picture,type,created_time,object_id,admin_creator,parent_id', env('FACEBOOK_ACCESS_TOKEN'));
                 if ($postResponse) {
                     $postId = explode("_", $postResponse->getGraphNode()->getField('id'))[1];
                     $newPost = false;
@@ -72,6 +72,7 @@ class GetPagePosts extends Command
 
                     if ($parentId = $postResponse->getGraphNode()->getField('parent_id')) {
                         $post->parent_id = $parentId;
+                        $post->message = $postResponse->getGraphNode()->getField('story');
                     }
 
                     if ($post->picture) {
