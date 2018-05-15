@@ -44,7 +44,6 @@ class GetPagePosts extends Command
      */
     public function handle()
     {
-        dump($this->arguments());
         $api = new Facebook;
         if ($this->argument('limit')) {
             $limit = $this->argument('limit');
@@ -52,7 +51,6 @@ class GetPagePosts extends Command
             $limit = 5;
         }
         $response = $api->get('/' . $this->argument('pageid') . '/posts/?limit=' . $limit, env('FACEBOOK_ACCESS_TOKEN'));
-        dump($response);
         if ($response) {
             foreach ($response->getGraphEdge() as $node) {
                 $postResponse = $api->get('/' . $node->getField('id') . '?fields=story,message,name,link,picture,type,created_time,object_id,admin_creator,parent_id', env('FACEBOOK_ACCESS_TOKEN'));
