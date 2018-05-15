@@ -22,13 +22,14 @@
                     <div class="box-header">
                         <h3 class="box-title">Videos</h3>
                     </div>
-
-                    <div class="box-body">
-                        <graph-metric id="video-reach-metric" color="aqua" fa-icon="eye" actual="<?php echo $videoReach; ?>" target="<?php echo $averages->get('daily_reach_video')->average * (($daysInRange - 1) + $day_percentage); ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
-                        <graph-metric id="video-reactions-metric" color="teal" fa-icon="thumbs-up" actual="<?php echo $videoReactions; ?>" target="<?php echo $averages->get('daily_reactions_video')->average * (($daysInRange - 1) + $day_percentage); ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
-                        <graph-metric id="video-comment-metric" color="yellow" fa-icon="comment" actual="<?php echo $videoComments; ?>" target="<?php echo $averages->get('daily_comments_video')->average * (($daysInRange - 1) + $day_percentage); ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
-                        <graph-metric id="video-shares-metric" color="green" fa-icon="share" actual="<?php echo $videoShares; ?>" target="<?php echo $averages->get('daily_shares_video')->average * (($daysInRange - 1) + $day_percentage); ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
-                    </div>
+                    @if(count($averages) > 0)
+                        <div class="box-body">
+                            <graph-metric id="video-reach-metric" color="aqua" fa-icon="eye" actual="<?php echo $videoReach; ?>" target="<?php echo $averages->get('daily_reach_video')->average * (($daysInRange - 1) + $day_percentage); ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                            <graph-metric id="video-reactions-metric" color="teal" fa-icon="thumbs-up" actual="<?php echo $videoReactions; ?>" target="<?php echo $averages->get('daily_reactions_video')->average * (($daysInRange - 1) + $day_percentage); ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                            <graph-metric id="video-comment-metric" color="yellow" fa-icon="comment" actual="<?php echo $videoComments; ?>" target="<?php echo $averages->get('daily_comments_video')->average * (($daysInRange - 1) + $day_percentage); ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                            <graph-metric id="video-shares-metric" color="green" fa-icon="share" actual="<?php echo $videoShares; ?>" target="<?php echo $averages->get('daily_shares_video')->average * (($daysInRange - 1) + $day_percentage); ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                        </div>
+                    @endif
                 </div>
             </div>
         @endif
@@ -44,25 +45,21 @@
                         <h3 class="box-title">Articles</h3>
                     </div>
 
-                    <div class="box-body">
-                        <?php 
-                            if ($daysInRange > 1) {
-                                $multiplier = ($daysInRange - 1) + $day_percentage;
-                            } else {
-                                $multiplier = 1;
-                            }
-                        ?>
-                        <graph-metric id="article-reach-metric" color="aqua" fa-icon="eye" actual="<?php echo $articleReach; ?>" target="<?php echo $averages->get('daily_reach_article')->average * $multiplier; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
-                        <graph-metric id="article-reactions-metric" color="teal" fa-icon="thumbs-up" actual="<?php echo $articleReactions; ?>" target="<?php echo $averages->get('daily_reactions_article')->average * $multiplier; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
-                        <graph-metric id="article-comment-metric" color="yellow" fa-icon="comment" actual="<?php echo $articleComments; ?>" target="<?php echo $averages->get('daily_comments_article')->average * $multiplier; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
-                        <graph-metric id="article-shares-metric" color="green" fa-icon="share" actual="<?php echo $articleShares; ?>" target="<?php echo $averages->get('daily_shares_article')->average * $multiplier; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
-                        <graph-metric id="article-clicks-metric" color="purple" fa-icon="hand-pointer-o" actual="{{ $posts->sum(function ($post) {
-                                    if ($post->type == 'link') {
-                                        return $post->link_clicks;
-                                    }
-                                    return 0;
-                                    }) }}" target="<?php echo $averages->get('daily_link_clicks')->average * $multiplier; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
-                    </div>
+                    @if(count($averages) > 0)
+                        <div class="box-body">
+                            <?php if ($daysInRange > 1) {$multiplier = ($daysInRange - 1) + $day_percentage;} else {$multiplier = 1;} ?>
+                            <graph-metric id="article-reach-metric" color="aqua" fa-icon="eye" actual="<?php echo $articleReach; ?>" target="<?php echo $averages->get('daily_reach_article')->average * $multiplier; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                            <graph-metric id="article-reactions-metric" color="teal" fa-icon="thumbs-up" actual="<?php echo $articleReactions; ?>" target="<?php echo $averages->get('daily_reactions_article')->average * $multiplier; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                            <graph-metric id="article-comment-metric" color="yellow" fa-icon="comment" actual="<?php echo $articleComments; ?>" target="<?php echo $averages->get('daily_comments_article')->average * $multiplier; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                            <graph-metric id="article-shares-metric" color="green" fa-icon="share" actual="<?php echo $articleShares; ?>" target="<?php echo $averages->get('daily_shares_article')->average * $multiplier; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                            <graph-metric id="article-clicks-metric" color="purple" fa-icon="hand-pointer-o" actual="{{ $posts->sum(function ($post) {
+                                        if ($post->type == 'link') {
+                                            return $post->link_clicks;
+                                        }
+                                        return 0;
+                                        }) }}" target="<?php echo $averages->get('daily_link_clicks')->average * $multiplier; ?>" day-percentage="<?php echo $day_percentage; ?>"></graph-metric>
+                        </div>
+                    @endif
                 </div>
             </div>
         @endif
@@ -147,16 +144,15 @@
                     <p>Showing posts by: <span class="badge bg-red creator"><a href="{{ route('posts.index', ['from' => $from->format('Y-m-d'), 'to' => $to->format('Y-m-d'),]) }}">{{ $creatorFilter->name }} <i class="fa fa-times"></i></a>&nbsp;</p>
                 @endif
                 <form>
-                    <label for="rangepicker">Date range:
-                        <input class="form-control input-sm" type="text" name="rangepicker">
-                    </label>
+                    <label for="rangepicker">Date range: <input class="form-control input-xlg" type="text" name="rangepicker"></label>
                 </form>
             </div>
         </div>
-        <div class="box-body averages" data-average-likes="{{ $averages->get('likes')->average }}"
-         data-average-comments="{{ $averages->get('comments')->average }}" data-average-shares="{{ $averages->get('shares')->average }}">
-         <div class="pull-right video-tags">
-                <span class="badge 
+        @if(count($averages) > 0)
+            <div class="box-body averages" data-average-likes="{{ $averages->get('likes')->average }}" data-average-comments="{{ $averages->get('comments')->average }}" data-average-shares="{{ $averages->get('shares')->average }}">
+        @endif
+        <div class="video-tags container">
+                <span class="badge
                         @if (!$labelFilter && !$iaFilter && !$typeFilter)
                             bg-aqua
                         @else
@@ -199,8 +195,7 @@
                         'creator' => \Request::get('creator'), 'day' => \Request::get('day'), 'type' => \Request::get('type'), 'from' => $from->format('Y-m-d'), 'to' => $to->format('Y-m-d')]) }}">{{$label->label}}</a></span>
                     @endforeach
             </div>
-         <br />
-         <br />
+         <hr />
          <table class="table table-striped" id="posts-table">
                 <thead class="dt-center">
                     <tr>
@@ -217,7 +212,7 @@
                         <th class="dt-center"><i class="fa fa-thumbs-up"></i> 
                         </th>
                         <th class="dt-center"><i class="fa fa-comment"></i> 
-                        </th>                                                 </th>
+                        </th>
                         <th class="dt-center"><i class="fa fa-share"></i>
                         </th>
                         <th class="dt-center"><i class="fa fa-hand-pointer-o"></i>
@@ -351,99 +346,100 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th>Totals</th>
-                        <th colspan="8" style="text-align: right;">
-                            <span class="badge
-                                @if ($type == 'link' && ($posts->sum('reach') > $averages->get('daily_reach_article')->average))
-                                    bg-green
-                                @elseif ($type == 'link')
-                                    bg-red
-                                @elseif ($type == 'video' && ($posts->sum('reach') > $averages->get('daily_reach_video')->average))
-                                    bg-green
-                                @elseif ($type == 'video')
-                                    bg-red
-                                @elseif ($posts->sum('reach') > $averages->get('daily_reach')->average))
-                                    bg-green
-                                @else
-                                    bg-red
-                                @endif
-                            ">
-                            {{ number_format($posts->sum('reach')) }}<br />
-                            </span>
-                        </th>
-                        <th>
-                            <span class="badge
-                                @if ($posts->sum('likes') > $averages->get('daily_likes')->average)
-                                    bg-green
-                                @else
-                                    bg-red
-                                @endif
-                            ">
-                            {{ number_format($posts->sum('likes')) }}<br />
-                            </span>
-                        </th>
-                        <th>
-                            <span class="badge
-                                @if ($type == 'link' && ($posts->sum('comments') > $averages->get('daily_comments_article')->average))
-                                    bg-green
-                                @elseif ($type == 'link')
-                                    bg-red
-                                @elseif ($type == 'video' && ($posts->sum('comments') > $averages->get('daily_comments_video')->average))
-                                    bg-green
-                                @elseif ($type == 'video')
-                                    bg-red
-                                @elseif ($posts->sum('comments') > $averages->get('daily_comments')->average))
-                                    bg-green
-                                @else
-                                    bg-red
-                                @endif
-                            ">
-                            {{ number_format($posts->sum('comments')) }}<br />
-                            </span>
-                        </th>
-                        <th>
-                            <span class="badge
-                                @if ($type == 'link' && ($posts->sum('shares') > $averages->get('daily_shares_article')->average))
-                                    bg-green
-                                @elseif ($type == 'link')
-                                    bg-red
-                                @elseif ($type == 'video' && ($posts->sum('shares') > $averages->get('daily_shares_video')->average))
-                                    bg-green
-                                @elseif ($type == 'video')
-                                    bg-red
-                                @elseif ($posts->sum('shares') > $averages->get('daily_shares')->average))
-                                    bg-green
-                                @else
-                                    bg-red
-                                @endif
-                            ">
-                            {{ number_format($posts->sum('shares')) }}<br />
-                            </span>
-                        </th>
-                        <th>
-                            <span class="badge
-                                @if ($posts->sum(function ($post) {
+                        @if(count($averages) > 0)
+                            <th>Totals</th>
+                            <th colspan="8" style="text-align: right;">
+                                <span class="badge
+                                    @if ($type == 'link' && ($posts->sum('reach') > $averages->get('daily_reach_article')->average))
+                                        bg-green
+                                    @elseif ($type == 'link')
+                                        bg-red
+                                    @elseif ($type == 'video' && ($posts->sum('reach') > $averages->get('daily_reach_video')->average))
+                                        bg-green
+                                    @elseif ($type == 'video')
+                                        bg-red
+                                    @elseif ($posts->sum('reach') > $averages->get('daily_reach')->average))
+                                        bg-green
+                                    @else
+                                        bg-red
+                                    @endif
+                                ">
+                                {{ number_format($posts->sum('reach')) }}<br />
+                                </span>
+                            </th>
+                            <th>
+                                <span class="badge
+                                    @if ($posts->sum('likes') > $averages->get('daily_likes')->average)
+                                        bg-green
+                                    @else
+                                        bg-red
+                                    @endif
+                                ">
+                                {{ number_format($posts->sum('likes')) }}<br />
+                                </span>
+                            </th>
+                            <th>
+                                <span class="badge
+                                    @if ($type == 'link' && ($posts->sum('comments') > $averages->get('daily_comments_article')->average))
+                                        bg-green
+                                    @elseif ($type == 'link')
+                                        bg-red
+                                    @elseif ($type == 'video' && ($posts->sum('comments') > $averages->get('daily_comments_video')->average))
+                                        bg-green
+                                    @elseif ($type == 'video')
+                                        bg-red
+                                    @elseif ($posts->sum('comments') > $averages->get('daily_comments')->average))
+                                        bg-green
+                                    @else
+                                        bg-red
+                                    @endif
+                                ">
+                                {{ number_format($posts->sum('comments')) }}<br />
+                                </span>
+                            </th>
+                            <th>
+                                <span class="badge
+                                    @if ($type == 'link' && ($posts->sum('shares') > $averages->get('daily_shares_article')->average))
+                                        bg-green
+                                    @elseif ($type == 'link')
+                                        bg-red
+                                    @elseif ($type == 'video' && ($posts->sum('shares') > $averages->get('daily_shares_video')->average))
+                                        bg-green
+                                    @elseif ($type == 'video')
+                                        bg-red
+                                    @elseif ($posts->sum('shares') > $averages->get('daily_shares')->average))
+                                        bg-green
+                                    @else
+                                        bg-red
+                                    @endif
+                                ">
+                                {{ number_format($posts->sum('shares')) }}<br />
+                                </span>
+                            </th>
+                            <th>
+                                <span class="badge
+                                    @if ($posts->sum(function ($post) {
+                                        if ($post->type == 'link') {
+                                            return $post->link_clicks;
+                                        }
+                                        return 0;
+                                        })
+                                    > $averages->get('daily_link_clicks')->average))
+                                        bg-green
+                                    @else
+                                        bg-red
+                                    @endif
+                                ">
+                                {{ number_format($posts->sum(function ($post) {
                                     if ($post->type == 'link') {
                                         return $post->link_clicks;
                                     }
                                     return 0;
-                                    }) 
-                                > $averages->get('daily_link_clicks')->average))
-                                    bg-green
-                                @else
-                                    bg-red
-                                @endif
-                            ">
-                            {{ number_format($posts->sum(function ($post) {
-                                if ($post->type == 'link') {
-                                    return $post->link_clicks;
-                                }
-                                return 0;
-                                }) 
-                            )}}<br />
-                            </span>
-                        </th>
-
+                                    })
+                                )}}<br />
+                                </span>
+                            </th>
+                        @endif
                     </tr>
                 </tfoot>
             </table>
@@ -467,6 +463,7 @@
         });
         $('input[name="rangepicker"]').daterangepicker({
             maxDate: moment(),
+            alwaysShowCalendars: true,
             startDate: '{{ $from->format('d/m/Y') }}',
             endDate: '{{ $to->format('d/m/Y') }}',
             locale: {
@@ -474,6 +471,14 @@
             },
             dateLimit: {
                 "days" : 14
+            },
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
             }
         });
         $('input[name="rangepicker"]').on('apply.daterangepicker', function (ev, picker) {

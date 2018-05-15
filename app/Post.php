@@ -84,6 +84,28 @@ class Post extends Model
     }
 
     /**
+     * @return mixed
+     * Get all posts included deletions, eager load page, and creator
+     */
+    public function getAllPosts()
+    {
+        return $this->withTrashed()->orderBy('posted', 'desc')->with(['page', 'creator']);
+    }
+
+    /**
+     * @param $model
+     * @param $entity
+     * @return mixed
+     * @override
+     */
+    public function whereHas($model, $entity)
+    {
+        return $this->whereHas($model, function ($q) use ($entity) {
+            $q->where('id', (int) $entity);
+        });
+    }
+
+    /**
      * Get latest stat snapshot
      */
     public function latestStatSnapshot()
