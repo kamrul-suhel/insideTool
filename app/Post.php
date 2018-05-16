@@ -98,7 +98,7 @@ class Post extends Model
      * @return mixed
      * @override
      */
-    public function whereHas($model, $entity)
+    public function whereHasEntity($model, $entity)
     {
         return $this->whereHas($model, function ($q) use ($entity) {
             $q->where('id', (int) $entity);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Creator;
 use App\Post;
@@ -10,15 +11,34 @@ use App\VideoStatSnapshot;
 use App\VideoLabel;
 use App\PostDelayedStatSnapshot;
 use App\AverageMetric;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\View\View;
 use Yajra\Datatables\Datatables;
 
 class PostController extends Controller
 {
-
-    protected $post, $articleImpressions, $articleReactions, $articleShares,
-        $articleComments, $videoImpressions, $videoReactions, $videoShares, $videoComments,
-        $label, $creator, $instantArticles, $type, $labelFilter, $creatorFilter, $iaFilter,
-        $typeFilter, $from, $to;
+    protected
+        $articleImpressions,
+        $articleReactions,
+        $articleShares,
+        $articleComments,
+        $creator,
+        $creatorFilter,
+        $from,
+        $iaFilter,
+        $instantArticles,
+        $label,
+        $labelFilter,
+        $post,
+        $query,
+        $to,
+        $type,
+        $typeFilter,
+        $videoImpressions,
+        $videoReactions,
+        $videoShares,
+        $videoComments;
 
     /**
      * PostController constructor.
@@ -34,76 +54,114 @@ class PostController extends Controller
      */
     public function index()
     {
-        $this->creator = \Request::get('creator');
-        $this->label = \Request::get('label');
-        $this->instantArticles = \Request::get('ia');
-        $this->type = \Request::get('type');
-        $this->from = \Request::get('from');
-        $this->to = \Request::get('to');
+        $this->creator = request()->get('creator');
+        $this->label = request()->get('label');
+        $this->instantArticles = request()->get('ia');
+        $this->type = request()->get('type');
+        $this->from = request()->get('from') ? \Carbon\Carbon::parse(request()->get('from')) : \Carbon\Carbon::now()->startOfDay();
+        $this->to = request()->get('to') ? \Carbon\Carbon::parse(request()->get('to'))->endOfDay() :  \Carbon\Carbon::now()->endOfDay();
 
-        $posts = $this->post->getAllPosts();
+        $this->query = $this->post->getAllPosts();
 
-        if ($this->label) {
-            $posts = $this->post->whereHas('videoLabels', $this->label);
-            $this->labelFilter = VideoLabel::find($this->label);
-        }
-        if ($this->creator) {
-            $posts = $this->post->whereHas('creator', $this->creator);
-            $this->creatorFilter = Creator::find($this->creator);
-        }
-        if ($this->instantArticles) {
-            $posts->where('instant_article', true);
-            $this->iaFilter = true;
-        }
-        if ($this->type) {
-            $posts->where('type', $this->type);
-            $this->typeFilter = true;
-        }
+        //TODO - Move into search class (new class for search functionality
+        $this->getLabels();
+        $this->getCreator();
+        $this->getInstantArticles();
+        $this->getPostType();
+        $this->getDates();
 
-        $this->from = $this->from ? \Carbon\Carbon::parse(\Request::get('from')) : \Carbon\Carbon::now()->startOfDay();
-        $this->to = $this->to ? \Carbon\Carbon::parse(\Request::get('to'))->endOfDay() :  \Carbon\Carbon::now()->endOfDay();
-
-        $posts->whereBetween('posted', [$this->from->toDateTimeString(), $this->to->toDateTimeString()]);
         $daysInRange = $this->from->diffInDays($this->to) + 1;
 
         $labels = VideoLabel::all();
 
-        $posts = $posts->get();
+        $this->query = $this->query->get();
 
-        $this->processPosts($posts);
+        $this->processPosts($this->query);
 
         $averages = AverageMetric::all()->keyBy('key');
 
-        return view('posts.index',
-            [
-                'posts' => $posts,
-                'averages' => $averages,
-                'labelFilter' => $this->labelFilter,
-                'labels' => $labels,
-                'creatorFilter' => $this->creatorFilter,
-                'iaFilter' => $this->iaFilter,
-                'typeFilter' => $this->typeFilter,
-                'videoReach' => $this->videoImpressions,
-                'videoReactions' => $this->videoReactions,
-                'videoShares' => $this->videoShares,
-                'videoComments' => $this->videoComments,
-                'articleReach' => $this->articleImpressions,
-                'articleReactions' => $this->articleReactions,
-                'articleShares' => $this->articleShares,
-                'articleComments' => $this->articleComments,
-                'type' => $this->type,
-                'daysInRange' => $daysInRange,
-                'from' => $this->from,
-                'to' => $this->to
-            ]);
+        return view('posts.index', [
+            'posts' => $this->query,
+            'averages' => $averages,
+            'labelFilter' => $this->labelFilter,
+            'labels' => $labels,
+            'creatorFilter' => $this->creatorFilter,
+            'iaFilter' => $this->iaFilter,
+            'typeFilter' => $this->typeFilter,
+            'videoReach' => $this->videoImpressions,
+            'videoReactions' => $this->videoReactions,
+            'videoShares' => $this->videoShares,
+            'videoComments' => $this->videoComments,
+            'articleReach' => $this->articleImpressions,
+            'articleReactions' => $this->articleReactions,
+            'articleShares' => $this->articleShares,
+            'articleComments' => $this->articleComments,
+            'type' => $this->type,
+            'daysInRange' => $daysInRange,
+            'from' => $this->from,
+            'to' => $this->to
+        ]);
     }
 
     /**
-     * @param $posts
+     * Search query by labels stored along side video
      */
-    public function processPosts($posts)
+    public function getLabels() : void
     {
-        foreach ($posts as $post) {
+        if ($this->label) {
+            $this->query = $this->post->whereHasEntity('videoLabels', $this->label);
+            $this->labelFilter = VideoLabel::find($this->label);
+        }
+    }
+
+    /**
+     * Search query by user/creator
+     */
+    public function getCreator() : void
+    {
+        if ($this->creator) {
+            $this->query = $this->post->whereHasEntity('creator', $this->creator);
+            $this->creatorFilter = Creator::find($this->creator);
+        }
+    }
+
+    /**
+     * Search query for Instant Articles only
+     */
+    public function getInstantArticles() : void
+    {
+        if ($this->instantArticles) {
+            $this->query->where('instant_article', true);
+            $this->iaFilter = true;
+        }
+    }
+
+    /**
+     * Search query by type of post
+     */
+    public function getPostType() : void
+    {
+        if ($this->type) {
+            $this->query->where('type', $this->type);
+            $this->typeFilter = true;
+        }
+    }
+
+    /**
+     * Search query dates
+     */
+    public function getDates() : void
+    {
+        $this->query->whereBetween('posted', [$this->from->toDateTimeString(), $this->to->toDateTimeString()]);
+    }
+
+    /**
+     * Accumulate all actions for every post retrieved from db
+     * @param $query
+     */
+    public function processPosts(Collection $query) : void
+    {
+        foreach ($query as $post) {
             if ($post->type == 'video') {
                 $this->videoImpressions += $post->reach;
             } else if ($post->type == 'link') {
@@ -123,15 +181,16 @@ class PostController extends Controller
     }
 
     /**
+     * Index js datatable values
      * @return mixed
      * @throws \Exception
      */
-    public function indexDatatables()
+    public function indexDatatables() : Datatables
     {
-        $posts = Post::withTrashed()
+        $query = Post::withTrashed()
             ->orderBy('posted', 'desc')
             ->with(['page', 'creator']);
-        return Datatables::of($posts)
+        return Datatables::of($query)
             ->make(true);
     }
 
@@ -139,7 +198,7 @@ class PostController extends Controller
      * @param Post $post
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show(Post $post)
+    public function show(Post $post) : View
     {
         $latestStats = $post->latestStatSnapshot();
         $latestDelayedStats = $post->latestDelayedStatSnapshot();
@@ -163,13 +222,14 @@ class PostController extends Controller
     }
 
     /**
+     * API call for snapshot data for posts
      * @param Request $request
      * @param Post $post
      * @param $type
      * @param bool $birth
      * @return \Illuminate\Http\JsonResponse
      */
-    public function jsonSnapshots(Request $request, Post $post, $type, $birth = false)
+    public function jsonSnapshots(Request $request, Post $post, $type, $birth = false) : JsonResponse
     {
         if (!in_array($type, ["live", "delayed", "latest", "video"])) {
             return response()->json(["error" => "invalid type, must be one of 'live', 'delayed', 'latest', 'video'"]);
@@ -245,84 +305,25 @@ class PostController extends Controller
     }
 
     /**
+     * Set metric colour
      * @param $metric
      * @param int $opacity
      * @return string
      */
-    public function getMetricColor($metric, $opacity = 1)
+    public function getMetricColor($metric, $opacity = 1) : string
     {
-        switch ($metric) {
-            case 'likes':
-                $color = 'rgba(0, 192 ,239, ' . $opacity . ')';
-                break;
-            case 'shares':
-                $color = 'rgba(0, 166, 9, ' . $opacity . ')';
-                break;
-            case 'comments':
-                $color = 'rgba(96, 92 ,168, ' . $opacity . ')';
-                break;
-            case 'loves':
-                $color = 'rgba(216, 27, 96, ' . $opacity . ')';
-                break;
-            case 'wows':
-                $color = 'rgba(0, 166, 90, ' . $opacity . ')';
-                break;
-            case 'hahas':
-                $color = 'rgba(57, 204, 204, ' . $opacity . ')';
-                break;
-            case 'sads':
-                $color = 'rgba(0, 185, 183, ' . $opacity . ')';
-                break;
-            case 'angrys':
-                $color = 'rgba(221, 75, 157, ' . $opacity . ')';
-                break;
-            case 'impressions':
-                $color = 'rgba(216, 27, 96, ' . $opacity . ')';
-                break;
-            case 'total_video_views':
-                $color = 'rgba(0, 192 ,239, ' . $opacity . ')';
-                break;
-            case 'total_video_views_autoplayed':
-                $color = 'rgba(0, 166, 9, ' . $opacity . ')';
-                break;
-            case 'total_video_views_clicked_to_play':
-                $color = 'rgba(96, 92 ,168, ' . $opacity . ')';
-                break;
-            case 'total_video_complete_views':
-                $color = 'rgba(216, 27, 96, ' . $opacity . ')';
-                break;
-            case 'uniques':
-            default:
-                $color = 'rgba(0, 166 ,90, ' . $opacity . ')';
-                break;
-        }
-
-        return $color;
+        $metric = $metric == "" ? $metric = 'colors.uniques.rgb': 'colors.'.$metric.'.rgb';
+        return __($metric, ['opacity' => $opacity]);
     }
 
     /**
+     * Set metric label
      * @param $metric
      * @return string
      */
-    protected function getMetricLabel($metric)
+    protected function getMetricLabel($metric) : string
     {
-        switch ($metric) {
-            case 'total_video_views':
-                $label = 'Total Views';
-                break;
-            case 'total_video_views_autoplayed':
-                $label = 'Total Views (Autoplayed)';
-                break;
-            case 'total_video_views_clicked_to_play';
-                $label = 'Total Views (Clicked to play)';
-                break;
-            case 'total_video_complete_views':
-                $label = 'Total Complete Views';
-                break;
-            default:
-                $label = title_case(str_replace('_', ' ', $metric));
-                break;
-        }
-        return $label;
+        $metric = $metric == "" ? $metric = title_case(str_replace('_', ' ', $metric)): 'colors.'.$metric.'.label';
+        return __($metric);
     }
 }
