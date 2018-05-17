@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\AverageMetric;
+use Illuminate\Support\Collection;
 
 class Post extends Model
 {
@@ -19,6 +20,17 @@ class Post extends Model
     public $birthSnapshot;
 
     public $birthDelayedSnapshot;
+
+    public $exportHeadings = [
+        'written by', 'link', 'post message',
+        'posted', 'deleted', 'reach', 'reactions', 'shares', 'like', 'comments', 'link clicks',
+        'engagement', 'type', 'primary cat', 'GA:views and clicks', 'GA:page views', 'GA:load speed',
+        'GA:bounce rate', '% of Engagement (eng/total eng)'
+    ];
+
+    public $exportTotalHeadings = [
+        'Articles', 'Videos', '','','','','','','','','', '',
+    ];
 
     /**
      * Return pages associated with this post
@@ -211,5 +223,25 @@ class Post extends Model
             return abs(100 - ($this->$metric / $target) * 100);
         }
         return 100;
+    }
+
+    /**
+     * Calculate the total of all posts provided with a specific column
+     */
+    public function calculateTotal(string $value, Collection $model): int
+    {
+        return array_sum($model->pluck($value)->toArray());
+    }
+
+    /**
+     * Calculate engagement level
+     */
+    public function calculateEngagement(Collection $posts): int
+    {
+        $totalShares = $posts->pluck('shares')->toArray();
+        $totalLikes = $posts->pluck('likes')->toArray();
+        $totalComments = $posts->pluck('comments')->toArray();
+
+        return array_sum($totalShares) + array_sum($totalLikes) + array_sum($totalComments);
     }
 }

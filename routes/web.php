@@ -31,6 +31,8 @@ Route::middleware('auth')->group(function() {
         //->where('metric', '(all|likes|loves|wows|hahas|sads|angrys|shares|comments)');
     
     Route::get('/logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+
+    Route::get('/export', 'ExportController@export')->name('exports.export');
 });
 
 // Authentication Routes...
