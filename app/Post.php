@@ -24,7 +24,7 @@ class Post extends Model
     public $exportHeadings = [
         'written by', 'link', 'post message',
         'posted', 'deleted', 'reach', 'reactions', 'shares', 'like', 'comments', 'link clicks',
-        'engagement', 'type', 'primary cat', 'GA:views and clicks', 'GA:page views', 'GA:load speed',
+        'engagement', 'type', 'primary cat', 'GA:avg page time', 'GA:page views', 'GA:avg load time (sec)',
         'GA:bounce rate', '% of Engagement (eng/total eng)'
     ];
 

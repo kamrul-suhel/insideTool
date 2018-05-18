@@ -12,7 +12,6 @@ use App\VideoLabel;
 use App\PostDelayedStatSnapshot;
 use App\AverageMetric;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Lang;
 use Illuminate\View\View;
 use Yajra\Datatables\Datatables;
 

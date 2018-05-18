@@ -186,7 +186,7 @@
                         @endif
                         video-label"><a href="{{ route('posts.index', ['ia' => true, 'creator' => \Request::get('creator'),
                             'label' => \Request::get('label'), 'day' => \Request::get('day'), 'from' => $from->format('Y-m-d'), 'to' => $to->format('Y-m-d')]) }}">Instant Articles</a></span>
-
+                    | With the tag:
                     @foreach ($labels as $label)
                         <span class="badge 
                             @if ($labelFilter && $label->id == $labelFilter->id)

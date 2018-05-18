@@ -4,22 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
+use App\Classes\Analytics;
 
 class ExportController extends Controller
 {
 
-    protected $post, $posts, $totalReactions, $totalReach, $totalVideos,
+    protected $analytics, $post, $posts, $totalReactions, $totalReach, $totalVideos,
         $totalArticles, $totalEngagement, $totalLinkClicks, $filename,
         $totalShares, $totalLikes, $totalComments;
 
     /**
      * ExportController constructor.
      * @param Post $post
+     * @param Analytics $analytics
      */
-    public function __construct(Post $post)
+    public function __construct(Post $post, Analytics $analytics)
     {
         $this->post = $post;
+
+        $this->analytics = $analytics;
     }
 
     /**
@@ -46,14 +49,38 @@ class ExportController extends Controller
             "Expires" => "0"
         ];
 
-        $from = Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT') + 4)->endOfDay()->toDateTimeString();
-        $to = Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT'))->startOfDay()->toDateTimeString();
+        $this->setExportDates();
 
+        $this->setFilename();
+
+        $this->getPosts();
+
+        $this->getFBData();
+
+        $this->buildCSV($this->filename);
+
+        return response()->download(storage_path()."/exports/".$this->filename, $this->filename, $headers);
+    }
+
+    public function setExportDates()
+    {
+        $this->from = Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT') + 4)->endOfDay();//->toDateTimeString();
+        $this->to = Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT'))->startOfDay();//->toDateTimeString();
+    }
+
+    public function setFilename()
+    {
         $this->filename = 'insights_unilad_'.date('d-m-Y_h:m:s').'.csv';
+    }
 
+    public function getPosts()
+    {
         $this->posts = $this->post->withTrashed();
-        $this->posts = $this->posts->whereBetween('posted', [$from, $to])->get();
+        $this->posts = $this->posts->whereBetween('posted', [$this->from, $this->to])->get();
+    }
 
+    public function getFBData()
+    {
         $this->totalReactions = $this->post->calculateTotal('reactions', $this->posts);
         $this->totalReach = $this->post->calculateTotal('reach', $this->posts);
 
@@ -62,10 +89,6 @@ class ExportController extends Controller
 
         $this->totalEngagement = $this->post->calculateEngagement($this->posts);
         $this->totalLinkClicks = $this->totalComments = $this->totalLikes = $this->totalShares = 0;
-
-        $this->buildCSV($this->filename);
-
-        return response()->download(storage_path()."/exports/".$this->filename, $this->filename, $headers);
     }
 
     public function buildCSV($filename)
@@ -81,6 +104,15 @@ class ExportController extends Controller
             $this->totalLikes      += $post->latestStatSnapshot()->likes;
             $this->totalComments   += $post->latestStatSnapshot()->comments;
 
+            $link = $post->link;
+            $link = str_replace('https://www.unilad.co.uk', '', $link);
+
+            $gaResults = $this->analytics->fetchPostGAData($link, $this->from, $this->to);
+            $gaPageView = $gaResults['ga:pageviews'];
+            $gaLoadSpeed = $gaResults['ga:avgPageLoadTime'];
+            $gaBounceRate = $gaResults['ga:bounceRate'];
+            $gaAvgTimeOnPage = $gaResults['ga:avgTimeOnPage'];
+
             fputcsv($file, [
                 $post->creator->name,
                 $post->link,
@@ -95,11 +127,11 @@ class ExportController extends Controller
                 $post->link_clicks,
                 $postEngagement,
                 $post->type,
-                'Primary Cat',
-                'GA: views/clicks',
-                'GA page views',
-                'GA load speed',
-                'GA bounce rate',
+                '?',
+                round($gaAvgTimeOnPage, 1),
+                $gaPageView,
+                round($gaLoadSpeed, 1), //minutes
+                round($gaBounceRate, 1),
                 round($percentOfEngagement, 1)
             ]);
         }
