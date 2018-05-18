@@ -58,12 +58,12 @@ class PostController extends Controller
         $this->label = request()->get('label');
         $this->instantArticles = request()->get('ia');
         $this->type = request()->get('type');
-        $this->from = request()->get('from') ? \Carbon\Carbon::parse(request()->get('from')) : \Carbon\Carbon::now()->startOfDay();
-        $this->to = request()->get('to') ? \Carbon\Carbon::parse(request()->get('to'))->endOfDay() :  \Carbon\Carbon::now()->endOfDay();
-
-        $this->query = $this->post->getAllPosts();
+        $this->from = request()->get('from') ? \Carbon\Carbon::parse(request()->get('from')) :            \Carbon\Carbon::now()->startOfDay();
+        $this->to = request()->get('to') ?     \Carbon\Carbon::parse(request()->get('to'))->endOfDay() :  \Carbon\Carbon::now()->endOfDay();
 
         //TODO - Move into search class (new class for search functionality
+        $this->query = $this->post->getAllPosts();
+
         $this->getLabels();
         $this->getCreator();
         $this->getInstantArticles();

@@ -10,7 +10,8 @@ class ExportController extends Controller
 {
 
     protected $post, $posts, $totalReactions, $totalReach, $totalVideos,
-        $totalArticles, $totalEngagement, $totalLinkClicks, $filename, $totalShares, $totalLikes, $totalComments;
+        $totalArticles, $totalEngagement, $totalLinkClicks, $filename,
+        $totalShares, $totalLikes, $totalComments;
 
     /**
      * ExportController constructor.
@@ -45,10 +46,13 @@ class ExportController extends Controller
             "Expires" => "0"
         ];
 
-        $this->filename = 'insights_unilad_'.date('d-m-Y_h:m:s').'_.csv';
+        $from = Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT') + 4)->endOfDay()->toDateTimeString();
+        $to = Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT'))->startOfDay()->toDateTimeString();
+
+        $this->filename = 'insights_unilad_'.date('d-m-Y_h:m:s').'.csv';
+
         $this->posts = $this->post->withTrashed();
-        $this->posts = $this->posts->where('posted', '<', Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT')));
-        $this->posts = $this->posts->get();
+        $this->posts = $this->posts->whereBetween('posted', [$from, $to])->get();
 
         $this->totalReactions = $this->post->calculateTotal('reactions', $this->posts);
         $this->totalReach = $this->post->calculateTotal('reach', $this->posts);
@@ -73,9 +77,9 @@ class ExportController extends Controller
             $postEngagement = $post->shares + $post->likes + $post->comments;
             $percentOfEngagement = $postEngagement/$this->totalEngagement*100;
             $this->totalLinkClicks += $post->link_clicks;
-            $this->totalShares += $post->latestStatSnapshot()->shares;
-            $this->totalLikes += $post->latestStatSnapshot()->likes;
-            $this->totalComments += $post->latestStatSnapshot()->comments;
+            $this->totalShares     += $post->latestStatSnapshot()->shares;
+            $this->totalLikes      += $post->latestStatSnapshot()->likes;
+            $this->totalComments   += $post->latestStatSnapshot()->comments;
 
             fputcsv($file, [
                 $post->creator->name,
@@ -101,7 +105,6 @@ class ExportController extends Controller
         }
 
         fputcsv($file, $this->post->exportTotalHeadings);
-
         fputcsv($file, [
             $this->totalArticles,
             $this->totalVideos,
