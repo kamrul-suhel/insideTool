@@ -22,14 +22,14 @@ class Post extends Model
     public $birthDelayedSnapshot;
 
     public $exportHeadings = [
-        'written by', 'link', 'post message',
+        'facebook_id','published by', 'link', 'post message',
         'posted', 'deleted', 'reach', 'reactions', 'shares', 'like', 'comments', 'link clicks',
-        'engagement', 'type', 'primary cat', 'GA:avg page time', 'GA:page views', 'GA:avg load time (sec)',
+        'engagement', 'type', 'GA:avg page time', 'GA:page views', 'GA:avg load time (sec)',
         'GA:bounce rate', '% of Engagement (eng/total eng)'
     ];
 
     public $exportTotalHeadings = [
-        'Articles', 'Videos', '','','','','','','','','', '',
+        '','','','', 'Articles', 'Videos', '','','','','','',
     ];
 
     /**
@@ -215,6 +215,10 @@ class Post extends Model
 
     /**
      * Gets the percentage from/above the target
+     * @param $metric
+     * @param bool $timeAdjusted
+     * @param bool $type
+     * @return float|int
      */
     public function percentageFromTarget($metric, $timeAdjusted = true, $type = false)
     {
@@ -227,6 +231,9 @@ class Post extends Model
 
     /**
      * Calculate the total of all posts provided with a specific column
+     * @param string $value
+     * @param Collection $model
+     * @return int
      */
     public function calculateTotal(string $value, Collection $model): int
     {
@@ -235,6 +242,8 @@ class Post extends Model
 
     /**
      * Calculate engagement level
+     * @param Collection $posts
+     * @return int
      */
     public function calculateEngagement(Collection $posts): int
     {

@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 use App\Post;
 use Carbon\Carbon;
 use App\Classes\Analytics;
+use Illuminate\View\View;
 
 class ExportController extends Controller
 {
-
     protected $analytics, $post, $posts, $totalReactions, $totalReach, $totalVideos,
         $totalArticles, $totalEngagement, $totalLinkClicks, $filename,
-        $totalShares, $totalLikes, $totalComments;
+        $totalShares, $totalLikes, $totalComments, $from, $to;
 
     /**
      * ExportController constructor.
@@ -26,11 +26,9 @@ class ExportController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         return view('exports.index');
     }
@@ -43,43 +41,62 @@ class ExportController extends Controller
     {
         $headers = [
             "Content-type" => "text/csv",
-            "Content-Disposition" => "attachment; filename=Insights_Unilad_".date('d-m-Y').".csv",
+            "Content-Disposition" => "attachment; filename=Insights_Unilad_" . date('d-m-Y') . ".csv",
             "Pragma" => "no-cache",
             "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
             "Expires" => "0"
         ];
 
+        //set dates
         $this->setExportDates();
 
+        //set filename
         $this->setFilename();
 
+        //gather posts
         $this->getPosts();
 
+        //link fb data with posts
         $this->getFBData();
 
+        //build new csv
         $this->buildCSV($this->filename);
 
-        return response()->download(storage_path()."/exports/".$this->filename, $this->filename, $headers);
+        //download csv
+        return response()->download(storage_path() . "/exports/" . $this->filename, $this->filename, $headers);
     }
 
-    public function setExportDates()
+    /**
+     * Set dates for export
+     */
+    public function setExportDates(): void
     {
-        $this->from = Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT') + 4)->endOfDay();//->toDateTimeString();
-        $this->to = Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT'))->startOfDay();//->toDateTimeString();
+        $this->from = Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT') + 4)->endOfDay();
+        $this->to = Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT'))->startOfDay();
     }
 
-    public function setFilename()
+    /**
+     * Set name of file produced by export
+     */
+    public function setFilename(): void
     {
-        $this->filename = 'insights_unilad_'.date('d-m-Y_h:m:s').'.csv';
+        $this->filename = 'insights_unilad_' . date('d-m-Y_h:m:s') . '.csv';
     }
 
-    public function getPosts()
+    /**
+     * Get al posts within the date ranges provided
+     */
+    public function getPosts(): void
     {
         $this->posts = $this->post->withTrashed();
         $this->posts = $this->posts->whereBetween('posted', [$this->from, $this->to])->get();
     }
 
-    public function getFBData()
+    /**
+     * Get FB analytics data for posts
+     * Reactions, Reach, Total Vids, and Articles, Engagement, Link Clicks
+     */
+    public function getFBData(): void
     {
         $this->totalReactions = $this->post->calculateTotal('reactions', $this->posts);
         $this->totalReach = $this->post->calculateTotal('reach', $this->posts);
@@ -91,66 +108,99 @@ class ExportController extends Controller
         $this->totalLinkClicks = $this->totalComments = $this->totalLikes = $this->totalShares = 0;
     }
 
-    public function buildCSV($filename)
+    /**
+     * @param $link
+     * @return mixed
+     */
+    public function getGAData($link): array
     {
-        $file = fopen(storage_path()."/exports/".$filename, 'w');
-        fputcsv($file, $this->post->exportHeadings);
+        $link = str_replace('https://www.unilad.co.uk', '', $link);
+        return $gaResults = $this->analytics->fetchPostGAData($link, $this->from, $this->to);
+    }
 
-        foreach($this->posts as $post) {
-            $postEngagement = $post->shares + $post->likes + $post->comments;
-            $percentOfEngagement = $postEngagement/$this->totalEngagement*100;
-            $this->totalLinkClicks += $post->link_clicks;
-            $this->totalShares     += $post->latestStatSnapshot()->shares;
-            $this->totalLikes      += $post->latestStatSnapshot()->likes;
-            $this->totalComments   += $post->latestStatSnapshot()->comments;
+    /**
+     * Format row for a post to add to csv
+     * @param $post
+     * @return array
+     */
+    public function formatPostData(Post $post): array
+    {
+        $postEngagement = $post->shares + $post->likes + $post->comments;
+        $percentOfEngagement = $postEngagement / $this->totalEngagement * 100;
+        $this->totalLinkClicks += $post->link_clicks;
+        $this->totalShares += $post->latestStatSnapshot()->shares;
+        $this->totalLikes += $post->latestStatSnapshot()->likes;
+        $this->totalComments += $post->latestStatSnapshot()->comments;
 
-            $link = $post->link;
-            $link = str_replace('https://www.unilad.co.uk', '', $link);
+        $gaResults = $this->getGAData($post->link);
 
-            $gaResults = $this->analytics->fetchPostGAData($link, $this->from, $this->to);
-            $gaPageView = $gaResults['ga:pageviews'];
-            $gaLoadSpeed = $gaResults['ga:avgPageLoadTime'];
-            $gaBounceRate = $gaResults['ga:bounceRate'];
-            $gaAvgTimeOnPage = $gaResults['ga:avgTimeOnPage'];
+        $postArray = [
+            '"'.$post->facebook_id.'"', //with quotes so it doesn't return exponent number to xls
+            $post->creator->name,
+            $post->link,
+            $post->message,
+            $post->posted,
+            $post->deleted_at,
+            $post->reach,
+            $post->reactions,
+            $post->latestStatSnapshot()->shares,
+            $post->latestStatSnapshot()->likes,
+            $post->latestStatSnapshot()->comments,
+            $post->link_clicks,
+            $postEngagement,
+            $post->type,
+            round($gaResults['ga:avgTimeOnPage'],   1),
+            round($gaResults['ga:pageviews']),
+            round($gaResults['ga:avgPageLoadTime'], 1),
+            round($gaResults['ga:bounceRate'],      1),
+            round($percentOfEngagement,             1)
+        ];
 
-            fputcsv($file, [
-                $post->creator->name,
-                $post->link,
-                $post->message,
-                $post->posted,
-                $post->deleted_at,
-                $post->reach,
-                $post->reactions,
-                $post->latestStatSnapshot()->shares,
-                $post->latestStatSnapshot()->likes,
-                $post->latestStatSnapshot()->comments,
-                $post->link_clicks,
-                $postEngagement,
-                $post->type,
-                '?',
-                round($gaAvgTimeOnPage, 1),
-                $gaPageView,
-                round($gaLoadSpeed, 1), //minutes
-                round($gaBounceRate, 1),
-                round($percentOfEngagement, 1)
-            ]);
-        }
+        return $postArray;
+    }
 
-        fputcsv($file, $this->post->exportTotalHeadings);
-        fputcsv($file, [
+    /**
+     * Format totals on bottom row for csv
+     * @return array
+     */
+    public function formatTotals(): array
+    {
+        return [
+            '', '', '', '', //blank columns
             $this->totalArticles,
             $this->totalVideos,
-            '',
-            '',
-            '',
             $this->totalReach,
             $this->totalReactions,
             $this->totalShares,
             $this->totalLikes,
             $this->totalComments,
             $this->totalLinkClicks,
-            $this->totalEngagement]);
+            $this->totalEngagement
+        ];
+    }
 
+    /**
+     * Build new csv with required rows, and columns
+     * @param $filename
+     */
+    public function buildCSV($filename): void
+    {
+        //get and open new csv to writing
+        $file = fopen(storage_path() . "/exports/" . $filename, 'w');
+
+        //Set headings
+        fputcsv($file, $this->post->exportHeadings);
+
+        //For every post apply new row to csv
+        foreach ($this->posts as $post) {
+            fputcsv($file, $this->formatPostData($post));
+        }
+
+        //Set Totals row
+        fputcsv($file, $this->post->exportTotalHeadings);
+        fputcsv($file, $this->formatTotals());
+
+        //close csv
         fclose($file);
     }
 }
