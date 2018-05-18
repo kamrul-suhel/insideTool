@@ -2,13 +2,22 @@
 
 namespace App\Console\Commands;
 
+use App\Classes\Analytics;
+use App\Classes\Export;
 use Illuminate\Console\Command;
 use App\Facebook;
 use App\PostStatSnapshot;
 use App\Post;
+use Illuminate\Support\Facades\Log;
 
 class GetPostStats extends Command
 {
+
+    /**
+     * @var Analytics
+     */
+    protected $analytics;
+
     /**
      * The name and signature of the console command.
      *
@@ -28,9 +37,11 @@ class GetPostStats extends Command
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Analytics $analytics)
     {
         parent::__construct();
+
+        $this->analytics = $analytics;
     }
 
     /**
@@ -137,6 +148,26 @@ class GetPostStats extends Command
                 } else {
                     throw $e;
                 }
+            }
+
+            //todo - GET GA STATS AND SAVE TO POSTS TABLE
+            try {
+                //get GA STATS
+                $from = new \Carbon\Carbon("48 hours ago");
+                $to = new \Carbon\Carbon("now");
+
+                $link = str_replace('https://www.unilad.co.uk', '', $post->link);
+                $gaStats = $this->analytics->fetchPostGAData($link, $from, $to);
+
+                $post->ga_page_views = round($gaStats['ga:pageviews'], 1);
+                $post->ga_avg_time_on_page = round($gaStats['ga:avgTimeOnPage'], 1);
+                $post->ga_bounce_rate = round($gaStats['ga:bounceRate'], 1);
+                $post->ga_avg_page_load_time = round($gaStats['ga:avgPageLoadTime'], 1);
+
+                $post->save();
+
+            } catch (\Google_Exception $e) {
+                Log::info(print_r($e->getMessage()));
             }
             
             $snapshot->save();

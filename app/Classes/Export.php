@@ -168,8 +168,6 @@ class Export
         $this->totalLikes += $post->latestStatSnapshot()->likes;
         $this->totalComments += $post->latestStatSnapshot()->comments;
 
-        $gaResults = $this->getGAData($post->link);
-
         $postArray = [
             '"'.$post->facebook_id.'"', //with quotes so it doesn't return exponent number to xls
             $post->creator->name,
@@ -185,13 +183,12 @@ class Export
             $post->link_clicks,
             $postEngagement,
             $post->type,
-            round($gaResults['ga:avgTimeOnPage'],   1),
-            round($gaResults['ga:pageviews']),
-            round($gaResults['ga:avgPageLoadTime'], 1),
-            round($gaResults['ga:bounceRate'],      1),
-            round($percentOfEngagement,             1)
+            $post->ga_avg_time_on_page,
+            $post->ga_page_views,
+            $post->ga_avg_page_load_time,
+            $post->ga_bounce_rate,
+            round($percentOfEngagement, 1)
         ];
-
         return $postArray;
     }
 
