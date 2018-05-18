@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Classes\Export;
-use App\Post;
-use Carbon\Carbon;
+use App\Jobs\ProcessExport;
 use Illuminate\View\View;
 
 class ExportController extends Controller
@@ -26,7 +25,6 @@ class ExportController extends Controller
 
     /**
      * Export Data that is over 2 days old to CSV
-     * @return mixed
      */
     public function export()
     {
@@ -38,10 +36,8 @@ class ExportController extends Controller
             "Expires" => "0"
         ];
 
-        $email = false; //todo add mailer notification, attached csv to email and send
-        
-
-        $filename = $this->export->export($email);
+        //run export class and get filename
+        $filename = $this->export->export();
 
         //download csv
         return response()->download(storage_path() . "/exports/" . $filename, $filename, $headers);

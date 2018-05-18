@@ -80,10 +80,9 @@ class Export
     }
 
     /**
-     * @param bool $email
      * @return mixed
      */
-    public function export($email = false)
+    public function export()
     {
         //set dates
         $this->setExportDates();
@@ -99,11 +98,6 @@ class Export
 
         //build new csv
         $this->buildCSV($this->filename);
-
-        if($email) {
-            //Email CSV
-            $this->emailExport($email);
-        }
 
         return $this->filename;
     }
@@ -244,14 +238,6 @@ class Export
 
         //close csv
         fclose($file);
-    }
-
-    /**
-     * @param bool $email
-     */
-    public function emailExport($email = false)
-    {
-
     }
 
 }
