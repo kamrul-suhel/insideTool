@@ -93,6 +93,11 @@ class Export
         //gather posts
         $this->getPosts();
 
+        if(count($this->posts) < 1)
+        {
+            return false;
+        }
+
         //link fb data with posts
         $this->getFBData();
 

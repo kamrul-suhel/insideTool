@@ -29,13 +29,17 @@ class ProcessExport implements ShouldQueue
 
     /**
      * Execute the job.
-     * @return void
+     * @return mixed
      * @param Export $export
      */
     public function handle(Export $export)
     {
 
         $filename = $export->export();
+
+        if(!$filename) {
+            return false;
+        }
 
         if($this->email) {
 
