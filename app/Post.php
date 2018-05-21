@@ -224,6 +224,10 @@ class Post extends Model
     {
         if ($this->$metric > 0) {
             $target = $this->getTarget($metric, $timeAdjusted, $type);
+
+            if($target == 0.0)
+                $target = 0.1;
+
             return abs(100 - ($this->$metric / $target) * 100);
         }
         return 100;
