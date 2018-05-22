@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\FB;
 
 use Illuminate\Console\Command;
 use App\Facebook;
@@ -9,6 +9,7 @@ use App\Page;
 use App\Post;
 use App\PublishedInstantArticle;
 use App\VideoLabel;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class GetPagePosts extends Command
@@ -137,6 +138,7 @@ class GetPagePosts extends Command
                         // Immediately pull stats
                         \Artisan::call('stats:getpoststats', ['postid' => $postId]);
                         \Artisan::call('stats:getpoststatsdelayed', ['postid' => $postId]);
+                        \Artisan::call('stats:getgapoststats', ['postid' => $postId]); // Ga Analytics
                     }
                 }
             }

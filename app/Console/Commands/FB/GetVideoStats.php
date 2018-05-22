@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\FB;
 
 use Illuminate\Console\Command;
 use App\Facebook;
 use App\VideoStatSnapshot;
 use App\Post;
-
 
 class GetVideoStats extends Command
 {
@@ -83,9 +82,7 @@ class GetVideoStats extends Command
     }
 
     /**
-     * Execute the console command.
-     *
-     * @return mixed
+     * @throws \Facebook\Exceptions\FacebookSDKException
      */
     public function handle()
     {

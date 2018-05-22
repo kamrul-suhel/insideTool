@@ -3,16 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Classes\Export;
-use App\Jobs\ProcessExport;
+use App\Post;
+use Carbon\Carbon;
 use Illuminate\View\View;
 
 class ExportController extends Controller
 {
-    protected $export;
+    protected $export, $post;
 
-    public function __construct(Export $export)
+    public function __construct(Export $export, Post $post)
     {
         $this->export = $export;
+
+        $this->post = $post;
     }
 
     /**
@@ -28,9 +31,15 @@ class ExportController extends Controller
      */
     public function export()
     {
+
+        if($this->post->where('posted', '<',  Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT'))->endOfDay())->count() < 1)
+        {
+            return redirect()->to('posts');
+        }
+
         $headers = [
             "Content-type" => "text/csv",
-            "Content-Disposition" => "attachment; filename=Insights_Unilad_" . date('d-m-Y') . ".csv",
+            "Content-Disposition" => "attachment; filename=Insights_Unilad_" . date('d-m-Y_h:m:s') . ".csv",
             "Pragma" => "no-cache",
             "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
             "Expires" => "0"

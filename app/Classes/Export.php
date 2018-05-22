@@ -112,8 +112,8 @@ class Export
      */
     public function setExportDates(): void
     {
-        $this->from = Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT') + 4)->endOfDay();
-        $this->to = Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT'))->startOfDay();
+        $this->from = Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT') + 4)->startOfDay();
+        $this->to = Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT'))->endOfDay();
     }
 
     /**

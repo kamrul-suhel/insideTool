@@ -144,7 +144,7 @@
                     <p>Showing posts by: <span class="badge bg-red creator"><a href="{{ route('posts.index', ['from' => $from->format('Y-m-d'), 'to' => $to->format('Y-m-d'),]) }}">{{ $creatorFilter->name }} <i class="fa fa-times"></i></a>&nbsp;</p>
                 @endif
                 <form>
-                    @if(count(\App\Post::where('posted', '<',  \Carbon\Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT')))->get()) > 0)
+                    @if(\App\Post::where('posted', '<',  \Carbon\Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT'))->endOfDay())->count() > 0)
                         <a href="{{ route('exports.export') }}" class="btn btn-xlg btn-success">Export CSV</a>
                     @endif
                     <label for="rangepicker">Date range: <input class="form-control input-xlg" type="text" name="rangepicker"></label>

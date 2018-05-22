@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\FB;
 
 use Illuminate\Console\Command;
 use App\Facebook;
@@ -34,9 +34,8 @@ class GetPostStatsDelayed extends Command
     }
 
     /**
-     * Execute the console command.
-     *
-     * @return mixed
+     * @throws \Facebook\Exceptions\FacebookResponseException
+     * @throws \Facebook\Exceptions\FacebookSDKException
      */
     public function handle()
     {
