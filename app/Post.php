@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\AverageMetric;
+use Illuminate\Support\Collection;
 
 class Post extends Model
 {
@@ -19,6 +20,17 @@ class Post extends Model
     public $birthSnapshot;
 
     public $birthDelayedSnapshot;
+
+    public $exportHeadings = [
+        'facebook_id','published by', 'link', 'post message',
+        'posted', 'deleted', 'reach', 'reactions', 'shares', 'like', 'comments', 'link clicks',
+        'engagement', 'type', 'GA:avg page time', 'GA:page views', 'GA:avg load time (sec)',
+        'GA:bounce rate', '% of Engagement (eng/total eng)'
+    ];
+
+    public $exportTotalHeadings = [
+        '','','','', 'Articles', 'Videos', '','','','','','',
+    ];
 
     /**
      * Return pages associated with this post
@@ -81,6 +93,28 @@ class Post extends Model
     public function toJson($options = 0) {
         $this->setHidden(static::$hiddenFields);
         return parent::toJson($options);
+    }
+
+    /**
+     * @return mixed
+     * Get all posts included deletions, eager load page, and creator
+     */
+    public function getAllPosts()
+    {
+        return $this->withTrashed()->orderBy('posted', 'desc')->with(['page', 'creator']);
+    }
+
+    /**
+     * @param $model
+     * @param $entity
+     * @return mixed
+     * @override
+     */
+    public function whereHasEntity($model, $entity)
+    {
+        return $this->whereHas($model, function ($q) use ($entity) {
+            $q->where('id', (int) $entity);
+        });
     }
 
     /**
@@ -181,13 +215,46 @@ class Post extends Model
 
     /**
      * Gets the percentage from/above the target
+     * @param $metric
+     * @param bool $timeAdjusted
+     * @param bool $type
+     * @return float|int
      */
     public function percentageFromTarget($metric, $timeAdjusted = true, $type = false)
     {
         if ($this->$metric > 0) {
             $target = $this->getTarget($metric, $timeAdjusted, $type);
+
+            if($target == 0.0)
+                $target = 0.1;
+
             return abs(100 - ($this->$metric / $target) * 100);
         }
         return 100;
+    }
+
+    /**
+     * Calculate the total of all posts provided with a specific column
+     * @param string $value
+     * @param Collection $model
+     * @return int
+     */
+    public function calculateTotal(string $value, Collection $model): int
+    {
+        return array_sum($model->pluck($value)->toArray());
+    }
+
+    /**
+     * Calculate engagement level
+     * @param Collection $posts
+     * @return int
+     */
+    public function calculateEngagement(Collection $posts): int
+    {
+        $totalShares = $posts->pluck('shares')->toArray();
+        $totalLikes = $posts->pluck('likes')->toArray();
+        $totalComments = $posts->pluck('comments')->toArray();
+
+        return array_sum($totalShares) + array_sum($totalLikes) + array_sum($totalComments);
     }
 }
