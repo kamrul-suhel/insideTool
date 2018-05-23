@@ -49,6 +49,6 @@ class ExportController extends Controller
         $filename = $this->export->export();
 
         //download csv
-        return response()->download(storage_path() . "/exports/" . $filename, $filename, $headers);
+        return response()->download(storage_path() . "/app/exports/" . $filename, $filename, $headers);
     }
 }
