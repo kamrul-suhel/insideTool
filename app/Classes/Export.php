@@ -223,6 +223,10 @@ class Export
      */
     public function buildCSV($filename): void
     {
+        if (!file_exists(storage_path("app/exports/"))) {
+            mkdir(storage_path("app/exports/"));
+        }
+
         //get and open new csv to writing
         $file = fopen(storage_path("app/exports/" . $filename), 'w');
 
