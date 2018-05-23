@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\FB;
 
 use Illuminate\Console\Command;
 use App\Post;
@@ -46,6 +46,7 @@ class GetStats extends Command
         if ($type == 'live') {
             foreach ($posts as $post) {
                 \Artisan::call('stats:getpoststats', ['postid' => $post->facebook_id]);
+                \Artisan::call('stats:getgapoststats', ['postid' => $post->facebook_id]); // Ga Analytics
             }
         } else if ($type == 'delayed') {
             foreach ($posts as $post) {

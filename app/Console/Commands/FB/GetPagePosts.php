@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\FB;
 
 use Illuminate\Console\Command;
 use App\Facebook;
@@ -9,6 +9,7 @@ use App\Page;
 use App\Post;
 use App\PublishedInstantArticle;
 use App\VideoLabel;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class GetPagePosts extends Command
@@ -38,9 +39,7 @@ class GetPagePosts extends Command
     }
 
     /**
-     * Execute the console command.
-     *
-     * @return mixed
+     * @throws \Facebook\Exceptions\FacebookSDKException
      */
     public function handle()
     {
@@ -99,6 +98,7 @@ class GetPagePosts extends Command
                     $post->save();
                     $objectId = $postResponse->getGraphNode()->getField('object_id');
 
+                    // VIDEO - GET CUSTOM LABELS BASED ON VIDEOS THAT HAVE BEEN FOUND
                     if ($post->type == 'video' && $objectId) {
                         $videoResponse = $api->get('/' . $objectId . '/?fields=custom_labels', env('FACEBOOK_ACCESS_TOKEN'));
                         if ($videoResponse) {
@@ -113,6 +113,7 @@ class GetPagePosts extends Command
                                 }
                             }
                         }
+                    // LINKS - GET INSTANT ARTICLE
                     } else if ($post->type == 'link') {
                         $instantArticles = $api->get('/' . $this->argument('pageid') . '/instant_articles', env('FACEBOOK_ACCESS_TOKEN'));
                         if ($instantArticles) {
@@ -137,6 +138,7 @@ class GetPagePosts extends Command
                         // Immediately pull stats
                         \Artisan::call('stats:getpoststats', ['postid' => $postId]);
                         \Artisan::call('stats:getpoststatsdelayed', ['postid' => $postId]);
+                        \Artisan::call('stats:getgapoststats', ['postid' => $postId]); // Ga Analytics
                     }
                 }
             }

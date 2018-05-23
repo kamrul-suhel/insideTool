@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\FB;
 
+use App\Classes\Analytics;
 use Illuminate\Console\Command;
 use App\Facebook;
 use App\PostStatSnapshot;
 use App\Post;
+use Illuminate\Support\Facades\Log;
 
 class GetPostStats extends Command
 {
@@ -24,19 +26,24 @@ class GetPostStats extends Command
     protected $description = 'Gets and saves a stats snapshot for a given post ID';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
+     * @var Analytics
      */
-    public function __construct()
+    protected $analytics;
+
+    /**
+     * GetPostStats constructor.
+     * @param Analytics $analytics
+     */
+    public function __construct(Analytics $analytics)
     {
         parent::__construct();
+
+        $this->analytics = $analytics;
     }
 
     /**
-     * Execute the console command.
-     *
-     * @return mixed
+     * @throws \Facebook\Exceptions\FacebookResponseException
+     * @throws \Facebook\Exceptions\FacebookSDKException
      */
     public function handle()
     {
@@ -138,7 +145,7 @@ class GetPostStats extends Command
                     throw $e;
                 }
             }
-            
+
             $snapshot->save();
         }
     }
