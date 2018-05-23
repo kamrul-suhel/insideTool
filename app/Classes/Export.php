@@ -224,7 +224,7 @@ class Export
     public function buildCSV($filename): void
     {
         //get and open new csv to writing
-        $file = fopen(storage_path() . "/exports/" . $filename, 'w');
+        $file = fopen(storage_path("/app/exports/" . $filename), 'w');
 
         //Set headings
         fputcsv($file, $this->post->exportHeadings);
