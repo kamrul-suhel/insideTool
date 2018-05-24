@@ -41,7 +41,7 @@ class EmailExport extends Notification
      */
     public function toMail($notifiable)
     {
-        $link = storage_path() . "/exports/" . $this->filename;
+        $link = storage_path() . "/app/exports/" . $this->filename;
 
         return (new MailMessage)
             ->greeting('Hello!')
