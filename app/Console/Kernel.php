@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('stats:get --from="48 hours ago" --to="now" --type=live')->everyTenMinutes();
         $schedule->command('stats:get --from="48 hours ago" --to="now" --type=delayed')->everyThirtyMinutes();
         $schedule->command('stats:updateaverages')->hourly();
-        $schedule->command('stats:emailstats')->daily();
+        $schedule->command('stats:emailstats')->dailyAt('09:00');
     }
 
     /**

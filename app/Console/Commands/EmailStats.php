@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Classes\Export;
 use App\Jobs\ProcessExport;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class EmailStats extends Command
 {
@@ -41,6 +42,7 @@ class EmailStats extends Command
      */
     public function handle()
     {
+        Log::info('sending email..');
         //dispatch job
         ProcessExport::dispatch(true);
     }
