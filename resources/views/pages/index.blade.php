@@ -22,7 +22,7 @@
                     @foreach ($pages as $page)
                         <tr>
                             <td>{{ $page->id }}</td>
-                            <td>{{ $page->name }}</td>
+                            <td><a href="pages/{{$page->id}}">{{ $page->name }}</a></td>
                             <td>{{ $page->facebook_id }}</td>
                         </tr>
                     @endforeach

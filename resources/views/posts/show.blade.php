@@ -55,7 +55,7 @@
                                         @if ($post->creator)
                                             <tr>
                                                 <th>Posted by</th>
-                                                <td><a href="{{ route('posts.index', ['creator' => $post->creator->id]) }}">{{ $post->creator->name }}</a></td>
+                                                <td><a href="{{ route('pages.show', ['id' => $post->page_id, 'creator' => $post->creator->id]) }}">{{ $post->creator->name }}</a></td>
                                             </tr>
                                         @endif
                                         <tr>
@@ -71,7 +71,7 @@
                                                 <th>Labels</th>
                                                 <td>
                                                     @foreach ($post->videoLabels as $label)
-                                                        <span class="badge bg-aqua video-label"><a href="{{ route('posts.index', ['label' => $label->id]) }}">{{$label->label}}</a></span>
+                                                        <span class="badge bg-aqua video-label"><a href="{{ route('pages.show', ['id' => $post->page_id, 'label' => $label->id]) }}">{{$label->label}}</a></span>
                                                     @endforeach
                                                 </td>
                                             </tr>

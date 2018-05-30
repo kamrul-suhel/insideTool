@@ -96,12 +96,14 @@ class Post extends Model
     }
 
     /**
+     * @param $id
      * @return mixed
      * Get all posts included deletions, eager load page, and creator
      */
-    public function getAllPosts()
+
+    public function getAllPosts($id)
     {
-        return $this->withTrashed()->orderBy('posted', 'desc')->with(['page', 'creator']);
+        return $this->find($id)->withTrashed()->orderBy('posted', 'desc')->with(['page', 'creator']);
     }
 
     /**
