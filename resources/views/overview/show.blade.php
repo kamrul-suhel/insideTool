@@ -14,6 +14,9 @@
             <a href="{{ request()->fullUrlWithQuery(["timeline"=> 'today'])  }}" class="btn btn-lg btn-primary {{ isset($timeline) && $timeline == 'today'? 'active' : '' }}">Today</a>
             <a href="{{ request()->fullUrlWithQuery(["timeline"=> 'week']) }}"  class="btn btn-lg btn-primary {{ isset($timeline) && $timeline == 'week'? 'active' : '' }} ">This Week</a>
             <a href="{{ request()->fullUrlWithQuery(["timeline"=> 'month'])  }}" class="btn btn-lg btn-primary {{ isset($timeline) && $timeline == 'month'? 'active' : '' }}">This Month</a>
+            ||
+            <a href="{{ request()->fullUrlWithQuery(["conversion"=> 'sum']) }}" class="btn btn-lg btn-primary {{ isset($conversion) && $conversion == 'sum'? 'active' : '' }}">Total</a>
+            <a href="{{ request()->fullUrlWithQuery(["conversion"=> 'avg']) }}"  class="btn btn-lg btn-primary {{ isset($conversion) && $conversion == 'avg'? 'active' : '' }} ">Average</a>
             <hr>
         </div>
 
@@ -33,7 +36,7 @@
                             <div class="info-box bg-purple">
                                 <i class="info-box-icon"><i class="fa fa-eye"></i></i>
                                 <div class="info-box-content">
-                                    <span class="info-box-text">Total Video Reach </span>
+                                    <span class="info-box-text">{{ $conversion == 'sum'? 'Total' : 'Average' }} Video Reach </span>
                                     <span class="info-box-number info-box-number-big">{{  number_format($videoStats['reach'][$timeline][0] ?? 0)  }}</span>
                                 </div>
                             </div>
@@ -42,7 +45,7 @@
                             <div class="info-box bg-maroon">
                                 <i class="info-box-icon"><i class="fa fa-eye"></i></i>
                                 <div class="info-box-content">
-                                    <span class="info-box-text">Total Link Reach </span>
+                                    <span class="info-box-text">{{ $conversion == 'sum'? 'Total' : 'Average' }} Link Reach </span>
                                     <span class="info-box-number info-box-number-big">{{  number_format($linkStats['reach'][$timeline][0] ?? 0)  }}</span>
                                 </div>
                             </div>
@@ -51,7 +54,7 @@
                             <div class="info-box bg-orange">
                                 <i class="info-box-icon"><i class="fa fa-eye"></i></i>
                                 <div class="info-box-content">
-                                    <span class="info-box-text">Total IA Reach </span>
+                                    <span class="info-box-text">{{ $conversion == 'sum'? 'Total' : 'Average' }} IA Reach </span>
                                     <span class="info-box-number info-box-number-big">{{  number_format($iAStats['reach'][$timeline][0] ?? 0)  }}</span>
                                 </div>
                             </div>
@@ -62,7 +65,7 @@
                             <div class="info-box bg-purple">
                                 <i class="info-box-icon"><i class="fa fa-thumbs-up"></i><small class="fa fa-plus-circle"></small></i>
                                 <div class="info-box-content">
-                                    <span class="info-box-text">Total Video Reactions </span>
+                                    <span class="info-box-text">{{ $conversion == 'sum'? 'Total' : 'Average' }} Video Reactions </span>
                                     <span class="info-box-number info-box-number-big">{{  number_format($videoStats['reactions'][$timeline][0] ?? 0)  }}</span>
                                 </div>
                             </div>
@@ -71,7 +74,7 @@
                             <div class="info-box bg-maroon">
                                 <i class="info-box-icon"><i class="fa fa-thumbs-up"></i><small class="fa fa-plus-circle"></small></i>
                                 <div class="info-box-content">
-                                    <span class="info-box-text">Total Link Reactions </span>
+                                    <span class="info-box-text">{{ $conversion == 'sum'? 'Total' : 'Average' }} Link Reactions </span>
                                     <span class="info-box-number info-box-number-big">{{  number_format($linkStats['reactions'][$timeline][0] ?? 0)  }}</span>
                                 </div>
                             </div>
@@ -80,7 +83,7 @@
                             <div class="info-box bg-orange">
                                 <i class="info-box-icon"><i class="fa fa-thumbs-up"></i><small class="fa fa-plus-circle"></small></i>
                                 <div class="info-box-content">
-                                    <span class="info-box-text">Total IA Reactions </span>
+                                    <span class="info-box-text">{{ $conversion == 'sum'? 'Total' : 'Average' }} IA Reactions </span>
                                     <span class="info-box-number info-box-number-big">{{  number_format($iAStats['reactions'][$timeline][0] ?? 0)  }}</span>
                                 </div>
                             </div>
@@ -91,7 +94,7 @@
                             <div class="info-box bg-purple">
                                 <i class="info-box-icon"><i class="fa fa-share"></i></i>
                                 <div class="info-box-content">
-                                    <span class="info-box-text">Total Video Shares </span>
+                                    <span class="info-box-text">{{ $conversion == 'sum'? 'Total' : 'Average' }} Video Shares </span>
                                     <span class="info-box-number info-box-number-big">{{  number_format($videoStats['shares'][$timeline][0] ?? 0)  }}</span>
                                 </div>
                             </div>
@@ -100,7 +103,7 @@
                             <div class="info-box bg-maroon">
                                 <i class="info-box-icon"><i class="fa fa-share"></i></i>
                                 <div class="info-box-content">
-                                    <span class="info-box-text">Total Link Shares </span>
+                                    <span class="info-box-text">{{ $conversion == 'sum'? 'Total' : 'Average' }} Link Shares </span>
                                     <span class="info-box-number info-box-number-big">{{  number_format($linkStats['shares'][$timeline][0] ?? 0)  }}</span>
                                 </div>
                             </div>
@@ -109,7 +112,7 @@
                             <div class="info-box bg-orange">
                                 <i class="info-box-icon"><i class="fa fa-share"></i></i>
                                 <div class="info-box-content">
-                                    <span class="info-box-text">Total IA Shares </span>
+                                    <span class="info-box-text">{{ $conversion == 'sum'? 'Total' : 'Average' }} IA Shares </span>
                                     <span class="info-box-number info-box-number-big">{{  number_format($iAStats['shares'][$timeline][0] ?? 0)  }}</span>
                                 </div>
                             </div>
@@ -120,7 +123,7 @@
                             <div class="info-box bg-purple">
                                 <i class="info-box-icon"><i class="fa fa-comment"></i></i>
                                 <div class="info-box-content">
-                                    <span class="info-box-text">Total Video Comments </span>
+                                    <span class="info-box-text">{{ $conversion == 'sum'? 'Total' : 'Average' }} Video Comments </span>
                                     <span class="info-box-number info-box-number-big">{{  number_format($videoStats['comments'][$timeline][0] ?? 0)  }}</span>
                                 </div>
                             </div>
@@ -129,7 +132,7 @@
                             <div class="info-box bg-maroon">
                                 <i class="info-box-icon"><i class="fa fa-comment"></i></i>
                                 <div class="info-box-content">
-                                    <span class="info-box-text">Total Link Comments </span>
+                                    <span class="info-box-text">{{ $conversion == 'sum'? 'Total' : 'Average' }} Link Comments </span>
                                     <span class="info-box-number info-box-number-big">{{  number_format($linkStats['comments'][$timeline][0] ?? 0)  }}</span>
                                 </div>
                             </div>
@@ -138,7 +141,7 @@
                             <div class="info-box bg-orange">
                                 <i class="info-box-icon"><i class="fa fa-comment"></i></i>
                                 <div class="info-box-content">
-                                    <span class="info-box-text">Total IA Comments </span>
+                                    <span class="info-box-text">{{ $conversion == 'sum'? 'Total' : 'Average' }} IA Comments </span>
                                     <span class="info-box-number info-box-number-big">{{  number_format($iAStats['comments'][$timeline][0] ?? 0)  }}</span>
                                 </div>
                             </div>
@@ -232,7 +235,7 @@
                 ],
                 datasets: [
                     {
-                        label: 'Total Reach (Video)',
+                        label: '{{ $conversion == 'sum'? 'Total' : 'Average' }} Reach (Video)',
                         borderColor: 'purple',
                         data: [
                             @foreach($videoStats['graph']['reach'][$timeline] as $key => $value)
@@ -241,7 +244,7 @@
                         ]
                     },
                     {
-                        label: 'Total Reach (Link)',
+                        label: '{{ $conversion == 'sum'? 'Total' : 'Average' }} Reach (Link)',
                         borderColor: '#d81b60',
                         data: [
                             @foreach($linkStats['graph']['reach'][$timeline] as $key => $value)
@@ -250,7 +253,7 @@
                         ]
                     },
                     {
-                        label: 'Total Reach (Instant Article)',
+                        label: '{{ $conversion == 'sum'? 'Total' : 'Average' }} Reach (Instant Article)',
                         borderColor: 'orange',
                         data: [
                             @foreach($iAStats['graph']['reach'][$timeline] as $key => $value)
@@ -268,7 +271,7 @@
                 ],
                 datasets: [
                     {
-                        label: 'Total Reach (Video)',
+                        label: '{{ $conversion == 'sum'? 'Total' : 'Average' }} Reach (Video)',
                         borderColor: 'purple',
                         data: [
                             @foreach($videoStats['graph']['reactions'][$timeline] as $key => $value)
@@ -277,7 +280,7 @@
                         ]
                     },
                     {
-                        label: 'Total Reach (Link)',
+                        label: '{{ $conversion == 'sum'? 'Total' : 'Average' }} Reach (Link)',
                         borderColor: '#d81b60',
                         data: [
                             @foreach($linkStats['graph']['reactions'][$timeline] as $key => $value)
@@ -286,7 +289,7 @@
                         ]
                     },
                     {
-                        label: 'Total Reach (Instant Article)',
+                        label: '{{ $conversion == 'sum'? 'Total' : 'Average' }} Reach (Instant Article)',
                         borderColor: 'orange',
                         data: [
                             @foreach($iAStats['graph']['reactions'][$timeline] as $key => $value)
@@ -304,7 +307,7 @@
                 ],
                 datasets: [
                     {
-                        label: 'Total Reach (Video)',
+                        label: '{{ $conversion == 'sum'? 'Total' : 'Average' }} Reach (Video)',
                         borderColor: 'purple',
                         data: [
                             @foreach($videoStats['graph']['shares'][$timeline] as $key => $value)
@@ -313,7 +316,7 @@
                         ]
                     },
                     {
-                        label: 'Total Reach (Link)',
+                        label: '{{ $conversion == 'sum'? 'Total' : 'Average' }} Reach (Link)',
                         borderColor: '#d81b60',
                         data: [
                             @foreach($linkStats['graph']['shares'][$timeline] as $key => $value)
@@ -322,7 +325,7 @@
                         ]
                     },
                     {
-                        label: 'Total Reach (Instant Article)',
+                        label: '{{ $conversion == 'sum'? 'Total' : 'Average' }} Reach (Instant Article)',
                         borderColor: 'orange',
                         data: [
                             @foreach($iAStats['graph']['shares'][$timeline] as $key => $value)
@@ -340,7 +343,7 @@
                 ],
                 datasets: [
                     {
-                        label: 'Total Comments (Video)',
+                        label: '{{ $conversion == 'sum'? 'Total' : 'Average' }} Comments (Video)',
                         borderColor: 'purple',
                         data: [
                             @foreach($videoStats['graph']['comments'][$timeline] as $key => $value)
@@ -349,7 +352,7 @@
                         ]
                     },
                     {
-                        label: 'Total Comments (Link)',
+                        label: '{{ $conversion == 'sum'? 'Total' : 'Average' }} Comments (Link)',
                         borderColor: '#d81b60',
                         data: [
                             @foreach($linkStats['graph']['comments'][$timeline] as $key => $value)
@@ -358,7 +361,7 @@
                         ]
                     },
                     {
-                        label: 'Total Comments (Instant Article)',
+                        label: '{{ $conversion == 'sum'? 'Total' : 'Average' }} Comments (Instant Article)',
                         borderColor: 'orange',
                         data: [
                             @foreach($iAStats['graph']['comments'][$timeline] as $key => $value)
