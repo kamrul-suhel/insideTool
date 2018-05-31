@@ -27,7 +27,11 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
 Route::middleware('auth')->group(function() {
     Route::get('/', 'HomeController@index');
+
+    Route::resource('overview', 'OverviewController')->only(['index', 'show']);
+
     Route::resource('pages', 'PageController')->only(['index', 'show']);
+
     Route::resource('posts', 'PostController')->only(['show']);
     Route::get('posts/{post}/snapshots/{type}/{birth?}', 'PostController@jsonSnapshots');
 

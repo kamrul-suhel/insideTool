@@ -16,6 +16,7 @@
                         <th>#</th>
                         <th>Name</th>
                         <th>Facebook ID</th>
+                        <th>Overview</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -24,6 +25,7 @@
                             <td>{{ $page->id }}</td>
                             <td><a href="pages/{{$page->id}}">{{ $page->name }}</a></td>
                             <td>{{ $page->facebook_id }}</td>
+                            <td><a href="{{ route('overview.show', ['id' => $page->id]) }}" class=""><i class="glyphicon glyphicon-stats"></i></a></td>
                         </tr>
                     @endforeach
                 </tbody>

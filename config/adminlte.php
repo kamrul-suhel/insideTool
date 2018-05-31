@@ -150,6 +150,7 @@ return [
 
     'plugins' => [
         'datatables' => true,
+        'chartjs' => true,
         'select2'    => true,
     ],
 ];

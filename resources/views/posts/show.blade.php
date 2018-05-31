@@ -89,7 +89,7 @@
                     <div class="info-box">
                         <span class="info-box-icon bg-aqua"><i class="fa fa-thumbs-up"></i></span>
                         <div class="info-box-content">
-                        <span class="info-box-text"><abbr title="Likes per minute">LPM</abbr> (Lifetime)</span>
+                            <span class="info-box-text"><abbr title="Likes per minute">LPM</abbr> (Lifetime)</span>
                             <span class="info-box-number info-box-number-big 
                                 @if ($liveLatest->likespm_lifetime > $averages->get("likes_perminute_{$post->type}_lifetime")->average)
                                     text-green 
