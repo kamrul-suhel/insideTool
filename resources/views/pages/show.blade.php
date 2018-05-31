@@ -206,7 +206,7 @@
                         <span class="badge @if ($iaFilter) bg-aqua @else bg-yellow @endif video-label">
                             <a href="{{ route('pages.show', ['id' => $pageId, 'ia' => true, 'creator' => \Request::get('creator'), 'label' => \Request::get('label'), 'day' => \Request::get('day'), 'from' => $from->format('Y-m-d'), 'to' => $to->format('Y-m-d')]) }}">Instant Articles</a>
                         </span>
-                        || With the label:
+                        || or video with label:
                         @foreach ($labels as $label)
                             <span class="badge @if ($labelFilter && $label->id == $labelFilter->id) bg-aqua @else bg-gray @endif video-label">
                                 <a href="{{ route('pages.show', ['id' => $pageId, 'label' => $label->id, 'ia' => \Request::get('ia'), 'creator' => \Request::get('creator'), 'day' => \Request::get('day'), 'type' => \Request::get('type'), 'from' => $from->format('Y-m-d'), 'to' => $to->format('Y-m-d')]) }}">{{$label->label}}</a>

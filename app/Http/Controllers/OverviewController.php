@@ -14,10 +14,12 @@ class OverviewController extends Controller
         $videoStats,
         $linkStats,
         $iAStats,
+        $videoLabelTotals,
         $timeline,
         $created_at,
         $conversion,
         $timeUnit,
+        $videoMetric,
         $metric,
         $metrics = ['reach', 'reactions', 'comments', 'shares'];
 
@@ -53,6 +55,7 @@ class OverviewController extends Controller
         $this->timeline = 'month';
         $this->timeUnit = 'hour';
         $this->metric = 'reach';
+        $this->videoMetric = 'reach';
         $this->created_at = Carbon::today()->startOfMonth();
 
         if(request()->has('timeline')) {
@@ -68,6 +71,10 @@ class OverviewController extends Controller
             $this->metric = request()->get('metric');
         }
 
+        if(request()->has('video_metric')) {
+            $this->videoMetric = request()->get('video_metric');
+        }
+
         if(request()->has('conversion')) {
             $this->conversion = request()->get('conversion');
         }
@@ -78,6 +85,7 @@ class OverviewController extends Controller
         $this->getLinkStats($id);
         $this->getIAStats($id);
         $this->getGraphStats($id);
+        $this->getVideoLabels($id);
 
         return view('overview.show')
             ->with('page', $this->pages)
@@ -85,7 +93,9 @@ class OverviewController extends Controller
             ->with('linkStats', $this->linkStats)
             ->with('timeline', $this->timeline)
             ->with('iAStats', $this->iAStats)
+            ->with('videoLabelTotals', $this->videoLabelTotals)
             ->with('metric', $this->metric)
+            ->with('videoMetric', $this->videoMetric)
             ->with('conversion', $this->conversion)
             ->with('unit', $this->timeUnit);
     }
@@ -103,6 +113,9 @@ class OverviewController extends Controller
         }
         if($this->timeline == 'month') {
             $this->created_at = Carbon::today()->startOfMonth();
+        }
+        if($this->timeline == 'all_time') {
+            $this->created_at = '2018-02-28 00:00:00';
         }
     }
 
@@ -154,7 +167,6 @@ class OverviewController extends Controller
      */
     public function getGraphStats($id)
     {
-
         $this->videoStats['graph']['reach'][$this->timeline] = DB::table('posts')->where('page_id', $id)->select(DB::raw($this->conversion.'(reach) as total'), 'posted')->where('type', 'video')->where('created_at', '>', $this->created_at)->groupBy(DB::raw($this->timeUnit.'(posted)'))->orderBy('posted', 'ASC')->pluck('total', 'posted');
         $this->linkStats['graph']['reach'][$this->timeline] = DB::table('posts')->where('page_id', $id)->select(DB::raw($this->conversion.'(reach) as total'), 'posted')->where('type', 'link')->where('created_at', '>',$this->created_at)->groupBy(DB::raw($this->timeUnit.'(posted)'))->orderBy('posted', 'ASC')->pluck('total', 'posted');
         $this->iAStats['graph']['reach'][$this->timeline] = DB::table('posts')->where('page_id', $id)->select(DB::raw($this->conversion.'(reach) as total'), 'posted')->where('type', 'link')->where('instant_article', 1)->where('created_at', '>', $this->created_at)->groupBy(DB::raw($this->timeUnit.'(posted)'))->pluck('total', 'posted');
@@ -170,9 +182,17 @@ class OverviewController extends Controller
         $this->videoStats['graph']['comments'][$this->timeline] = DB::table('posts')->where('page_id', $id)->select(DB::raw($this->conversion.'(comments) as total'), 'posted')->where('type', 'video')->where('created_at', '>', $this->created_at)->groupBy(DB::raw($this->timeUnit.'(posted)'))->orderBy('posted', 'ASC')->pluck('total', 'posted');
         $this->linkStats['graph']['comments'][$this->timeline] = DB::table('posts')->where('page_id', $id)->select(DB::raw($this->conversion.'(comments) as total'), 'posted')->where('type', 'link')->where('created_at', '>', $this->created_at)->groupBy(DB::raw($this->timeUnit.'(posted)'))->orderBy('posted', 'ASC')->pluck('total', 'posted');
         $this->iAStats['graph']['comments'][$this->timeline] = DB::table('posts')->where('page_id', $id)->select(DB::raw($this->conversion.'(comments) as total'), 'posted')->where('type', 'link')->where('instant_article', 1)->where('created_at', '>', $this->created_at)->groupBy(DB::raw($this->timeUnit.'(posted)'))->orderBy('posted', 'ASC')->pluck('total', 'posted');
-
-
     }
 
+    public function getVideoLabels($id)
+    {
+        $query = __('metrics.video_labels_total', ['id' => $id, 'created_at' => $this->created_at]);
+        $result = \DB::select($query);
+        $this->videoLabelTotals = $result;
 
+        $query = __('metrics.video_label_posts_compare', ['id' => $id, 'created_at' => $this->created_at, 'conversion' => $this->conversion, 'metric' => $this->videoMetric]);
+        $result = \DB::select($query);
+        $this->videoLabelTotals = $result;
+    }
 }
+

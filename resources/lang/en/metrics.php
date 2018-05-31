@@ -222,4 +222,28 @@ return [
                 post_id) posts
         GROUP BY
             dateposted) daily",
+
+    'video_labels_total' => "
+        select count(posts.id) as total, video_labels.label
+        from posts, post_video_label, video_labels
+        where posts.id = post_video_label.post_id
+        and video_labels.id = post_video_label.video_label_id
+        and posts.created_at > ':created_at'
+        and posts.type = 'video'
+        and posts.page_id = :id
+        group by video_labels.label
+        order by total DESC;
+        ",
+
+    'video_label_posts_compare' => "
+        select :conversion(posts.:metric) as total, count(posts.id) as video_total, video_labels.label
+        from posts, post_video_label, video_labels
+        where posts.id = post_video_label.post_id
+        and video_labels.id = post_video_label.video_label_id
+        and posts.created_at > ':created_at'
+        and posts.type = 'video'
+        and posts.page_id = :id
+        group by video_labels.label
+        order by total DESC;
+    ",
 ];

@@ -11,12 +11,13 @@
     <div class="row">
 
         <div class="col-lg-12 text-center">
-            <a href="{{ request()->fullUrlWithQuery(["timeline"=> 'today'])  }}" class="btn btn-lg btn-primary {{ isset($timeline) && $timeline == 'today'? 'active' : '' }}">Today</a>
-            <a href="{{ request()->fullUrlWithQuery(["timeline"=> 'week']) }}"  class="btn btn-lg btn-primary {{ isset($timeline) && $timeline == 'week'? 'active' : '' }} ">This Week</a>
-            <a href="{{ request()->fullUrlWithQuery(["timeline"=> 'month'])  }}" class="btn btn-lg btn-primary {{ isset($timeline) && $timeline == 'month'? 'active' : '' }}">This Month</a>
+            <a href="{{ request()->fullUrlWithQuery(["timeline"=> 'today'])  }}" class="btn  btn-primary {{ isset($timeline) && $timeline == 'today'? 'active' : '' }}">Today</a>
+            <a href="{{ request()->fullUrlWithQuery(["timeline"=> 'week']) }}"  class="btn  btn-primary {{ isset($timeline) && $timeline == 'week'? 'active' : '' }} ">This Week</a>
+            <a href="{{ request()->fullUrlWithQuery(["timeline"=> 'month'])  }}" class="btn  btn-primary {{ isset($timeline) && $timeline == 'month'? 'active' : '' }}">This Month</a>
+            <a href="{{ request()->fullUrlWithQuery(["timeline"=> 'all_time'])  }}" class="btn  btn-primary {{ isset($timeline) && $timeline == 'all_time'? 'active' : '' }}">All Time</a>
             ||
-            <a href="{{ request()->fullUrlWithQuery(["conversion"=> 'sum']) }}" class="btn btn-lg btn-primary {{ isset($conversion) && $conversion == 'sum'? 'active' : '' }}">Total</a>
-            <a href="{{ request()->fullUrlWithQuery(["conversion"=> 'avg']) }}"  class="btn btn-lg btn-primary {{ isset($conversion) && $conversion == 'avg'? 'active' : '' }} ">Average</a>
+            <a href="{{ request()->fullUrlWithQuery(["conversion"=> 'sum']) }}" class="btn  btn-primary {{ isset($conversion) && $conversion == 'sum'? 'active' : '' }}">Total</a>
+            <a href="{{ request()->fullUrlWithQuery(["conversion"=> 'avg']) }}"  class="btn  btn-primary {{ isset($conversion) && $conversion == 'avg'? 'active' : '' }} ">Average</a>
             <hr>
         </div>
 
@@ -152,45 +153,73 @@
         </div>
 
         {{-- Graph --}}
-        <div class="col-lg-12">
+        <div class="col-lg-6">
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title"> This {{$timeline == 'today'? 'Day': ucwords($timeline)}}</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     </div>
-                    <div>
-                        <hr>
-                        <div class="col-lg-12">
-                            <div class="col-lg-12 col-lg-offset-5">
-                                <div class="btn-toolbar">
-                                    <div class="dropdown">
-                                        <button class="btn btn-lg btn-default dropdown-toggle" type="button" data-toggle="dropdown">Viewing: {{ ucwords($metric) ?? 'Select Metric'}} <span class="caret"></span></button>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="{{ request()->fullUrlWithQuery(["metric"=> 'reach']) }}">Reach</a></li>
-                                            <li><a href="{{ request()->fullUrlWithQuery(["metric"=> 'reactions']) }}">Reactions</a></li>
-                                            <li><a href="{{ request()->fullUrlWithQuery(["metric"=> 'comments']) }}">Comments</a></li>
-                                            <li><a href="{{ request()->fullUrlWithQuery(["metric"=> 'shares']) }}">Shares</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="dropbox"></div>
-                                    <div class="dropdown">
-                                        <button class="btn btn-lg btn-default dropdown-toggle" type="button" data-toggle="dropdown">By: {{ ucwords($unit) ?? 'Select Unit'}} <span class="caret"></span></button>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="{{ request()->fullUrlWithQuery(["unit"=> 'hour']) }}">Hour</a></li>
-                                            <li><a href="{{ request()->fullUrlWithQuery(["unit"=> 'day']) }}">Day</a></li>
-                                            <li><a href="{{ request()->fullUrlWithQuery(["unit"=> 'week']) }}">Week</a></li>
-                                        </ul>
-                                    </div>
+                </div>
+                <div class="box-body">
+                    <hr>
+                    <div class="col-lg-12">
+                        <div class="col-lg-12 col-lg-offset-5">
+                            <div class="btn-toolbar">
+                                <div class="dropdown">
+                                    <button class="btn  btn-default dropdown-toggle" type="button" data-toggle="dropdown">Viewing: {{ ucwords($metric) ?? 'Select Metric'}} <span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ request()->fullUrlWithQuery(["metric"=> 'reach']) }}">Reach</a></li>
+                                        <li><a href="{{ request()->fullUrlWithQuery(["metric"=> 'reactions']) }}">Reactions</a></li>
+                                        <li><a href="{{ request()->fullUrlWithQuery(["metric"=> 'comments']) }}">Comments</a></li>
+                                        <li><a href="{{ request()->fullUrlWithQuery(["metric"=> 'shares']) }}">Shares</a></li>
+                                    </ul>
+                                </div>
+                                <div class="dropbox"></div>
+                                <div class="dropdown">
+                                    <button class="btn  btn-default dropdown-toggle" type="button" data-toggle="dropdown">By: {{ ucwords($unit) ?? 'Select Unit'}} <span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ request()->fullUrlWithQuery(["unit"=> 'hour']) }}">Hour</a></li>
+                                        <li><a href="{{ request()->fullUrlWithQuery(["unit"=> 'day']) }}">Day</a></li>
+                                        <li><a href="{{ request()->fullUrlWithQuery(["unit"=> 'week']) }}">Week</a></li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="box-body">
                     <div class="row">
                         <canvas id="lineChartCanvas" class="chart" style="padding:50px;"></canvas>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Video Graphs--}}
+        <div class="col-lg-6">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title"> Video Label Stats</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="col-lg-12">
+                        <div class="col-lg-12 col-lg-offset-5">
+                            <div class="btn-toolbar">
+                                <div class="dropdown">
+                                    <button class="btn  btn-default dropdown-toggle" type="button" data-toggle="dropdown">Viewing: {{ ucwords($videoMetric) ?? 'Select Metric'}} <span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ request()->fullUrlWithQuery(["video_metric"=> 'reach']) }}">Reach</a></li>
+                                        <li><a href="{{ request()->fullUrlWithQuery(["video_metric"=> 'reactions']) }}">Reactions</a></li>
+                                        <li><a href="{{ request()->fullUrlWithQuery(["video_metric"=> 'comments']) }}">Comments</a></li>
+                                        <li><a href="{{ request()->fullUrlWithQuery(["video_metric"=> 'shares']) }}">Shares</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <canvas id="videoTotalsCanvas" class="chart" style="padding:50px;"></canvas>
                 </div>
             </div>
         </div>
@@ -202,32 +231,27 @@
     <script>
         $(function () {
 
-            var areaChartOptions = {
-                showScale: true,  //Boolean - Whether grid lines are shown across the chart
-                scaleShowGridLines: false,  //String - Colour of the grid lines
-                scaleGridLineColor: 'rgba(0,0,0,.05)',  //Number - Width of the grid lines
-                scaleGridLineWidth: 1,  //Boolean - Whether to show horizontal lines (except X axis)
-                scaleShowHorizontalLines: true,  //Boolean - Whether to show vertical lines (except Y axis)
-                scaleShowVerticalLines: true,  //Boolean - Whether the line is curved between points
-                bezierCurve: true,  //Number - Tension of the bezier curve between points
-                bezierCurveTension: 0.3,  //Boolean - Whether to show a dot for each point
-                pointDot: true,  //Number - Radius of each point dot in pixels
-                pointDotRadius: 4,  //Number - Pixel width of point dot stroke
-                pointDotStrokeWidth: 1,  //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-                pointHitDetectionRadius: 20,  //Boolean - Whether to show a stroke for datasets
-                datasetStroke: true,  //Number - Pixel width of dataset stroke
-                datasetStrokeWidth: 2,  //Boolean - Whether to fill the dataset with a color
-                datasetFill: true,  //String - A legend template
-                maintainAspectRatio: true,  //Boolean - whether to make the chart responsive to window resizing
-                responsive: true,
+            let areaChartOptions = {
                 title: {
                     display: false,
                     text: '{{ ucwords($metric) }} by the {{$timeline == 'today'? 'Day': ucwords($unit)}}',
                     fontSize: 25,
+                },
+                scaleShowValues: true,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            autoSkip: false
+                        }
+                    }]
                 }
             };
-
-            var reachData = {
+            let reachData = {
                 labels: [
                     @foreach($videoStats['graph']['reach'][$timeline] as $key => $value)
                         "[{{date('d-m-y - H:m', strtotime($key))}}]",
@@ -263,7 +287,7 @@
                     },
                 ]
             };
-            var reactionData = {
+            let reactionData = {
                 labels: [
                     @foreach($videoStats['graph']['reactions'][$timeline] as $key => $value)
                         "[{{date('d-m-y - H:m', strtotime($key))}}]",
@@ -299,7 +323,7 @@
                     },
                 ]
             };
-            var sharesData = {
+            let sharesData = {
                 labels: [
                     @foreach($videoStats['graph']['shares'][$timeline] as $key => $value)
                         "[{{date('d-m-y - H:m', strtotime($key))}}]",
@@ -335,7 +359,7 @@
                     },
                 ]
             };
-            var commentsData = {
+            let commentsData = {
                 labels: [
                     @foreach($videoStats['graph']['comments'][$timeline] as $key => $value)
                         "[{{date('d-m-y - H:m', strtotime($key))}}]",
@@ -371,24 +395,52 @@
                     },
                 ]
             };
+            let videoTotalData = {
+                labels: [
+                    @foreach($videoLabelTotals as $total)
+                        '{{ $total->label }} ({{ $total->video_total }})',
+                    @endforeach
+                ],
+                datasets: [
+                    {
+                        backgroundColor: [
+                            @foreach($videoLabelTotals as $total)
+                             "#777",
+                            @endforeach
+                        ],
+                        label: 'Most Popular Videos by Label',
+                        data: [
+                            @foreach($videoLabelTotals as $total)
+                                '{{ $total->total }}',
+                            @endforeach
+                        ]
+                    },
+                ]
+            };
 
-            var lineChartCanvas = $('#lineChartCanvas').get(0).getContext('2d');
+            let lineChartCanvas = $('#lineChartCanvas').get(0).getContext('2d');
+            let videoTotalsCanvas = $('#videoTotalsCanvas').get(0).getContext('2d');
 
             function drawChart(type)
             {
-                var data;
-                if(type == 'reach') data = reachData;
+                let data;
+                if(type == 'reach')     data = reachData;
                 if(type == 'reactions') data = reactionData;
-                if(type == 'shares') data = sharesData;
-                if(type == 'comments') data = commentsData;
+                if(type == 'shares')    data = sharesData;
+                if(type == 'comments')  data = commentsData;
 
-                var graph_type = new Chart(lineChartCanvas, {
+                let graph = new Chart(lineChartCanvas, {
                     type: 'line',
-
                     data: data,
                     options: areaChartOptions,
                 });
-            }
+            };
+
+            let videoTotalGraph = new Chart(videoTotalsCanvas, {
+                type: 'bar',
+                data: videoTotalData,
+                options: areaChartOptions,
+            });
 
             window.onload = function() {
                 drawChart('{{$metric}}');
