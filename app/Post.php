@@ -23,7 +23,7 @@ class Post extends Model
 
     public $exportHeadings = [
         'facebook_id','published by', 'link', 'post message',
-        'posted', 'deleted', 'reach', 'reactions', 'shares', 'like', 'comments', 'link clicks',
+        'posted', 'tag(s)', 'deleted', 'reach', 'reactions', 'shares', 'like', 'comments', 'link clicks',
         'engagement', 'type', 'GA:avg page time', 'GA:page views', 'GA:avg load time (sec)',
         'GA:bounce rate', '% of Engagement (eng/total eng)'
     ];
