@@ -28,7 +28,7 @@
         <div class="col-lg-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Overall Statistics between {{ date('D M Y', strtotime($from)) }} and {{ date('D M Y', strtotime($to)) }}</h3>
+                    <h3 class="box-title">Overall Statistics between {{ date('dS M Y', strtotime($from)) }} and {{ date('dS M Y', strtotime($to)) }}</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     </div>
