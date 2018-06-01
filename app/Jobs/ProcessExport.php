@@ -6,6 +6,7 @@ use App\Classes\Export;
 use App\Notifications\EmailExport;
 use App\User;
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -44,19 +45,21 @@ class ProcessExport implements ShouldQueue
         if($this->email) {
 
             $emails = [
-                ['Hemm', 'hemmit.kerrai@unilad.co.uk'],
-                ['Kojo', 'kojo@unilad.co.uk'],
-                ['Russell', 'russell@unilad.co.uk'],
+                ['name'=> 'Hemm', 'email' => 'hemmit.kerrai@unilad.co.uk'],
+                ['name'=> 'Kojo', 'email' => 'kojo@unilad.co.uk'],
+                ['name'=> 'Russell', 'email' => 'russell@unilad.co.uk'],
             ];
 
             foreach ($emails as $email) {
 
                 $user = new User();
-                $user->name = $email[0];
-                $user->email = $email[1];
+                $user->name = $email['name'];
+                $user->email = $email['email'];
 
                 Notification::send($user, new EmailExport($filename));
             }
+
+            Log::info('emails sent');
         }
 
 

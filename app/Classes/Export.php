@@ -179,6 +179,7 @@ class Export
             $post->link,
             $post->message,
             $post->posted,
+            implode(', ', $post->videoLabels()->pluck('label')->toArray()),
             $post->deleted_at,
             $post->reach,
             $post->reactions,

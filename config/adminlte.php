@@ -71,7 +71,7 @@ return [
     |
     */
 
-    'collapse_sidebar' => false,
+    'collapse_sidebar' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -108,17 +108,11 @@ return [
     */
 
     'menu' => [
-        'FACEBOOK',
+        '',
         [
             'text'        => 'Pages',
             'url'         => '/pages',
             'icon'        => 'book',
-            'label_color' => 'success',
-        ],
-        [
-            'text'        => 'Posts',
-            'url'         => '/posts',
-            'icon'        => 'thumb-tack',
             'label_color' => 'success',
         ],
     ],
@@ -156,6 +150,7 @@ return [
 
     'plugins' => [
         'datatables' => true,
+        'chartjs' => true,
         'select2'    => true,
     ],
 ];

@@ -55,7 +55,7 @@
                                         @if ($post->creator)
                                             <tr>
                                                 <th>Posted by</th>
-                                                <td><a href="{{ route('posts.index', ['creator' => $post->creator->id]) }}">{{ $post->creator->name }}</a></td>
+                                                <td><a href="{{ route('pages.show', ['id' => $post->page_id, 'creator' => $post->creator->id]) }}">{{ $post->creator->name }}</a></td>
                                             </tr>
                                         @endif
                                         <tr>
@@ -71,7 +71,7 @@
                                                 <th>Labels</th>
                                                 <td>
                                                     @foreach ($post->videoLabels as $label)
-                                                        <span class="badge bg-aqua video-label"><a href="{{ route('posts.index', ['label' => $label->id]) }}">{{$label->label}}</a></span>
+                                                        <span class="badge bg-aqua video-label"><a href="{{ route('pages.show', ['id' => $post->page_id, 'label' => $label->id]) }}">{{$label->label}}</a></span>
                                                     @endforeach
                                                 </td>
                                             </tr>
@@ -89,7 +89,7 @@
                     <div class="info-box">
                         <span class="info-box-icon bg-aqua"><i class="fa fa-thumbs-up"></i></span>
                         <div class="info-box-content">
-                        <span class="info-box-text"><abbr title="Likes per minute">LPM</abbr> (Lifetime)</span>
+                            <span class="info-box-text"><abbr title="Likes per minute">LPM</abbr> (Lifetime)</span>
                             <span class="info-box-number info-box-number-big 
                                 @if ($liveLatest->likespm_lifetime > $averages->get("likes_perminute_{$post->type}_lifetime")->average)
                                     text-green 
