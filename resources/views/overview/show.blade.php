@@ -181,7 +181,7 @@
                             </div>
                         </div>
                     </div>
-                    <canvas id="videoTotalsCanvas" class="chart" style="padding:50px;"></canvas>
+                    <canvas id="videoTotalsCanvas" class="chart"></canvas>
                 </div>
             </div>
         </div>
@@ -204,7 +204,7 @@
                             </div>
                         </div>
                     </div>
-                    <canvas id="videoYesterdayTotalsCanvas" class="chart" style="padding:50px;"></canvas>
+                    <canvas id="videoYesterdayTotalsCanvas" class="chart"></canvas>
                 </div>
             </div>
         </div>
@@ -252,6 +252,25 @@
             </div>
         </div>
 
+        {{-- Top Performers --}}
+        {{--<div class="col-lg-12">--}}
+            {{--<div class="box">--}}
+                {{--<div class="box-header">--}}
+                    {{--<h3 class="box-title"> Creator Metrics </h3>--}}
+                    {{--<div class="box-tools pull-right">--}}
+                        {{--<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>--}}
+                        {{--<button type="button" class="btn btn-primary download-canvas" data-canvas="lineChartCanvas"><i class="fa fa-download"></i></button>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+                {{--<div class="box-body">--}}
+                    {{--<div class="row">--}}
+                        {{--<canvas id="creatorStatsCanvas" class="chart" style="padding:50px;"></canvas>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+
+
     </div>
 
 @stop
@@ -263,7 +282,6 @@
     <!-- Include Date Range Picker -->
     <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css"/>
-
 
     <script>
         $('input[name="rangepicker"]').daterangepicker({
@@ -327,7 +345,7 @@
                         ]
                     },
                     {
-                        label: '{{ $conversion == 'sum'? 'Total' : 'Average' }} Reach (Link)',
+                        label: '{{ $conversion == 'sum'? 'Total' : 'Average' }} {{ ucwords($metric) }} (Link)',
                         borderColor: '#d81b60',
                         data: [
                             @foreach($linkStats['graph'][$metric][0] as $key => $value)
@@ -336,7 +354,7 @@
                         ]
                     },
                     {
-                        label: '{{ $conversion == 'sum'? 'Total' : 'Average' }} Reach (Instant Article)',
+                        label: '{{ $conversion == 'sum'? 'Total' : 'Average' }} {{ ucwords($metric) }} (Instant Article)',
                         borderColor: 'orange',
                         data: [
                             @foreach($iAStats['graph'][$metric][0] as $key => $value)
@@ -392,17 +410,56 @@
                 ]
             };
 
+            {{--let creatorStatsData = {--}}
+                {{--labels: [--}}
+                    {{--@foreach($creatorStats as $total)--}}
+                        {{--'{{ $total->name }} ({{ $total->posts }} posts)',--}}
+                    {{--@endforeach--}}
+                {{--],--}}
+                {{--datasets: [{--}}
+                    {{--label: 'Reach',--}}
+                    {{--backgroundColor: '#57d3ff',--}}
+                    {{--borderWidth: 1,--}}
+                    {{--data: [--}}
+                        {{--@foreach($creatorStats as $total)--}}
+                            {{--'{{ $total->reach }}',--}}
+                        {{--@endforeach--}}
+                    {{--]--}}
+                {{--}, {--}}
+                    {{--label: 'Reactions',--}}
+                    {{--backgroundColor: '#29b698',--}}
+                    {{--borderWidth: 1,--}}
+                    {{--data: [--}}
+                        {{--@foreach($creatorStats as $total)--}}
+                            {{--'{{ $total->reactions }}',--}}
+                        {{--@endforeach--}}
+                    {{--]--}}
+                {{--}, {--}}
+                    {{--label: 'Shares',--}}
+                    {{--backgroundColor: '#7358ee',--}}
+                    {{--borderWidth: 1,--}}
+                    {{--data: [--}}
+                        {{--@foreach($creatorStats as $total)--}}
+                            {{--'{{ $total->shares }}',--}}
+                        {{--@endforeach--}}
+                    {{--]--}}
+                {{--}, {--}}
+                    {{--label: 'Comments',--}}
+                    {{--backgroundColor: '#eea559',--}}
+                    {{--borderWidth: 1,--}}
+                    {{--data: [--}}
+                        {{--@foreach($creatorStats as $total)--}}
+                            {{--'{{ $total->comments }}',--}}
+                        {{--@endforeach--}}
+                    {{--]--}}
+                {{--}]--}}
+
+            {{--};--}}
+
             let lineChartCanvas = $('#lineChartCanvas').get(0).getContext('2d');
             let videoTotalsCanvas = $('#videoTotalsCanvas').get(0).getContext('2d');
             let videoYesterdayTotalsCanvas = $('#videoYesterdayTotalsCanvas').get(0).getContext('2d');
-
-            function drawChart(type) {
-                let graph = new Chart(lineChartCanvas, {
-                    type: 'line',
-                    data: graphData,
-                    options: areaChartOptions,
-                });
-            };
+            // let creatorStatsCanvas = $('#creatorStatsCanvas').get(0).getContext('2d');
 
             new Chart(videoTotalsCanvas, {
                 type: 'bar',
@@ -415,9 +472,18 @@
                 options: areaChartOptions,
             });
 
-            window.onload = function () {
-                drawChart('{{$metric}}');
-            }
+            new Chart(lineChartCanvas, {
+                type: 'line',
+                data: graphData,
+                options: areaChartOptions,
+            });
+
+            // new Chart(creatorStatsCanvas, {
+            //     type: 'bar',
+            //     data: creatorStatsData,
+            //     options: areaChartOptions,
+            // });
+
 
         });
     </script>
