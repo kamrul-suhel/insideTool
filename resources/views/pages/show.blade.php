@@ -376,7 +376,6 @@
     <script>
     $('#posts-table').dataTable({
         "paging": false,
-        "order": [['1', 'desc']]
     });
     $('input[name="rangepicker"]').daterangepicker({
         maxDate: moment(),

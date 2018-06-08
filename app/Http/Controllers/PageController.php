@@ -60,7 +60,7 @@ class PageController extends Controller
      */
     public function index()
     {
-        $pages = $this->page->all();
+        $pages = $this->page;
         return view('pages.index', ['pages' => $pages]);
     }
 
@@ -79,7 +79,7 @@ class PageController extends Controller
 
         $page = $this->page->find($id);
 
-        $this->query = $page->posts();
+        $this->query = $page->posts()->orderBy('posted', 'DESC');
 
         $this->getLabels();
         $this->getCreator();
