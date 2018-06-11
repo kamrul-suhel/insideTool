@@ -64,7 +64,7 @@ class GetPostStats extends Command
                 $post->save();
 
             } catch (\Exception $e) {
-                Log::info(print_r($e->getMessage()));
+                Log::info(print_r('GA quota reached'));
             }
         }
     }

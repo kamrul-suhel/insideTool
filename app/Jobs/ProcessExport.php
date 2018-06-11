@@ -45,9 +45,11 @@ class ProcessExport implements ShouldQueue
         if($this->email) {
 
             $emails = [
-                ['name'=> 'Hemm', 'email' => 'hemmit.kerrai@unilad.co.uk'],
-                ['name'=> 'Kojo', 'email' => 'kojo@unilad.co.uk'],
-                ['name'=> 'Russell', 'email' => 'russell@unilad.co.uk'],
+                ['name'=> 'Hemm',       'email' =>     'hemmit.kerrai@unilad.co.uk'],
+                ['name'=> 'Kojo',       'email' =>     'kojo@unilad.co.uk'],
+                ['name'=> 'Russell',    'email' =>     'russell@unilad.co.uk'],
+                ['name'=> 'Ian',        'email' =>     'ian@unilad.co.uk'],
+                ['name'=> 'John',       'email' =>     'john@unilad.co.uk'],
             ];
 
             foreach ($emails as $email) {
@@ -56,7 +58,7 @@ class ProcessExport implements ShouldQueue
                 $user->name = $email['name'];
                 $user->email = $email['email'];
 
-                Notification::send($user, new EmailExport($filename));
+                Notification::send($user, new EmailExport($filename, $user));
             }
 
             Log::info('emails sent');
