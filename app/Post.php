@@ -73,6 +73,14 @@ class Post extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'facebook_id', 'facebook_id');
+    }
+
+    /**
      * Static method to set hidden fields when serialising
      */
     public static function setHiddenFields($fields = []) {

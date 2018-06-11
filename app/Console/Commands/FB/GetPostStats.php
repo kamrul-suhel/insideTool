@@ -3,6 +3,7 @@
 namespace App\Console\Commands\FB;
 
 use App\Classes\Analytics;
+use App\Comment;
 use Illuminate\Console\Command;
 use App\Facebook;
 use App\PostStatSnapshot;
@@ -107,17 +108,30 @@ class GetPostStats extends Command
                     $snapshot->angrys = $response->getDecodedBody()["summary"]["total_count"];
                     $reactions += $snapshot->angrys;
                 }
-                
+
                 $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/comments/?summary=1', env('FACEBOOK_ACCESS_TOKEN'));
                 // Comment count
                 if ($response) {
-                    $comments = $response->getDecodedBody()["summary"]["total_count"];
-                    $snapshot->comments = $comments;
+                    $commentsTotal = $response->getDecodedBody()["summary"]["total_count"];
+                    $snapshot->comments = $commentsTotal;
                 }
 
-                if ($comments > 0) {
-                    $post->comments = $comments;
+                if ($commentsTotal > 0) {
+                    $post->comments = $commentsTotal;
                     $post->save();
+
+                    $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/comments/?limit=500', env('FACEBOOK_ACCESS_TOKEN'));
+
+                    $comments = $response->getDecodedBody()['data'];
+
+                    foreach ($comments as $comment) {
+                        Comment::updateOrCreate([
+                            'facebook_id' => $postId,
+                            'comment_id' =>  $comment['id'],
+                            'comment' =>     $comment['message'],
+                            'created_at' =>  date('Y-m-d h:i:s', strtotime($comment['created_time'])),
+                        ]);
+                    }
                 }
 
                 if ($reactions > 0) {
