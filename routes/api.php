@@ -13,6 +13,10 @@ use Illuminate\Http\Request;
 |
 */
 
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('v1/validate_url', ['uses' => 'Api\v1\PostController@validateUrl', 'as' => 'post.validatePost']);
+Route::post('v1/get_post', ['uses' => 'Api\v1\PostController@getPost', 'as' => 'post.getPost']);
