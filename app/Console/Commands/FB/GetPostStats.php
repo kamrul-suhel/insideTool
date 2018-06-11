@@ -120,7 +120,7 @@ class GetPostStats extends Command
                     $post->comments = $commentsTotal;
                     $post->save();
 
-                    $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/comments/?limit=500', env('FACEBOOK_ACCESS_TOKEN'));
+                    $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/comments/?limit=500&order=reverse_chronological', env('FACEBOOK_ACCESS_TOKEN'));
 
                     $comments = $response->getDecodedBody()['data'];
 
