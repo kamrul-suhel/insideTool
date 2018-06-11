@@ -9,6 +9,10 @@ class PostController extends Controller
 {
     protected $post;
 
+    /**
+     * PostController constructor.
+     * @param Post $post
+     */
     public function __construct(Post $post)
     {
         $this->middleware('basicAuth');
@@ -60,5 +64,22 @@ class PostController extends Controller
         ];
 
         return response(['data' => $data, 'status' => 'success'], 200);
+    }
+
+    /**
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function getPostComments()
+    {
+        if(!request()->has('post_id')) {
+            return response(['status' => 'failed', 'message' => 'No Video Found'], 200);
+        }
+
+        $postId = request()->get('post_id');
+
+        $post = $this->post->where('facebook_id', $postId)->first();
+
+        return response(['data' => $post->comments()->pluck('comment'), 'status' => 'success'], 200);
+
     }
 }

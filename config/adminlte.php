@@ -115,6 +115,11 @@ return [
             'icon'        => 'book',
             'label_color' => 'success',
         ],
+        [
+            'text'        => 'Overview',
+            'url'         => '/overview',
+            'icon'        => 'bar-chart'
+        ]
     ],
 
     /*

@@ -24,12 +24,9 @@ class BasicAuth
 
         header('Cache-Control: no-cache, must-revalidate, max-age=0');
 
-        $has_supplied_credentials =
-            !(empty($user) && empty($pass));
+        $has_supplied_credentials = !(empty($user) && empty($pass));
 
-        $is_not_authenticated = ( !$has_supplied_credentials
-            || $user!= $AUTH_USER
-            || $pass!= $AUTH_PASS);
+        $is_not_authenticated = ( !$has_supplied_credentials || $user!= $AUTH_USER || $pass!= $AUTH_PASS);
 
         if ($is_not_authenticated) {
             header('HTTP/1.1 401 Authorization Required');

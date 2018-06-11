@@ -60,7 +60,8 @@ class PageController extends Controller
      */
     public function index()
     {
-        $pages = $this->page;
+        $pages = $this->page->all();
+
         return view('pages.index', ['pages' => $pages]);
     }
 
