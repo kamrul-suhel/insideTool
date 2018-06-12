@@ -8,6 +8,7 @@ use App\Post;
 use App\PostStatSnapshot;
 use Facebook\Exceptions\FacebookResponseException;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class GetComments extends Command
 {
@@ -58,12 +59,7 @@ class GetComments extends Command
                     ]);
                 }
             } catch (FacebookResponseException $e) {
-                if ($e->getCode() == 100 && $e->getSubErrorCode() == 33) {
-                    // Post has been deleted
-                    $post->delete();
-                } else {
-                    throw $e;
-                }
+               Log::info('no comments found');
             }
         }
     }
