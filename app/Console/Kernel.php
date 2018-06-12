@@ -30,6 +30,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('stats:updateaverages')->hourly();
 //        $schedule->command('stats:emailstats')->dailyAt('09:00')->timezone('Europe/London');
         $schedule->command('stats:emailstats')->dailyAt('09:40')->timezone('Europe/London');
+
+        $schedule->command('stats:getcomments')->hourly();
     }
 
     /**

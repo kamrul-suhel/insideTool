@@ -3,12 +3,10 @@
 namespace App\Console\Commands\FB;
 
 use App\Classes\Analytics;
-use App\Comment;
 use Illuminate\Console\Command;
 use App\Facebook;
 use App\PostStatSnapshot;
 use App\Post;
-use Illuminate\Support\Facades\Log;
 
 class GetPostStats extends Command
 {
@@ -119,19 +117,6 @@ class GetPostStats extends Command
                 if ($commentsTotal > 0) {
                     $post->comments = $commentsTotal;
                     $post->save();
-
-                    $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/comments/?limit=500&order=reverse_chronological', env('FACEBOOK_ACCESS_TOKEN'));
-
-                    $comments = $response->getDecodedBody()['data'];
-
-                    foreach ($comments as $comment) {
-                        Comment::updateOrCreate([
-                            'facebook_id' => $postId,
-                            'comment_id' =>  $comment['id'],
-                            'comment' =>     $comment['message'],
-                            'created_at' =>  date('Y-m-d h:i:s', strtotime($comment['created_time'])),
-                        ]);
-                    }
                 }
 
                 if ($reactions > 0) {
