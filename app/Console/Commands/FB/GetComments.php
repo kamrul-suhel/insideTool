@@ -42,11 +42,11 @@ class GetComments extends Command
         $api = new Facebook;
         $snapshot = new PostStatSnapshot;
 
-        $posts = Post::all();
+        $posts = Post::orderBy('posted', 'desc')->limit(15)->get();
 
         foreach($posts as $post) {
             try {
-                $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_' . $post->id . '/comments/?limit=250&order=reverse_chronological', env('FACEBOOK_ACCESS_TOKEN'));
+                $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_' . $post->facebook_id . '/comments/?limit=250&order=reverse_chronological', env('FACEBOOK_ACCESS_TOKEN'));
 
                 $comments = $response->getDecodedBody()['data'];
 
