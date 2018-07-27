@@ -244,7 +244,7 @@
         <div class="col-lg-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title"> IA vs Non IA Total </h3>
+                    <h3 class="box-title"> IA vs Non IA Total for the Last Month</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         {{--<button type="button" class="btn btn-primary download-canvas" data-canvas="videoYesterdayTotalsCanvas"><i class="fa fa-download"></i></button>--}}
