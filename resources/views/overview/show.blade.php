@@ -240,6 +240,20 @@
             </div>
         </div>
 
+        {{-- IA non IA comparison --}}
+        <div class="col-lg-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title"> IA vs Non IA Total </h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        {{--<button type="button" class="btn btn-primary download-canvas" data-canvas="videoYesterdayTotalsCanvas"><i class="fa fa-download"></i></button>--}}
+                    </div>
+                    <canvas id="iaNonIaComparisonCanvas" class="chart"></canvas>
+                </div>
+            </div>
+        </div>
+
         {{-- Graph --}}
         <div class="col-lg-12">
             <div class="box">
@@ -440,6 +454,34 @@
                     },
                 ]
             };
+            let iaNonIaComparisonData = {
+                labels: [
+                    @foreach($iaNonIaComparison['non_ia'] as $ia)
+                        "[{{date('d-m-y - H:m', strtotime($ia->posted))}}]",
+                    @endforeach
+
+                ],
+                datasets: [
+                    {
+                        label: 'Non IA Total',
+                        borderColor: 'purple',
+                        data: [
+                            @foreach($iaNonIaComparison['non_ia'] as $ia)
+                                '{{$ia->total}}',
+                            @endforeach
+                        ]
+                    },
+                    {
+                        label: 'IA Total',
+                        borderColor: 'orange',
+                        data: [
+                            @foreach($iaNonIaComparison['ia'] as $ia)
+                                '{{$ia->total}}',
+                            @endforeach
+                        ]
+                    },
+                ]
+            };
 
             {{--let creatorStatsData = {--}}
                 {{--labels: [--}}
@@ -490,6 +532,7 @@
             let lineChartCanvas = $('#lineChartCanvas').get(0).getContext('2d');
             let videoTotalsCanvas = $('#videoTotalsCanvas').get(0).getContext('2d');
             let videoYesterdayTotalsCanvas = $('#videoYesterdayTotalsCanvas').get(0).getContext('2d');
+            let iaNonIaComparisonCanvas = $('#iaNonIaComparisonCanvas').get(0).getContext('2d');
             // let creatorStatsCanvas = $('#creatorStatsCanvas').get(0).getContext('2d');
 
             new Chart(videoTotalsCanvas, {
@@ -506,6 +549,12 @@
             new Chart(lineChartCanvas, {
                 type: 'line',
                 data: graphData,
+                options: areaChartOptions,
+            });
+
+            new Chart(iaNonIaComparisonCanvas, {
+                type: 'bar',
+                data: iaNonIaComparisonData,
                 options: areaChartOptions,
             });
 

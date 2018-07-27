@@ -16,6 +16,7 @@ class OverviewController extends Controller
         $videoStats,
         $linkStats,
         $iAStats,
+        $iaNonIa,
         $videoLabelTotals,
         $videoYesterdayLabelTotals,
         $conversion,
@@ -67,6 +68,7 @@ class OverviewController extends Controller
         $this->getVideoStats($id);
         $this->getLinkStats($id);
         $this->getIAStats($id);
+        $this->iaNonIaComparison($id);
         $this->getGraphStats($id);
         $this->getVideoLabels($id);
         $this->getYesterdayVideoLabels($id);
@@ -79,6 +81,7 @@ class OverviewController extends Controller
             ->with('videoStats', $this->videoStats)
             ->with('linkStats', $this->linkStats)
             ->with('iAStats', $this->iAStats)
+            ->with('iaNonIaComparison', $this->iaNonIa)
             ->with('videoLabelTotals', $this->videoLabelTotals)
             ->with('videoYesterdayLabelTotals', $this->videoYesterdayLabelTotals)
             ->with('metric', $this->metric)
@@ -151,6 +154,13 @@ class OverviewController extends Controller
         foreach($this->metrics as $metric) {
             $this->iAStats[$metric][0] = DB::table('posts')->where('page_id', $id)->select(DB::raw($this->conversion.'('.$metric.') as total'))->where('instant_article', 1)->where('type', 'link')->whereBetween('posted', [$this->from, $this->to])->groupBy('page_id')->pluck('total');
         }
+    }
+
+    public function iaNonIaComparison($id)
+    {
+        $this->iaNonIa = [];
+        $this->iaNonIa['ia'] = $this->pages->posts()->select(DB::raw('count(id) as total, posted'))->where('instant_article', 1)->groupBy(DB::raw('day(posted)'))->get();
+        $this->iaNonIa['non_ia'] = $this->pages->posts()->select(DB::raw('count(id) as total, posted'))->where('instant_article', 0)->groupBy(DB::raw('day(posted)'))->get();
     }
 
     /**
