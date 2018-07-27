@@ -162,8 +162,8 @@ class OverviewController extends Controller
         $to = Carbon::now();
 
         $this->iaNonIa = [];
-        $this->iaNonIa['ia'] = $this->pages->posts()->select(DB::raw('count(id) as total, posted'))->where('instant_article', 1)->whereBetween('posted', [$from, $to])->groupBy(DB::raw('day(posted)'))->get();
-        $this->iaNonIa['non_ia'] = $this->pages->posts()->select(DB::raw('count(id) as total, posted'))->where('instant_article', 0)->whereBetween('posted', [$from, $to])->groupBy(DB::raw('day(posted)'))->get();
+        $this->iaNonIa['ia'] = $this->pages->posts()->select(DB::raw('count(id) as total, posted'))->where('instant_article', 1)->whereBetween('posted', [$from, $to])->groupBy(DB::raw('day(posted)'))->orderBy('posted')->get();
+        $this->iaNonIa['non_ia'] = $this->pages->posts()->select(DB::raw('count(id) as total, posted'))->where('instant_article', 0)->whereBetween('posted', [$from, $to])->groupBy(DB::raw('day(posted)'))->orderBy('posted')->get();
     }
 
     /**
