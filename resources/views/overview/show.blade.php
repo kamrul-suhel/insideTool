@@ -249,7 +249,7 @@
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         {{--<button type="button" class="btn btn-primary download-canvas" data-canvas="videoYesterdayTotalsCanvas"><i class="fa fa-download"></i></button>--}}
                     </div>
-                    <canvas id="iaNonIaComparisonCanvas" class="chart"></canvas>
+                    <canvas id="iaNonIaComparisonCanvas" class="chart" style="height:400px;"></canvas>
                 </div>
             </div>
         </div>
@@ -457,14 +457,18 @@
             let iaNonIaComparisonData = {
                 labels: [
                     @foreach($iaNonIaComparison['non_ia'] as $ia)
-                        "[{{date('d-m-y - H:m', strtotime($ia->posted))}}]",
+                        "[{{date('D m y', strtotime($ia->posted))}}]",
                     @endforeach
 
                 ],
                 datasets: [
                     {
                         label: 'Non IA Total',
-                        borderColor: 'purple',
+                        backgroundColor: [
+                            @foreach($iaNonIaComparison['non_ia'] as $ia)
+                                "#D31955",
+                            @endforeach
+                        ],
                         data: [
                             @foreach($iaNonIaComparison['non_ia'] as $ia)
                                 '{{$ia->total}}',
@@ -473,7 +477,11 @@
                     },
                     {
                         label: 'IA Total',
-                        borderColor: 'orange',
+                        backgroundColor: [
+                            @foreach($iaNonIaComparison['ia'] as $ia)
+                                "#FF791A",
+                            @endforeach
+                        ],
                         data: [
                             @foreach($iaNonIaComparison['ia'] as $ia)
                                 '{{$ia->total}}',
