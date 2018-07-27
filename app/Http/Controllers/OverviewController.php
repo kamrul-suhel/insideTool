@@ -135,7 +135,7 @@ class OverviewController extends Controller
         $this->linkStats = [];
         $this->linkStats[0] = $this->pages->posts()->where('type', 'link')->whereBetween('posted', [$this->from, $this->to])->count();
         foreach($this->metrics as $metric) {
-            $this->linkStats[$metric][0] = DB::table('posts')->where('page_id', $id)->select(DB::raw($this->conversion.'('.$metric.') as total'))->where('type', 'link')->whereBetween('posted', [$this->from, $this->to])->groupBy('page_id')->pluck('total');
+            $this->linkStats[$metric][0] = DB::table('posts')->where('instant_article', 0)->where('page_id', $id)->select(DB::raw($this->conversion.'('.$metric.') as total'))->where('type', 'link')->whereBetween('posted', [$this->from, $this->to])->groupBy('page_id')->pluck('total');
         }
     }
 

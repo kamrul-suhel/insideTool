@@ -35,6 +35,37 @@
                 </div>
                 <div class="box-body">
                     <div class="row">
+                        {{--Totals--}}
+                        <div class="col-md-4">
+                            <div class="info-box bg-purple">
+                                <i class="info-box-icon"><i class="fa fa-upload"></i></i>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">{{ $conversion == 'sum'? 'Total' : 'Average' }} Video </span>
+                                    <span class="info-box-number info-box-number-big">{{  number_format($videoStats[0] ?? 0)  }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="info-box bg-maroon">
+                                <i class="info-box-icon"><i class="fa fa-upload"></i></i>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">{{ $conversion == 'sum'? 'Total' : 'Average' }} Non IA  </span>
+                                    <span class="info-box-number info-box-number-big">{{  number_format($linkStats[0] ?? 0)  }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="info-box bg-orange">
+                                <i class="info-box-icon"><i class="fa fa-upload"></i></i>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">{{ $conversion == 'sum'? 'Total' : 'Average' }} IA </span>
+                                    <span class="info-box-number info-box-number-big">{{  number_format($iAStats[0] ?? 0)  }}</span>
+                                </div>
+                            </div>
+                        </div>
+
                         {{-- Reach--}}
                         <div class="col-md-4">
                             <div class="info-box bg-purple">
