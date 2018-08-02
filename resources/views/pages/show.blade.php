@@ -297,8 +297,8 @@
                         </td>
                         <td class="dt-center"
                             @if ($post->type == 'link')
-                                data-sort="{{ $post->link_clicks }}">
-                                <i class="badge @if (!$post->isUnderAverage('link_clicks', true)) bg-green @else bg-red @endif "> {{ number_format($post->link_clicks) }}</i><br/>
+                                data-sort="{{ $post->link_clicks > 0 ? $post->link_clicks : $post->ga_page_views }}">
+                                <i class="badge @if (!$post->isUnderAverage('link_clicks', true)) bg-green @else bg-red @endif "> {{ $post->link_clicks > 0 ? number_format($post->link_clicks) : "GA:".number_format($post->ga_page_views) }}</i><br/>
                                 @if (!$post->isUnderAverage('link_clicks', true))
                                     <i class="text-success"><i class="fa fa-caret-up"></i>
                                 @else
