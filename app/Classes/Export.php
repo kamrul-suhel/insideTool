@@ -79,13 +79,15 @@ class Export
         $this->analytics = $analytics;
     }
 
-    /**
-     * @return mixed
-     */
-    public function export()
+	/**
+	 * @param null $from
+	 * @param null $to
+	 * @return bool
+	 */
+    public function export($from = null, $to = null)
     {
         //set dates
-        $this->setExportDates();
+        $this->setExportDates($from, $to);
 
         //set filename
         $this->setFilename();
@@ -110,10 +112,15 @@ class Export
     /**
      * Set dates for export
      */
-    public function setExportDates(): void
+    public function setExportDates($from, $to): void
     {
-        $this->from = Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT') + 4)->startOfDay();
-        $this->to = Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT'))->endOfDay();
+    	if(is_null($from) && is_null($to)) {
+			$this->from = Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT') + 4)->startOfDay();
+			$this->to = Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT'))->endOfDay();
+		} else {
+    		$this->from = $from;
+    		$this->to = $to;
+		}
     }
 
     /**
@@ -205,7 +212,7 @@ class Export
     public function formatTotals(): array
     {
         return [
-            '', '', '', '', //blank columns
+            '', '', '', '', '', //blank columns
             $this->totalArticles,
             $this->totalVideos,
             $this->totalReach,

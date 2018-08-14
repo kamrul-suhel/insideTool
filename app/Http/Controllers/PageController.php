@@ -80,22 +80,19 @@ class PageController extends Controller
 
         $page = $this->page->find($id);
 
-        $this->query = $page->posts()->orderBy('posted', 'DESC');
-
-        $this->getLabels();
-        $this->getCreator();
-        $this->getInstantArticles();
-        $this->getPostType();
-        $this->getDates();
-
         $daysInRange = $this->from->diffInDays($this->to) + 1;
 
         $dayPercentage = $this->to->isToday() ? ((date('H') + (($daysInRange - 1) * 24)) / (24 + (($daysInRange - 1) * 24)) + date('i') / (60 * 24)) : 1;
 
         $labels = $this->videoLabel->all();
 
-        $this->query = $this->query->get();
+        $paginatedResults = $this->runQuery($page)->paginate(25);
+        $totalPosts = $this->runQuery($page)->select('id')->count();
+        $totalVideos = $this->runQuery($page)->select('id')->where('type', 'video')->count();
+        $totalLinks = $this->runQuery($page)->select('id')->where('type', '=', 'link')->where('instant_article', 0)->count();
+        $totalIA = $this->runQuery($page)->select('id')->where('instant_article', 1)->count();
 
+        $this->query = $this->runQuery($page)->get();
         $this->processPosts($this->query);
 
         $averages = $this->averageMetric->all()->keyBy('key');
@@ -114,18 +111,35 @@ class PageController extends Controller
             'labels' => $labels,
             'pageId' => $id,
             'pageName' => $page->name,
-            'posts' => $this->query,
+            'posts' => $paginatedResults,
             'type' => $this->type,
             'typeFilter' => $this->typeFilter,
             'videoComments' => $this->videoComments,
             'videoReach' => $this->videoImpressions,
             'videoReactions' => $this->videoReactions,
             'videoShares' => $this->videoShares,
+			'totalPosts' => $totalPosts,
+			'totalVideos' => $totalVideos,
+			'totalLinks' => $totalLinks,
+			'totalIA' => $totalIA,
             'from' => $this->from,
             'to' => $this->to
         ]);
 
     }
+
+    public function runQuery($page)
+	{
+		$this->query = $page->posts()->orderBy('posted', 'DESC');
+
+		$this->getLabels();
+		$this->getCreator();
+		$this->getInstantArticles();
+		$this->getPostType();
+		$this->getDates();
+
+		return $this->query;
+	}
 
     /**
      * Accumulate all actions for every post retrieved from db
@@ -150,6 +164,7 @@ class PageController extends Controller
                 $this->articleComments += $post->comments;
             }
         }
+
     }
 
     /**

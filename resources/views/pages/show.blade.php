@@ -21,7 +21,7 @@
                 <div class="input-group">
                     <input class="form-control input-lg" style="resize: none;" type="text" name="rangepicker" autocomplete="off">
                     @if(\App\Post::where('posted', '<',  \Carbon\Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT'))->endOfDay())->count() > 0)
-                        <a href="{{ route('exports.export') }}" class="btn btn-lg btn-success input-group-addon" style="background-color: #00a65a; color: white;">Export CSV</a>
+                        <a href="{{ route('exports.export', ['from' => $from->format('Y-m-d H:i:s'), 'to' => $to->format('Y-m-d H:i:s')]) }}" class="btn btn-lg btn-success input-group-addon" style="background-color: #00a65a; color: white;">Export CSV</a>
                     @endif
                 </div>
             </form>
@@ -137,7 +137,7 @@
                     <i class="info-box-icon"><i class="fa fa-thumb-tack"></i></i>
                     <div class="info-box-content">
                         <span class="info-box-text">Total Posts</span>
-                        <span class="info-box-number info-box-number-big">{{ count($posts) }}</span>
+                        <span class="info-box-number info-box-number-big">{{ $totalPosts }}</span>
                     </div>
                 </div>
             </div>
@@ -146,7 +146,7 @@
                     <i class="info-box-icon"><i class="fa fa-play"></i></i>
                     <div class="info-box-content">
                         <span class="info-box-text">Videos</span>
-                        <span class="info-box-number info-box-number-big">{{ count($posts->where('type', 'video')) }}</span>
+                        <span class="info-box-number info-box-number-big">{{ $totalVideos }}</span>
                     </div>
                 </div>
             </div>
@@ -155,7 +155,7 @@
                     <i class="info-box-icon"><i class="fa fa-list"></i></i>
                     <div class="info-box-content">
                         <span class="info-box-text">Articles</span>
-                        <span class="info-box-number info-box-number-big">{{ count($posts->where('type', 'link'))-count($posts->where('instant_article', true)) }}</span>
+                        <span class="info-box-number info-box-number-big">{{ $totalLinks }}</span>
                     </div>
                 </div>
             </div>
@@ -164,7 +164,7 @@
                     <i class="info-box-icon"><i class="fa fa-bolt"></i></i>
                     <div class="info-box-content">
                         <span class="info-box-text">IA</span>
-                        <span class="info-box-number info-box-number-big"> {{ count($posts->where('instant_article', true)) }}</span>
+                        <span class="info-box-number info-box-number-big"> {{ $totalIA }}</span>
                     </div>
                 </div>
             </div>
@@ -360,6 +360,11 @@
                 </tr>
                 </tfoot>
             </table>
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    {{ $posts->appends(request()->except('page'))}}
+                </div>
+            </div>
         </div>
     </div>
 @stop

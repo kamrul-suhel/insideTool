@@ -31,6 +31,8 @@ class ExportController extends Controller
      */
     public function export()
     {
+		$from = request()->get('from') ? Carbon::parse(request()->get('from')) : Carbon::now()->startOfDay();
+		$to = request()->get('to') ?     Carbon::parse(request()->get('to'))  :  Carbon::now()->endOfDay();
 
         if($this->post->where('posted', '<',  Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT'))->endOfDay())->count() < 1)
         {
@@ -46,7 +48,7 @@ class ExportController extends Controller
         ];
 
         //run export class and get filename
-        $filename = $this->export->export();
+        $filename = $this->export->export($from, $to);
 
         //download csv
         return response()->download(storage_path() . "/app/exports/" . $filename, $filename, $headers);
