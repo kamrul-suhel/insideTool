@@ -379,27 +379,26 @@
     });
     $('input[name="rangepicker"]').daterangepicker({
         maxDate: moment(),
+        timePicker: true,
+        timePicker24Hour: true,
         alwaysShowCalendars: true,
-        startDate: '{{ $from->format('d/m/Y') }}',
-        endDate: '{{ $to->format('d/m/Y') }}',
+        startDate: '{{ $from->format('d-m-Y H:i') }}',
+        endDate: '{{ $to->format('d-m-Y H:i') }}',
         locale: {
-            format: 'DD/MM/YYYY'
-        },
-        dateLimit: {
-            "days": 14
+            format: 'DD/MM/YYYY H:mm',
+            firstDay: 1,
         },
         ranges: {
             'Today': [moment(), moment()],
             'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'Last Week': [moment().subtract(1, 'weeks').startOf('isoWeek'), moment().subtract(1, 'weeks').endOf('isoWeek')],
             'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
         }
     });
 
     $('input[name="rangepicker"]').on('apply.daterangepicker', function (ev, picker) {
-        window.location.search += '&from=' + picker.startDate.format('YYYY-MM-DD') + '&to=' + picker.endDate.format('YYYY-MM-DD');
+        window.location.search += '&from=' + picker.startDate.format('DD-MM-YY-H-mm') + '&to=' + picker.endDate.format('DD-MM-YY-H-mm');
     });
 
     </script>

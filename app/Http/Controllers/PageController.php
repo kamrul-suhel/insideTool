@@ -75,8 +75,8 @@ class PageController extends Controller
         $this->label = request()->get('label');
         $this->instantArticles = request()->get('ia');
         $this->type = request()->get('type');
-        $this->from = request()->get('from') ? Carbon::parse(request()->get('from')) :            Carbon::now()->startOfDay();
-        $this->to = request()->get('to') ?     Carbon::parse(request()->get('to'))->endOfDay() :  Carbon::now()->endOfDay();
+        $this->from = request()->get('from') ? Carbon::createFromFormat('d-m-y-H-i', request()->get('from')) : Carbon::now()->startOfDay();
+        $this->to = request()->get('to') ?     Carbon::createFromFormat('d-m-y-H-i', request()->get('to'))  :  Carbon::now()->endOfDay();
 
         $page = $this->page->find($id);
 

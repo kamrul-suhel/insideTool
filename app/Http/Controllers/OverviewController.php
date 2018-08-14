@@ -60,8 +60,8 @@ class OverviewController extends Controller
         $this->metric = 'reach';
         $this->videoMetric = 'reach';
 
-        $this->from = request()->get('from') ? Carbon::parse(request()->get('from'))->startOfDay() :    Carbon::now()->startOfDay();
-        $this->to = request()->get('to') ?     Carbon::parse(request()->get('to'))->endOfDay() :        Carbon::now()->endOfDay();
+        $this->from = request()->get('from') ? Carbon::createFromFormat('d-m-y-H-i', request()->get('from')) : Carbon::now()->startOfDay();
+        $this->to = request()->get('to') ?     Carbon::createFromFormat('d-m-y-H-i', request()->get('to'))  :  Carbon::now()->endOfDay();
         $this->pages = $this->page->find($id);
 
         $this->getSearchParameters();

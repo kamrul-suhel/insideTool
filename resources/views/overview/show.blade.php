@@ -14,13 +14,18 @@
 
             <form class="pull-right">
                 <div class="input-group">
-                    <input class="form-control input-lg" style="resize: none;" type="text" name="rangepicker" autocomplete="off">
-                    <a href="{{ route('overview.show', ['id' => $id]) }}" class="btn btn-lg btn-success input-group-addon" style="background-color: #00a65a; color: white;">Reset</a>
+                    <input class="form-control input-lg" style="resize: none;" type="text" name="rangepicker"
+                           autocomplete="off">
+                    <a href="{{ route('overview.show', ['id' => $id]) }}"
+                       class="btn btn-lg btn-success input-group-addon"
+                       style="background-color: #00a65a; color: white;">Reset</a>
                 </div>
                 <hr>
             </form>
-            <a href="{{ request()->fullUrlWithQuery(["conversion"=> 'sum']) }}" class="btn btn-lg btn-primary {{ isset($conversion) && $conversion == 'sum'? 'active' : '' }}">Total</a>
-            <a href="{{ request()->fullUrlWithQuery(["conversion"=> 'avg']) }}"  class="btn btn-lg btn-primary {{ isset($conversion) && $conversion == 'avg'? 'active' : '' }} ">Average</a>
+            <a href="{{ request()->fullUrlWithQuery(["conversion"=> 'sum']) }}"
+               class="btn btn-lg btn-primary {{ isset($conversion) && $conversion == 'sum'? 'active' : '' }}">Total</a>
+            <a href="{{ request()->fullUrlWithQuery(["conversion"=> 'avg']) }}"
+               class="btn btn-lg btn-primary {{ isset($conversion) && $conversion == 'avg'? 'active' : '' }} ">Average</a>
             <hr>
         </div>
 
@@ -28,9 +33,11 @@
         <div class="col-lg-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Overall Statistics between {{ date('dS M Y', strtotime($from)) }} and {{ date('dS M Y', strtotime($to)) }}</h3>
+                    <h3 class="box-title">Overall Statistics between {{ date('dS M Y', strtotime($from)) }}
+                        and {{ date('dS M Y', strtotime($to)) }}</h3>
                     <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                    class="fa fa-minus"></i></button>
                     </div>
                 </div>
                 <div class="box-body">
@@ -40,7 +47,8 @@
                             <div class="info-box bg-purple">
                                 <i class="info-box-icon"><i class="fa fa-upload"></i></i>
                                 <div class="info-box-content">
-                                    <span class="info-box-text">{{ $conversion == 'sum'? 'Total' : 'Average' }} Video </span>
+                                    <span class="info-box-text">{{ $conversion == 'sum'? 'Total' : 'Average' }}
+                                        Video </span>
                                     <span class="info-box-number info-box-number-big">{{  number_format($videoStats[0] ?? 0)  }}</span>
                                 </div>
                             </div>
@@ -50,7 +58,8 @@
                             <div class="info-box bg-maroon">
                                 <i class="info-box-icon"><i class="fa fa-upload"></i></i>
                                 <div class="info-box-content">
-                                    <span class="info-box-text">{{ $conversion == 'sum'? 'Total' : 'Average' }} Non IA  </span>
+                                    <span class="info-box-text">{{ $conversion == 'sum'? 'Total' : 'Average' }}
+                                        Non IA  </span>
                                     <span class="info-box-number info-box-number-big">{{  number_format($linkStats[0] ?? 0)  }}</span>
                                 </div>
                             </div>
@@ -60,7 +69,8 @@
                             <div class="info-box bg-orange">
                                 <i class="info-box-icon"><i class="fa fa-upload"></i></i>
                                 <div class="info-box-content">
-                                    <span class="info-box-text">{{ $conversion == 'sum'? 'Total' : 'Average' }} IA </span>
+                                    <span class="info-box-text">{{ $conversion == 'sum'? 'Total' : 'Average' }}
+                                        IA </span>
                                     <span class="info-box-number info-box-number-big">{{  number_format($iAStats[0] ?? 0)  }}</span>
                                 </div>
                             </div>
@@ -89,7 +99,8 @@
                             <div class="info-box bg-orange">
                                 <i class="info-box-icon"><i class="fa fa-eye"></i></i>
                                 <div class="info-box-content">
-                                    <span class="info-box-text">{{ $conversion == 'sum'? 'Total' : 'Average' }} IA Reach </span>
+                                    <span class="info-box-text">{{ $conversion == 'sum'? 'Total' : 'Average' }}
+                                        IA Reach </span>
                                     <span class="info-box-number info-box-number-big">{{  number_format($iAStats['reach'][0][0] ?? 0)  }}</span>
                                 </div>
                             </div>
@@ -98,7 +109,9 @@
                         {{--Reactions--}}
                         <div class="col-md-4">
                             <div class="info-box bg-purple">
-                                <i class="info-box-icon"><i class="fa fa-thumbs-up"></i><small class="fa fa-plus-circle"></small></i>
+                                <i class="info-box-icon"><i class="fa fa-thumbs-up"></i>
+                                    <small class="fa fa-plus-circle"></small>
+                                </i>
                                 <div class="info-box-content">
                                     <span class="info-box-text">{{ $conversion == 'sum'? 'Total' : 'Average' }} Video Reactions </span>
                                     <span class="info-box-number info-box-number-big">{{  number_format($videoStats['reactions'][0][0] ?? 0)  }}</span>
@@ -107,7 +120,9 @@
                         </div>
                         <div class="col-md-4">
                             <div class="info-box bg-maroon">
-                                <i class="info-box-icon"><i class="fa fa-thumbs-up"></i><small class="fa fa-plus-circle"></small></i>
+                                <i class="info-box-icon"><i class="fa fa-thumbs-up"></i>
+                                    <small class="fa fa-plus-circle"></small>
+                                </i>
                                 <div class="info-box-content">
                                     <span class="info-box-text">{{ $conversion == 'sum'? 'Total' : 'Average' }} Link Reactions </span>
                                     <span class="info-box-number info-box-number-big">{{  number_format($linkStats['reactions'][0][0] ?? 0)  }}</span>
@@ -116,7 +131,9 @@
                         </div>
                         <div class="col-md-4">
                             <div class="info-box bg-orange">
-                                <i class="info-box-icon"><i class="fa fa-thumbs-up"></i><small class="fa fa-plus-circle"></small></i>
+                                <i class="info-box-icon"><i class="fa fa-thumbs-up"></i>
+                                    <small class="fa fa-plus-circle"></small>
+                                </i>
                                 <div class="info-box-content">
                                     <span class="info-box-text">{{ $conversion == 'sum'? 'Total' : 'Average' }} IA Reactions </span>
                                     <span class="info-box-number info-box-number-big">{{  number_format($iAStats['reactions'][0][0] ?? 0)  }}</span>
@@ -192,7 +209,8 @@
                 <div class="box-header">
                     <h3 class="box-title"> Video Label Stats</h3>
                     <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                    class="fa fa-minus"></i></button>
                         {{--<button type="button" class="btn btn-primary download-canvas" data-canvas="videoTotalsCanvas"><i class="fa fa-download"></i></button>--}}
                     </div>
                 </div>
@@ -201,12 +219,19 @@
                         <div class="col-lg-12 col-lg-offset-5">
                             <div class="btn-toolbar">
                                 <div class="dropdown">
-                                    <button class="btn  btn-default dropdown-toggle" type="button" data-toggle="dropdown">Viewing: {{ ucwords($videoMetric) ?? 'Select Metric'}} <span class="caret"></span></button>
+                                    <button class="btn  btn-default dropdown-toggle" type="button"
+                                            data-toggle="dropdown">
+                                        Viewing: {{ ucwords($videoMetric) ?? 'Select Metric'}} <span
+                                                class="caret"></span></button>
                                     <ul class="dropdown-menu">
-                                        <li><a href="{{ request()->fullUrlWithQuery(["video_metric"=> 'reach']) }}">Reach</a></li>
-                                        <li><a href="{{ request()->fullUrlWithQuery(["video_metric"=> 'reactions']) }}">Reactions</a></li>
-                                        <li><a href="{{ request()->fullUrlWithQuery(["video_metric"=> 'comments']) }}">Comments</a></li>
-                                        <li><a href="{{ request()->fullUrlWithQuery(["video_metric"=> 'shares']) }}">Shares</a></li>
+                                        <li><a href="{{ request()->fullUrlWithQuery(["video_metric"=> 'reach']) }}">Reach</a>
+                                        </li>
+                                        <li><a href="{{ request()->fullUrlWithQuery(["video_metric"=> 'reactions']) }}">Reactions</a>
+                                        </li>
+                                        <li><a href="{{ request()->fullUrlWithQuery(["video_metric"=> 'comments']) }}">Comments</a>
+                                        </li>
+                                        <li><a href="{{ request()->fullUrlWithQuery(["video_metric"=> 'shares']) }}">Shares</a>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -221,9 +246,12 @@
         <div class="col-lg-6">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title"> Video Label Stats - {{ date('dS M Y', strtotime($videoLabelCompareDateFrom)) }} and {{ date('dS M Y', strtotime($videoLabelCompareDateTo)) }}</h3>
+                    <h3 class="box-title"> Video Label Stats
+                        - {{ date('dS M Y', strtotime($videoLabelCompareDateFrom)) }}
+                        and {{ date('dS M Y', strtotime($videoLabelCompareDateTo)) }}</h3>
                     <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                    class="fa fa-minus"></i></button>
                         {{--<button type="button" class="btn btn-primary download-canvas" data-canvas="videoYesterdayTotalsCanvas"><i class="fa fa-download"></i></button>--}}
                     </div>
                 </div>
@@ -246,7 +274,8 @@
                 <div class="box-header">
                     <h3 class="box-title"> IA vs Non IA Total for the Last Month</h3>
                     <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                    class="fa fa-minus"></i></button>
                         {{--<button type="button" class="btn btn-primary download-canvas" data-canvas="videoYesterdayTotalsCanvas"><i class="fa fa-download"></i></button>--}}
                     </div>
                     <canvas id="iaNonIaComparisonCanvas" class="chart" style="height:400px;"></canvas>
@@ -260,7 +289,8 @@
                 <div class="box-header">
                     <h3 class="box-title"> Video, Link, and Instant Article Metrics </h3>
                     <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                    class="fa fa-minus"></i></button>
                         {{--<button type="button" class="btn btn-primary download-canvas" data-canvas="lineChartCanvas"><i class="fa fa-download"></i></button>--}}
                     </div>
                 </div>
@@ -270,17 +300,26 @@
                         <div class="col-lg-12 col-lg-offset-5">
                             <div class="btn-toolbar">
                                 <div class="dropdown">
-                                    <button class="btn  btn-default dropdown-toggle" type="button" data-toggle="dropdown">Viewing: {{ ucwords($metric) ?? 'Select Metric'}} <span class="caret"></span></button>
+                                    <button class="btn  btn-default dropdown-toggle" type="button"
+                                            data-toggle="dropdown">Viewing: {{ ucwords($metric) ?? 'Select Metric'}}
+                                        <span class="caret"></span></button>
                                     <ul class="dropdown-menu">
-                                        <li><a href="{{ request()->fullUrlWithQuery(["metric"=> 'reach']) }}">Reach</a></li>
-                                        <li><a href="{{ request()->fullUrlWithQuery(["metric"=> 'reactions']) }}">Reactions</a></li>
-                                        <li><a href="{{ request()->fullUrlWithQuery(["metric"=> 'comments']) }}">Comments</a></li>
-                                        <li><a href="{{ request()->fullUrlWithQuery(["metric"=> 'shares']) }}">Shares</a></li>
+                                        <li><a href="{{ request()->fullUrlWithQuery(["metric"=> 'reach']) }}">Reach</a>
+                                        </li>
+                                        <li><a href="{{ request()->fullUrlWithQuery(["metric"=> 'reactions']) }}">Reactions</a>
+                                        </li>
+                                        <li><a href="{{ request()->fullUrlWithQuery(["metric"=> 'comments']) }}">Comments</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ request()->fullUrlWithQuery(["metric"=> 'shares']) }}">Shares</a>
+                                        </li>
                                     </ul>
                                 </div>
                                 <div class="dropbox"></div>
                                 <div class="dropdown">
-                                    <button class="btn  btn-default dropdown-toggle" type="button" data-toggle="dropdown">By: {{ ucwords($unit) ?? 'Select Unit'}} <span class="caret"></span></button>
+                                    <button class="btn  btn-default dropdown-toggle" type="button"
+                                            data-toggle="dropdown">By: {{ ucwords($unit) ?? 'Select Unit'}} <span
+                                                class="caret"></span></button>
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ request()->fullUrlWithQuery(["unit"=> 'hour']) }}">Hour</a></li>
                                         <li><a href="{{ request()->fullUrlWithQuery(["unit"=> 'day']) }}">Day</a></li>
@@ -299,20 +338,20 @@
 
         {{-- Top Performers --}}
         {{--<div class="col-lg-12">--}}
-            {{--<div class="box">--}}
-                {{--<div class="box-header">--}}
-                    {{--<h3 class="box-title"> Creator Metrics </h3>--}}
-                    {{--<div class="box-tools pull-right">--}}
-                        {{--<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>--}}
-                        {{--<button type="button" class="btn btn-primary download-canvas" data-canvas="lineChartCanvas"><i class="fa fa-download"></i></button>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-                {{--<div class="box-body">--}}
-                    {{--<div class="row">--}}
-                        {{--<canvas id="creatorStatsCanvas" class="chart" style="padding:50px;"></canvas>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-            {{--</div>--}}
+        {{--<div class="box">--}}
+        {{--<div class="box-header">--}}
+        {{--<h3 class="box-title"> Creator Metrics </h3>--}}
+        {{--<div class="box-tools pull-right">--}}
+        {{--<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>--}}
+        {{--<button type="button" class="btn btn-primary download-canvas" data-canvas="lineChartCanvas"><i class="fa fa-download"></i></button>--}}
+        {{--</div>--}}
+        {{--</div>--}}
+        {{--<div class="box-body">--}}
+        {{--<div class="row">--}}
+        {{--<canvas id="creatorStatsCanvas" class="chart" style="padding:50px;"></canvas>--}}
+        {{--</div>--}}
+        {{--</div>--}}
+        {{--</div>--}}
         {{--</div>--}}
 
 
@@ -331,25 +370,26 @@
     <script>
         $('input[name="rangepicker"]').daterangepicker({
             maxDate: moment(),
+            timePicker: true,
+            timePicker24Hour: true,
             alwaysShowCalendars: true,
-            startDate: '{{ $from->format('d/m/Y') }}',
-            endDate: '{{ $to->format('d/m/Y') }}',
+            startDate: '{{ $from->format('d-m-Y H:i') }}',
+            endDate: '{{ $to->format('d-m-Y H:i') }}',
             locale: {
-                format: 'DD/MM/YYYY',
+                format: 'DD/MM/YYYY H:mm',
                 firstDay: 1,
             },
             ranges: {
                 'Today': [moment(), moment()],
                 'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                 'Last Week': [moment().subtract(1, 'weeks').startOf('isoWeek'), moment().subtract(1, 'weeks').endOf('isoWeek')],
-                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
                 'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
             }
         });
 
         $('input[name="rangepicker"]').on('apply.daterangepicker', function (ev, picker) {
-            window.location.search += '&from=' + picker.startDate.format('YYYY-MM-DD') + '&to=' + picker.endDate.format('YYYY-MM-DD');
+            window.location.search += '&from=' + picker.startDate.format('DD-MM-YY-H-mm') + '&to=' + picker.endDate.format('DD-MM-YY-H-mm');
         });
 
         $(function () {
@@ -491,51 +531,51 @@
                 ]
             };
 
-            {{--let creatorStatsData = {--}}
-                {{--labels: [--}}
+                    {{--let creatorStatsData = {--}}
+                    {{--labels: [--}}
                     {{--@foreach($creatorStats as $total)--}}
-                        {{--'{{ $total->name }} ({{ $total->posts }} posts)',--}}
+                    {{--'{{ $total->name }} ({{ $total->posts }} posts)',--}}
                     {{--@endforeach--}}
-                {{--],--}}
-                {{--datasets: [{--}}
+                    {{--],--}}
+                    {{--datasets: [{--}}
                     {{--label: 'Reach',--}}
                     {{--backgroundColor: '#57d3ff',--}}
                     {{--borderWidth: 1,--}}
                     {{--data: [--}}
-                        {{--@foreach($creatorStats as $total)--}}
-                            {{--'{{ $total->reach }}',--}}
-                        {{--@endforeach--}}
+                    {{--@foreach($creatorStats as $total)--}}
+                    {{--'{{ $total->reach }}',--}}
+                    {{--@endforeach--}}
                     {{--]--}}
-                {{--}, {--}}
+                    {{--}, {--}}
                     {{--label: 'Reactions',--}}
                     {{--backgroundColor: '#29b698',--}}
                     {{--borderWidth: 1,--}}
                     {{--data: [--}}
-                        {{--@foreach($creatorStats as $total)--}}
-                            {{--'{{ $total->reactions }}',--}}
-                        {{--@endforeach--}}
+                    {{--@foreach($creatorStats as $total)--}}
+                    {{--'{{ $total->reactions }}',--}}
+                    {{--@endforeach--}}
                     {{--]--}}
-                {{--}, {--}}
+                    {{--}, {--}}
                     {{--label: 'Shares',--}}
                     {{--backgroundColor: '#7358ee',--}}
                     {{--borderWidth: 1,--}}
                     {{--data: [--}}
-                        {{--@foreach($creatorStats as $total)--}}
-                            {{--'{{ $total->shares }}',--}}
-                        {{--@endforeach--}}
+                    {{--@foreach($creatorStats as $total)--}}
+                    {{--'{{ $total->shares }}',--}}
+                    {{--@endforeach--}}
                     {{--]--}}
-                {{--}, {--}}
+                    {{--}, {--}}
                     {{--label: 'Comments',--}}
                     {{--backgroundColor: '#eea559',--}}
                     {{--borderWidth: 1,--}}
                     {{--data: [--}}
-                        {{--@foreach($creatorStats as $total)--}}
-                            {{--'{{ $total->comments }}',--}}
-                        {{--@endforeach--}}
+                    {{--@foreach($creatorStats as $total)--}}
+                    {{--'{{ $total->comments }}',--}}
+                    {{--@endforeach--}}
                     {{--]--}}
-                {{--}]--}}
+                    {{--}]--}}
 
-            {{--};--}}
+                    {{--};--}}
 
             let lineChartCanvas = $('#lineChartCanvas').get(0).getContext('2d');
             let videoTotalsCanvas = $('#videoTotalsCanvas').get(0).getContext('2d');
