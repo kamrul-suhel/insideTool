@@ -4,6 +4,7 @@ namespace App\Classes;
 
 use App\Post;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class Export
 {
@@ -15,6 +16,12 @@ class Export
      * @var Post
      */
     protected $post;
+
+	/**
+	 * @var
+	 */
+    protected $postIds;
+
     /**
      * @var Post
      */
@@ -95,8 +102,7 @@ class Export
         //gather posts
         $this->getPosts();
 
-        if(count($this->posts) < 1)
-        {
+        if($this->posts->count() < 1) {
             return false;
         }
 
@@ -111,17 +117,19 @@ class Export
 
     /**
      * Set dates for export
-     */
+	 * @param $from
+	 * @param $to
+	 */
     public function setExportDates($from, $to): void
-    {
-    	if(is_null($from) && is_null($to)) {
+	{
+		if (is_null($from) && is_null($to)) {
 			$this->from = Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT') + 4)->startOfDay();
 			$this->to = Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT'))->endOfDay();
 		} else {
-    		$this->from = $from;
-    		$this->to = $to;
+			$this->from = $from;
+			$this->to = $to;
 		}
-    }
+	}
 
     /**
      * Set name of file produced by export
@@ -148,22 +156,16 @@ class Export
     {
         $this->totalReactions = $this->post->calculateTotal('reactions', $this->posts);
         $this->totalReach = $this->post->calculateTotal('reach', $this->posts);
+		$this->totalShares = $this->post->calculateTotal('shares', $this->posts);
+		$this->totalLikes = $this->post->calculateTotal('likes', $this->posts);
+		$this->totalComments = $this->post->calculateTotal('comments', $this->posts);
 
         $this->totalVideos = array_count_values($this->posts->pluck('type')->toArray())['video'];
         $this->totalArticles = array_count_values($this->posts->pluck('type')->toArray())['link'];
+        $this->totalIAArticles = array_count_values($this->posts->where('instant_article', 1)->pluck('type')->toArray())['link'];
+        $this->totalNonIAArticles = array_count_values($this->posts->where('instant_article', 0)->pluck('type')->toArray())['link'];
 
         $this->totalEngagement = $this->post->calculateEngagement($this->posts);
-        $this->totalLinkClicks = $this->totalComments = $this->totalLikes = $this->totalShares = 0;
-    }
-
-    /**
-     * @param $link
-     * @return mixed
-     */
-    public function getGAData($link): array
-    {
-        $link = str_replace('https://www.unilad.co.uk', '', $link);
-        return $gaResults = $this->analytics->fetchPostGAData($link, $this->from, $this->to);
     }
 
     /**
@@ -176,9 +178,6 @@ class Export
         $postEngagement = $post->shares + $post->likes + $post->comments;
         $percentOfEngagement = $postEngagement / $this->totalEngagement * 100;
         $this->totalLinkClicks += $post->link_clicks;
-        $this->totalShares += $post->latestStatSnapshot()->shares;
-        $this->totalLikes += $post->latestStatSnapshot()->likes;
-        $this->totalComments += $post->latestStatSnapshot()->comments;
 
         $postArray = [
             '"'.$post->facebook_id.'"', //with quotes so it doesn't return exponent number to xls
@@ -190,12 +189,13 @@ class Export
             $post->deleted_at,
             $post->reach,
             $post->reactions,
-            $post->latestStatSnapshot()->shares,
-            $post->latestStatSnapshot()->likes,
-            $post->latestStatSnapshot()->comments,
+            $post->shares,
+            $post->likes,
+            $post->comments,
             $post->link_clicks,
             $postEngagement,
             $post->type,
+			$post->instant_article,
             $post->ga_avg_time_on_page,
             $post->ga_page_views,
             $post->ga_avg_page_load_time,
@@ -212,8 +212,9 @@ class Export
     public function formatTotals(): array
     {
         return [
-            '', '', '', '', '', //blank columns
-            $this->totalArticles,
+            '', '', '', '', //blank columns
+            $this->totalIAArticles,
+            $this->totalNonIAArticles,
             $this->totalVideos,
             $this->totalReach,
             $this->totalReactions,
@@ -242,8 +243,12 @@ class Export
         fputcsv($file, $this->post->exportHeadings);
 
         //For every post apply new row to csv
+		Log::info($this->posts->count());
+		$count = 0;
         foreach ($this->posts as $post) {
             fputcsv($file, $this->formatPostData($post));
+            $count += 1;
+            Log::info('Counter:: '. $count);
         }
 
         //Set Totals row

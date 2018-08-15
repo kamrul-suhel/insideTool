@@ -24,12 +24,12 @@ class Post extends Model
     public $exportHeadings = [
         'facebook_id','published by', 'link', 'post message',
         'posted', 'tag(s)', 'deleted', 'reach', 'reactions', 'shares', 'like', 'comments', 'link clicks',
-        'engagement', 'type', 'GA:avg page time', 'GA:page views', 'GA:avg load time (sec)',
+        'engagement', 'type', 'IA?', 'GA:avg page time', 'GA:page views', 'GA:avg load time (sec)',
         'GA:bounce rate', '% of Engagement (eng/total eng)'
     ];
 
     public $exportTotalHeadings = [
-        '','','','', 'Articles', 'Videos', '','','','','','',
+        '','','','', 'IA', 'NON IA', 'Videos', '','','','','','',
     ];
 
     /**
@@ -87,13 +87,17 @@ class Post extends Model
        static::$hiddenFields = $fields;
     }
 
-    /**
-     * Link clicks attribute
-     */
-    public function getLinkClicksAttribute()
-    {
-        return $this->latestDelayedStatSnapshot()->link_clicks;
-    }
+//    public function linkClicks($id)
+//	{
+//		return $this->select('link_clicks')->find($id);
+//	}
+//    /**
+//     * Link clicks attribute
+//     */
+//    public function getLinkClicksAttribute()
+//    {
+//        return $this->latestDelayedStatSnapshot()->link_clicks;
+//    }
 
     /**
      * Set hidden fields when serialising
@@ -152,11 +156,12 @@ class Post extends Model
         if (!is_null($this->latestDelayedSnapshot)) {
             return $this->latestDelayedSnapshot;
         } else {
-            $this->latestDelayedSnapshot = \App\PostDelayedStatSnapshot::where('post_id', $this->id)
+            $this->latestDelayedSnapshot = $this->delayedStatSnapshots()->where('post_id', $this->id)
                 ->where('impressions', '>', 0)
                 ->orderBy('id', 'DESC')
                 ->take(1)
                 ->firstOrNew([]);
+
             return $this->latestDelayedSnapshot;
         }
     }
@@ -169,7 +174,7 @@ class Post extends Model
         if (!is_null($this->birthSnapshot)) {
             return $this->birthSnapshot;
         } else {
-            $this->birthSnapshot = \App\PostStatSnapshot::where('post_id', $this->id)->where('likes', '>', 0)
+        	$this->birthSnapshot = $this->statSnapshots->where('likes', '>', '0')
                 ->where('created_at', '<', \Carbon\Carbon::parse($this->posted)->addMinutes(5))
                 ->orderBy('id', 'DESC')
                 ->firstOrNew([]);

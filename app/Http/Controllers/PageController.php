@@ -130,7 +130,8 @@ class PageController extends Controller
 
     public function runQuery($page)
 	{
-		$this->query = $page->posts()->orderBy('posted', 'DESC');
+
+		$this->query = $page->posts()->withTrashed()->orderBy('posted', 'DESC');
 
 		$this->getLabels();
 		$this->getCreator();
