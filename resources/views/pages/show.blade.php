@@ -195,21 +195,31 @@
                      data-average-shares="{{ $averages->get('shares')->average }}">
                     <div class="video-tags container">
                         <span class="badge @if (!$labelFilter && !$iaFilter && !$typeFilter) bg-aqua @else bg-green @endif video-label">
-                            <a href="{{ route('pages.show', ['id' => $pageId, 'from' => $from->format('Y-m-d'), 'to' => $to->format('Y-m-d')]) }}">All</a>
+                            <a href="{{ route('pages.show', ['id' => $pageId, 'from' => request()->get('from'), 'to' => request()->get('to')]) }}">All</a>
                         </span>
                         <span class="badge @if ($type == 'video')bg-aqua @else bg-purple @endif video-label">
-                            <a href="{{ route('pages.show', ['id' => $pageId, 'ia' => false, 'creator' => \Request::get('creator'),  'label' => \Request::get('label'), 'day' => \Request::get('day'), 'type' => 'video', 'from' => $from->format('Y-m-d'), 'to' => $to->format('Y-m-d')]) }}">Videos</a>
+                            <a href="{{ route('pages.show', ['id' => $pageId, 'ia' => false, 'creator' => \Request::get('creator'),  'label' => \Request::get('label'), 'day' => \Request::get('day'), 'type' => 'video', 'from' => request()->get('from'), 'to' => request()->get('to')]) }}">Videos</a>
                         </span>
                         <span class="badge @if ($type == 'link') bg-aqua @else bg-maroon @endif video-label">
-                            <a href="{{ route('pages.show', ['id' => $pageId, 'ia' => false, 'creator' => \Request::get('creator'),  'label' => \Request::get('label'), 'day' => \Request::get('day'), 'type' => 'link', 'from' => $from->format('Y-m-d'), 'to' => $to->format('Y-m-d')]) }}">Links</a>
+                            <a href="{{ route('pages.show', ['id' => $pageId, 'ia' => false, 'creator' => \Request::get('creator'),  'label' => \Request::get('label'), 'day' => \Request::get('day'), 'type' => 'link', 'from' => request()->get('from'), 'to' => request()->get('to')]) }}">Links</a>
                         </span>
                         <span class="badge @if ($iaFilter) bg-aqua @else bg-yellow @endif video-label">
-                            <a href="{{ route('pages.show', ['id' => $pageId, 'ia' => true, 'creator' => \Request::get('creator'), 'label' => \Request::get('label'), 'day' => \Request::get('day'), 'from' => $from->format('Y-m-d'), 'to' => $to->format('Y-m-d')]) }}">Instant Articles</a>
+                            <a href="{{ route('pages.show', ['id' => $pageId, 'ia' => true, 'creator' => \Request::get('creator'), 'label' => \Request::get('label'), 'day' => \Request::get('day'), 'from' => request()->get('from'), 'to' => request()->get('to')]) }}">Instant Articles</a>
                         </span>
                         || or video with label:
                         @foreach ($labels as $label)
                             <span class="badge @if ($labelFilter && $label->id == $labelFilter->id) bg-aqua @else bg-gray @endif video-label">
-                                <a href="{{ route('pages.show', ['id' => $pageId, 'label' => $label->id, 'ia' => \Request::get('ia'), 'creator' => \Request::get('creator'), 'day' => \Request::get('day'), 'type' => \Request::get('type'), 'from' => $from->format('Y-m-d'), 'to' => $to->format('Y-m-d')]) }}">{{$label->label}}</a>
+                                <a href="{{ route('pages.show', [
+                                'id' => $pageId,
+                                'from' => request()->get('from'),
+                                'to' => request()->get('to'),
+                                'label' => $label->id,
+                                'ia' => request()->get('ia'),
+                                'creator' => request()->get('creator'),
+                                'day' => request()->get('day'),
+                                'type' => request()->get('type')
+                                ]) }}">{{$label->label}}</a>
+
                             </span>
                         @endforeach
                     </div>
