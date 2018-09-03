@@ -174,10 +174,10 @@ class Post extends Model
         if (!is_null($this->birthSnapshot)) {
             return $this->birthSnapshot;
         } else {
-        	$this->birthSnapshot = $this->statSnapshots->where('likes', '>', '0')
+        	$this->birthSnapshot = $this->statSnapshots
+				->where('likes', '>', '0')
                 ->where('created_at', '<', \Carbon\Carbon::parse($this->posted)->addMinutes(5))
-                ->orderBy('id', 'DESC')
-                ->firstOrNew([]);
+                ->first();
             return $this->birthSnapshot;
         }
     }
