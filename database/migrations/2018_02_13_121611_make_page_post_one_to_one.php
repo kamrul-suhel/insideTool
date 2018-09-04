@@ -27,12 +27,12 @@ class MakePagePostOneToOne extends Migration
      */
     public function down()
     {
-        Schema::create('pages_posts', function (Blueprint $table) {
-            $table->increments('id');
-            $table->bigInteger('page_id');
-            $table->bigInteger('post_id');
-            $table->text('description');
-        });
+//        Schema::create('pages_posts', function (Blueprint $table) {
+//            $table->increments('id');
+//            $table->bigInteger('page_id');
+//            $table->bigInteger('post_id');
+//            $table->text('description');
+//        });
         Schema::table('posts', function (Blueprint $table) {
             $table->unsignedInteger('facebook_id')->change();
             $table->dropColumn('page_id');

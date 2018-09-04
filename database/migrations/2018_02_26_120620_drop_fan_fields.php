@@ -21,16 +21,18 @@ class DropFanFields extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        $table->dropColumn('impressions_paid');
-        $table->dropColumn('uniques_paid');
-        $table->unsignedInteger('fan_impressions');
-        $table->unsignedInteger('fan_uniques');
-    }
+	/**
+	 * Reverse the migrations.
+	 *
+	 * @return void
+	 */
+	public function down()
+	{
+		Schema::table('post_delayed_stat_snapshots', function (Blueprint $table) {
+			$table->unsignedInteger('fan_impressions');
+			$table->unsignedInteger('fan_uniques');
+			$table->dropColumn('impressions_paid');
+			$table->dropColumn('uniques_paid');
+		});
+	}
 }
