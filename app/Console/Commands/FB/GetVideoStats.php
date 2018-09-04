@@ -69,6 +69,7 @@ class GetVideoStats extends Command
         'total_video_impressions_fan',
         'total_video_impressions_fan_paid_unique',
         'total_video_impressions_fan_paid',
+		//todo total_video_retention_graph
     ];
 
     /**
