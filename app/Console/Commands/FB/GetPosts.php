@@ -39,6 +39,7 @@ class GetPosts extends Command
     public function handle()
     {
         $pages = Page::all();
+
         foreach ($pages as $page) {
             \Artisan::call('stats:getpageposts', ['pageid' => $page->facebook_id]);
         }

@@ -47,7 +47,12 @@ class GetPagePosts extends Command
         if ($this->argument('limit')) {
             $limit = $this->argument('limit');
         } else {
-            $limit = 5;
+        	if($this->argument('pageid') == '1648609298801884'){
+        		$limit = 100;
+			}else{
+				$limit = 5;
+			}
+
         }
         $response = $api->get('/' . $this->argument('pageid') . '/posts/?limit=' . $limit, env('FACEBOOK_ACCESS_TOKEN'));
         if ($response) {

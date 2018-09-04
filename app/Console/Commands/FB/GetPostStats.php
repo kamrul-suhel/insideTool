@@ -60,7 +60,7 @@ class GetPostStats extends Command
                 $shares = 0;
 
                 // Like count
-                $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=LIKE&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
+                $response = $api->get('/' . $postId . '_'. $postId . '/reactions/?type=LIKE&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
                 if ($response) {
                     $likes = $response->getDecodedBody()["summary"]["total_count"];
                     $snapshot->likes = $likes;
@@ -73,41 +73,41 @@ class GetPostStats extends Command
                 }
 
                 // Love count
-                $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=LOVE&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
+                $response = $api->get('/' . $postId . '_'. $postId . '/reactions/?type=LOVE&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
                 if ($response) {
                     $snapshot->loves = $response->getDecodedBody()["summary"]["total_count"];
                     $reactions += $snapshot->loves;
                 }
                 
                 // Wow count
-                $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=WOW&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
+                $response = $api->get('/' . $postId . '_'. $postId . '/reactions/?type=WOW&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
                 if ($response) {
                     $snapshot->wows = $response->getDecodedBody()["summary"]["total_count"];
                     $reactions += $snapshot->wows;
                 }
                 
                 // Haha count
-                $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=HAHA&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
+                $response = $api->get('/' . $postId . '_'. $postId . '/reactions/?type=HAHA&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
                 if ($response) {
                     $snapshot->hahas = $response->getDecodedBody()["summary"]["total_count"];
                     $reactions += $snapshot->hahas;
                 }
                 
                 // Sad count
-                $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=SAD&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
+                $response = $api->get('/' . $postId . '_'. $postId . '/reactions/?type=SAD&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
                 if ($response) {
                     $snapshot->sads = $response->getDecodedBody()["summary"]["total_count"];
                     $reactions += $snapshot->sads;
                 }
                 
                 // Angry count
-                $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/reactions/?type=ANGRY&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
+                $response = $api->get('/' . $postId . '_'. $postId . '/reactions/?type=ANGRY&summary=1', env('FACEBOOK_ACCESS_TOKEN'));
                 if ($response) {
                     $snapshot->angrys = $response->getDecodedBody()["summary"]["total_count"];
                     $reactions += $snapshot->angrys;
                 }
 
-                $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/comments/?summary=1', env('FACEBOOK_ACCESS_TOKEN'));
+                $response = $api->get('/' . $postId . '_'. $postId . '/comments/?summary=1', env('FACEBOOK_ACCESS_TOKEN'));
                 // Comment count
                 if ($response) {
                     $commentsTotal = $response->getDecodedBody()["summary"]["total_count"];
@@ -125,7 +125,7 @@ class GetPostStats extends Command
                 }
 
                 // Share count
-                $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/?fields=shares', env('FACEBOOK_ACCESS_TOKEN'));
+                $response = $api->get('/' . $postId . '_'. $postId . '/?fields=shares', env('FACEBOOK_ACCESS_TOKEN'));
                 if ($response && array_key_exists('shares', $response->getDecodedBody())) {
                     $shares = $response->getDecodedBody()["shares"]["count"];
                     $snapshot->shares = $shares;
