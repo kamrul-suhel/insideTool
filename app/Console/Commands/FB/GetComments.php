@@ -46,7 +46,7 @@ class GetComments extends Command
 
         foreach($posts as $post) {
             try {
-                $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_' . $post->facebook_id . '/comments/?limit=250&order=reverse_chronological', env('FACEBOOK_ACCESS_TOKEN'));
+                $response = $api->get('/' . $post->page->facebook_id . '_' . $post->facebook_id . '/comments/?limit=250&order=reverse_chronological', $post->page->access_token);
 
                 $comments = $response->getDecodedBody()['data'];
 

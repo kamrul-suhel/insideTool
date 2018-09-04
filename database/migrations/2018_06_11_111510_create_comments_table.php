@@ -14,7 +14,7 @@ class CreateCommentsTable extends Migration
     public function up()
     {
         Schema::create('comments', function (Blueprint $table) {
-            $table->engine = 'archive';
+            //$table->engine = 'archive';
             $table->increments('id');
             $table->bigInteger('facebook_id')->unsigned();
             $table->string('comment_id')->nullable();

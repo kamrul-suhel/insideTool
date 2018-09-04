@@ -47,17 +47,13 @@ class GetPagePosts extends Command
         if ($this->argument('limit')) {
             $limit = $this->argument('limit');
         } else {
-        	if($this->argument('pageid') == '1648609298801884'){
-        		$limit = 100;
-			}else{
-				$limit = 5;
-			}
-
+			$limit = 5;
         }
-        $response = $api->get('/' . $this->argument('pageid') . '/posts/?limit=' . $limit, env('FACEBOOK_ACCESS_TOKEN'));
+        $page = Page::where(['facebook_id' => $this->argument('pageid')])->first();
+        $response = $api->get('/' . $this->argument('pageid') . '/posts/?limit=' . $limit, $page->access_token);
         if ($response) {
             foreach ($response->getGraphEdge() as $node) {
-                $postResponse = $api->get('/' . $node->getField('id') . '?fields=story,message,name,link,picture,type,created_time,object_id,admin_creator,parent_id', env('FACEBOOK_ACCESS_TOKEN'));
+                $postResponse = $api->get('/' . $node->getField('id') . '?fields=story,message,name,link,picture,type,created_time,object_id,admin_creator,parent_id', $page->access_token);
                 if ($postResponse) {
                     $postId = explode("_", $postResponse->getGraphNode()->getField('id'))[1];
                     $newPost = false;
@@ -105,7 +101,7 @@ class GetPagePosts extends Command
 
                     // VIDEO - GET CUSTOM LABELS BASED ON VIDEOS THAT HAVE BEEN FOUND
                     if ($post->type == 'video' && $objectId) {
-                        $videoResponse = $api->get('/' . $objectId . '/?fields=custom_labels', env('FACEBOOK_ACCESS_TOKEN'));
+                        $videoResponse = $api->get('/' . $objectId . '/?fields=custom_labels', $page->access_token);
                         if ($videoResponse) {
                             foreach ($videoResponse->getGraphNode() as $node) {
                                 if (is_object($node)) {
@@ -120,10 +116,10 @@ class GetPagePosts extends Command
                         }
                     // LINKS - GET INSTANT ARTICLE
                     } else if ($post->type == 'link') {
-                        $instantArticles = $api->get('/' . $this->argument('pageid') . '/instant_articles', env('FACEBOOK_ACCESS_TOKEN'));
+                        $instantArticles = $api->get('/' . $this->argument('pageid') . '/instant_articles', $page->access_token);
                         if ($instantArticles) {
                             foreach ($instantArticles->getGraphEdge() as $article) {
-                                $article = $api->get('/' . $article->getField('id') . '/?fields=publish_status,canonical_url', env('FACEBOOK_ACCESS_TOKEN'));
+                                $article = $api->get('/' . $article->getField('id') . '/?fields=publish_status,canonical_url', $page->access_token);
                                 if ($article && $article->getGraphNode()->getField('publish_status') == 'LIVE') {
                                     $published = PublishedInstantArticle::firstOrNew(['facebook_id' => $article->getGraphNode()->getField('id')]);
                                     $published->canonical_url = $article->getGraphNode()->getField('canonical_url');

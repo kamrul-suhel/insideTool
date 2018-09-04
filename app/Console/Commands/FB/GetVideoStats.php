@@ -97,7 +97,7 @@ class GetVideoStats extends Command
             }
             $snapshot->post_id = $post->id;
         
-            $response = $api->get('/' . $postId . '/video_insights', env('FACEBOOK_ACCESS_TOKEN'));
+            $response = $api->get('/' . $postId . '/video_insights', $post->page->access_token);
             if ($response) {
                 foreach ($response->getGraphEdge() as $node) {
                     if (in_array($node["name"], $this->simpleFields)) {

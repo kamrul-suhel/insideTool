@@ -49,7 +49,7 @@ class GetPostStatsDelayed extends Command
 
             try {
                 // Impressions
-                $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions', env('FACEBOOK_ACCESS_TOKEN'));
+                $response = $api->get('/' . $post->page->facebook_id . '_'. $postId . '/insights/post_impressions', $post->page->access_token);
                 if ($response) {
                     $snapshot->impressions = $response->getGraphEdge()[0]["values"][0]["value"];
                     $post->reach = $snapshot->impressions;
@@ -57,25 +57,25 @@ class GetPostStatsDelayed extends Command
                 }
                 
                 // Unique impressions
-                $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_unique', env('FACEBOOK_ACCESS_TOKEN'));
+                $response = $api->get('/' . $post->page->facebook_id . '_'. $postId . '/insights/post_impressions_unique', $post->page->access_token);
                 if ($response) {
                     $snapshot->uniques = $response->getGraphEdge()[0]["values"][0]["value"];
                 }
 
                 // Viral impressions
-                $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_viral', env('FACEBOOK_ACCESS_TOKEN'));
+                $response = $api->get('/' . $post->page->facebook_id . '_'. $postId . '/insights/post_impressions_viral', $post->page->access_token);
                 if ($response) {
                     $snapshot->impressions_viral = $response->getGraphEdge()[0]["values"][0]["value"];
                 }
 
                 // Viral uniques
-                $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_impressions_viral_unique', env('FACEBOOK_ACCESS_TOKEN'));
+                $response = $api->get('/' . $post->page->facebook_id . '_'. $postId . '/insights/post_impressions_viral_unique', $post->page->access_token);
                 if ($response) {
                     $snapshot->uniques_viral = $response->getGraphEdge()[0]["values"][0]["value"];
                 }
 
                 // Link clicks
-                $response = $api->get('/' . env('FACEBOOK_PAGE_ID') . '_'. $postId . '/insights/post_clicks', env('FACEBOOK_ACCESS_TOKEN'));
+                $response = $api->get('/' . $post->page->facebook_id . '_'. $postId . '/insights/post_clicks', $post->page->access_token);
                 if ($response) {
                     $link_clicks = $response->getGraphEdge()[0]->getField('values')->getField(0)->getField('value');
                     if ($link_clicks) {

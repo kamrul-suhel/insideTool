@@ -25,7 +25,7 @@ class AddLinkClicksToPostStats extends Migration
      */
     public function down()
     {
-        Schema::table('posts', function (Blueprint $table) {
+        Schema::table('post_delayed_stat_snapshots', function (Blueprint $table) {
             $table->dropColumn('link_clicks');
         });
     }

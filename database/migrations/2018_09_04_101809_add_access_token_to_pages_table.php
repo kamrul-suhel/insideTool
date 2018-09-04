@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddIndexToPostedTimes extends Migration
+class AddAccessTokenToPagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddIndexToPostedTimes extends Migration
      */
     public function up()
     {
-        Schema::table('posts', function (Blueprint $table) {
-            $table->index('posted')->change();
-        });
+		Schema::table('pages', function (Blueprint $table) {
+			$table->string('access_token');
+		});
     }
 
     /**
@@ -25,8 +25,8 @@ class AddIndexToPostedTimes extends Migration
      */
     public function down()
     {
-        Schema::table('posts', function (Blueprint $table) {
-            $table->dropIndex('posted');
-        });
+		Schema::table('pages', function (Blueprint $table) {
+			$table->dropColumn('access_token');
+		});
     }
 }
