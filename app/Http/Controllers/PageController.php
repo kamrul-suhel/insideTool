@@ -36,7 +36,8 @@ class PageController extends Controller
         $videoReactions,
         $videoShares,
         $videoComments,
-        $videoLabel;
+        $videoLabel,
+		$chosenLabels;
 
     /**
      * PageController constructor.
@@ -77,14 +78,14 @@ class PageController extends Controller
         $this->type = request()->get('type');
         $this->from = request()->get('from') ? Carbon::createFromFormat('d-m-y-H-i', request()->get('from')) : Carbon::now()->startOfDay();
         $this->to = request()->get('to') ?     Carbon::createFromFormat('d-m-y-H-i', request()->get('to'))  :  Carbon::now()->endOfDay();
-
+        $this->chosenLabels = request()->get('label');
         $page = $this->page->find($id);
 
         $daysInRange = $this->from->diffInDays($this->to) + 1;
 
         $dayPercentage = $this->to->isToday() ? ((date('H') + (($daysInRange - 1) * 24)) / (24 + (($daysInRange - 1) * 24)) + date('i') / (60 * 24)) : 1;
 
-        $labels = $this->videoLabel->all();
+        $labels = $this->videoLabel->orderBy('label', 'ASC')->pluck('label');
 
         $paginatedResults = $this->runQuery($page)->paginate(25);
         $totalPosts = $this->runQuery($page)->select('id')->count();
@@ -123,7 +124,8 @@ class PageController extends Controller
 			'totalLinks' => $totalLinks,
 			'totalIA' => $totalIA,
             'from' => $this->from,
-            'to' => $this->to
+            'to' => $this->to,
+	        'chosenLabels' => $this->chosenLabels,
         ]);
 
     }
@@ -174,8 +176,12 @@ class PageController extends Controller
     private function getLabels() : void
     {
         if ($this->label) {
-            $this->query = $this->post->whereHasEntity('videoLabels', $this->label);
-            $this->labelFilter = $this->videoLabel->find($this->label);
+        	$labels = explode(',', $this->label);
+            $labels = $this->videoLabel->whereIn('label', $labels)->pluck('id');
+	        foreach ($labels as $label) {
+		        $this->query = $this->post->whereHasEntity('videoLabels', $label);
+		        $this->labelFilter = $this->videoLabel->find($label);
+	        }
         }
     }
 
@@ -208,6 +214,9 @@ class PageController extends Controller
     {
         if ($this->type) {
             $this->query->where('type', $this->type);
+            if($this->type == 'link') {
+            	$this->query->where('instant_article', 0);
+            }
             $this->typeFilter = true;
         }
     }

@@ -17,6 +17,7 @@ class OverviewController extends Controller
         $linkStats,
         $iAStats,
         $iaNonIa,
+	    $creatorStats,
         $videoLabelTotals,
         $videoYesterdayLabelTotals,
         $conversion,
@@ -72,6 +73,7 @@ class OverviewController extends Controller
         $this->getGraphStats($id);
         $this->getVideoLabels($id);
         $this->getYesterdayVideoLabels($id);
+	    $this->getCreatorsStats($id);
 
         return view('overview.show')
             ->with('id', $id)
@@ -89,7 +91,8 @@ class OverviewController extends Controller
             ->with('videoLabelCompareDateFrom', $this->videoLabelCompareDateFrom )
             ->with('videoLabelCompareDateTo', $this->videoLabelCompareDateTo )
             ->with('conversion', $this->conversion)
-            ->with('unit', $this->timeUnit);
+            ->with('unit', $this->timeUnit)
+	        ->with('creatorStats', $this->creatorStats);
     }
 
     /**
@@ -170,19 +173,19 @@ class OverviewController extends Controller
     public function getGraphStats($id)
     {
         $this->videoStats['graph']['reach'][0] = DB::table('posts')->where('page_id', $id)->select(DB::raw($this->conversion.'(reach) as total'), 'posted')->where('type', 'video')->whereBetween('posted', [$this->from, $this->to])->groupBy(DB::raw($this->timeUnit.'(posted)'))->orderBy('posted', 'ASC')->pluck('total', 'posted');
-        $this->linkStats['graph']['reach'][0] = DB::table('posts')->where('page_id', $id)->select(DB::raw($this->conversion.'(reach) as total'), 'posted')->where('type', 'link')->whereBetween('posted', [$this->from, $this->to])->groupBy(DB::raw($this->timeUnit.'(posted)'))->orderBy('posted', 'ASC')->pluck('total', 'posted');
+        $this->linkStats['graph']['reach'][0] = DB::table('posts')->where('page_id', $id)->select(DB::raw($this->conversion.'(reach) as total'), 'posted')->where('type', 'link')->where('instant_article', 0)->whereBetween('posted', [$this->from, $this->to])->groupBy(DB::raw($this->timeUnit.'(posted)'))->orderBy('posted', 'ASC')->pluck('total', 'posted');
         $this->iAStats['graph']['reach'][0] = DB::table('posts')->where('page_id', $id)->select(DB::raw($this->conversion.'(reach) as total'), 'posted')->where('type', 'link')->where('instant_article', 1)->whereBetween('posted', [$this->from, $this->to])->groupBy(DB::raw($this->timeUnit.'(posted)'))->pluck('total', 'posted');
 
         $this->videoStats['graph']['shares'][0] = DB::table('posts')->where('page_id', $id)->select(DB::raw($this->conversion.'(shares) as total'), 'posted')->where('type', 'video')->whereBetween('posted', [$this->from, $this->to])->groupBy(DB::raw($this->timeUnit.'(posted)'))->orderBy('posted', 'ASC')->pluck('total', 'posted');
-        $this->linkStats['graph']['shares'][0] = DB::table('posts')->where('page_id', $id)->select(DB::raw($this->conversion.'(shares) as total'), 'posted')->where('type', 'link')->whereBetween('posted', [$this->from, $this->to])->groupBy(DB::raw($this->timeUnit.'(posted)'))->orderBy('posted', 'ASC')->pluck('total', 'posted');
+        $this->linkStats['graph']['shares'][0] = DB::table('posts')->where('page_id', $id)->select(DB::raw($this->conversion.'(shares) as total'), 'posted')->where('type', 'link')->where('instant_article', 0)->whereBetween('posted', [$this->from, $this->to])->groupBy(DB::raw($this->timeUnit.'(posted)'))->orderBy('posted', 'ASC')->pluck('total', 'posted');
         $this->iAStats['graph']['shares'][0] = DB::table('posts')->where('page_id', $id)->select(DB::raw($this->conversion.'(shares) as total'), 'posted')->where('type', 'link')->where('instant_article', 1)->whereBetween('posted', [$this->from, $this->to])->groupBy(DB::raw($this->timeUnit.'(posted)'))->orderBy('posted', 'ASC')->pluck('total', 'posted');
 
         $this->videoStats['graph']['reactions'][0] = DB::table('posts')->where('page_id', $id)->select(DB::raw($this->conversion.'(reactions) as total'), 'posted')->where('type', 'video')->whereBetween('posted', [$this->from, $this->to])->groupBy(DB::raw($this->timeUnit.'(posted)'))->orderBy('posted', 'ASC')->pluck('total', 'posted');
-        $this->linkStats['graph']['reactions'][0] = DB::table('posts')->where('page_id', $id)->select(DB::raw($this->conversion.'(reactions) as total'), 'posted')->where('type', 'link')->whereBetween('posted', [$this->from, $this->to])->groupBy(DB::raw($this->timeUnit.'(posted)'))->orderBy('posted', 'ASC')->pluck('total', 'posted');
+        $this->linkStats['graph']['reactions'][0] = DB::table('posts')->where('page_id', $id)->select(DB::raw($this->conversion.'(reactions) as total'), 'posted')->where('type', 'link')->where('instant_article', 0)->whereBetween('posted', [$this->from, $this->to])->groupBy(DB::raw($this->timeUnit.'(posted)'))->orderBy('posted', 'ASC')->pluck('total', 'posted');
         $this->iAStats['graph']['reactions'][0] = DB::table('posts')->where('page_id', $id)->select(DB::raw($this->conversion.'(reactions) as total'), 'posted')->where('type', 'link')->where('instant_article', 1)->whereBetween('posted', [$this->from, $this->to])->groupBy(DB::raw($this->timeUnit.'(posted)'))->orderBy('posted', 'ASC')->pluck('total', 'posted');
 
         $this->videoStats['graph']['comments'][0] = DB::table('posts')->where('page_id', $id)->select(DB::raw($this->conversion.'(comments) as total'), 'posted')->where('type', 'video')->whereBetween('posted', [$this->from, $this->to])->groupBy(DB::raw($this->timeUnit.'(posted)'))->orderBy('posted', 'ASC')->pluck('total', 'posted');
-        $this->linkStats['graph']['comments'][0] = DB::table('posts')->where('page_id', $id)->select(DB::raw($this->conversion.'(comments) as total'), 'posted')->where('type', 'link')->whereBetween('posted', [$this->from, $this->to])->groupBy(DB::raw($this->timeUnit.'(posted)'))->orderBy('posted', 'ASC')->pluck('total', 'posted');
+        $this->linkStats['graph']['comments'][0] = DB::table('posts')->where('page_id', $id)->select(DB::raw($this->conversion.'(comments) as total'), 'posted')->where('type', 'link')->where('instant_article', 0)->whereBetween('posted', [$this->from, $this->to])->groupBy(DB::raw($this->timeUnit.'(posted)'))->orderBy('posted', 'ASC')->pluck('total', 'posted');
         $this->iAStats['graph']['comments'][0] = DB::table('posts')->where('page_id', $id)->select(DB::raw($this->conversion.'(comments) as total'), 'posted')->where('type', 'link')->where('instant_article', 1)->whereBetween('posted', [$this->from, $this->to])->groupBy(DB::raw($this->timeUnit.'(posted)'))->orderBy('posted', 'ASC')->pluck('total', 'posted');
     }
 
@@ -201,8 +204,9 @@ class OverviewController extends Controller
      */
     public function getYesterdayVideoLabels($id)
     {
-        $from = request()->get('from') ? Carbon::parse(request()->get('from'))->startOfDay() :    Carbon::now()->startOfDay();
-        $to = request()->get('to') ?     Carbon::parse(request()->get('to'))->endOfDay() :        Carbon::now()->endOfDay();
+        $from = request()->get('from') ? Carbon::createFromFormat('d-m-y-H-i', request()->get('from')) :    Carbon::now()->startOfDay();
+        $to = request()->get('to') ?     Carbon::createFromFormat('d-m-y-H-i', request()->get('to')):        Carbon::now()->endOfDay();
+
         $diff = ($to->diffInDays($from) !== 0 ? $to->diffInDays($from)+1 : $to->diffInDays($from)+1);
         $this->videoLabelCompareDateFrom = $from->subDays($diff);
         $this->videoLabelCompareDateTo = $to->subDays($diff);
@@ -212,5 +216,12 @@ class OverviewController extends Controller
         $result = \DB::select($query);
         $this->videoYesterdayLabelTotals = $result;
     }
+
+	public function getCreatorsStats($id)
+	{
+		$query = __('metrics.creators_stats', ['id' => $id, 'from' => $this->from, 'to' => $this->to, 'conversion' => $this->conversion]);
+		$result = \DB::select($query);
+		$this->creatorStats = $result;
+	}
 }
 

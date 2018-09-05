@@ -10,18 +10,21 @@
                 </span>
                 <span class="pull-right">
                 @if ($from->format('Y-m-d') == $to->format('Y-m-d'))
-                    {{ $from->format('l, jS F Y') }}
+                {{ $from->format('l, jS F Y') }}
                 @else
-                    {{ $from->format('l, jS F Y') }} &dash; {{ $to->format('l, jS F Y') }}
-                @endif
+                {{ $from->format('l, jS F Y') }} &dash; {{ $to->format('l, jS F Y') }}
+                    @endif
                 </span>
             </h1>
             <br><br><br><br>
             <form class="pull-right" style="margin-top:-70px;">
                 <div class="input-group">
-                    <input class="form-control input-lg" style="resize: none;" type="text" name="rangepicker" autocomplete="off">
+                    <input class="form-control input-lg" style="resize: none;" type="text" name="rangepicker"
+                           autocomplete="off">
                     @if(\App\Post::where('posted', '<',  \Carbon\Carbon::now()->subDays(env('EXPORT_POSTED_LIMIT'))->endOfDay())->count() > 0)
-                        <a href="{{ route('exports.export', ['from' => $from->format('Y-m-d H:i:s'), 'to' => $to->format('Y-m-d H:i:s')]) }}" class="btn btn-lg btn-success input-group-addon" style="background-color: #00a65a; color: white;">Export CSV</a>
+                        <a href="{{ route('exports.export', ['from' => $from->format('Y-m-d H:i:s'), 'to' => $to->format('Y-m-d H:i:s')]) }}"
+                           class="btn btn-lg btn-success input-group-addon"
+                           style="background-color: #00a65a; color: white;">Export CSV</a>
                     @endif
                 </div>
             </form>
@@ -40,7 +43,8 @@
                         <div class="box-header">
                             <h3 class="box-title">Videos</h3>
                             <div class="box-tools pull-right">
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                            class="fa fa-minus"></i></button>
                             </div>
                         </div>
                         @if(count($averages) > 0)
@@ -78,12 +82,13 @@
                         <div class="box-header">
                             <h3 class="box-title">Articles</h3>
                             <div class="box-tools pull-right">
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                            class="fa fa-minus"></i></button>
                             </div>
                         </div>
                         @if(count($averages) > 0)
                             <div class="box-body">
-                                <?php if($daysInRange > 1) $multiplier = ($daysInRange - 1) + $day_percentage; else $multiplier = 1 ?>
+								<?php if ($daysInRange > 1) $multiplier = ($daysInRange - 1) + $day_percentage; else $multiplier = 1 ?>
                                 <graph-metric id="article-reach-metric" color="aqua"
                                               fa-icon="eye"
                                               actual="{{ $articleReach }}"
@@ -122,6 +127,7 @@
             @endif
         </div>
 
+        {{-- Overall Stats --}}
         <div class="row">
             <div class="col-md-6">
                 <div class="info-box bg-teal">
@@ -170,6 +176,7 @@
             </div>
         </div>
 
+        {{-- Creator Filter --}}
         <div class="box box-primary">
             <div class="box-header clearfix post-header @if ($creatorFilter) creator-filter @endif">
                 <h3 class="box-title">Posts</h3>
@@ -193,35 +200,48 @@
                      data-average-likes="{{ $averages->get('likes')->average }}"
                      data-average-comments="{{ $averages->get('comments')->average }}"
                      data-average-shares="{{ $averages->get('shares')->average }}">
-                    <div class="video-tags container">
-                        <span class="badge @if (!$labelFilter && !$iaFilter && !$typeFilter) bg-aqua @else bg-green @endif video-label">
-                            <a href="{{ route('pages.show', ['id' => $pageId, 'from' => request()->get('from'), 'to' => request()->get('to')]) }}">All</a>
-                        </span>
-                        <span class="badge @if ($type == 'video')bg-aqua @else bg-purple @endif video-label">
-                            <a href="{{ route('pages.show', ['id' => $pageId, 'ia' => false, 'creator' => \Request::get('creator'),  'label' => \Request::get('label'), 'day' => \Request::get('day'), 'type' => 'video', 'from' => request()->get('from'), 'to' => request()->get('to')]) }}">Videos</a>
-                        </span>
-                        <span class="badge @if ($type == 'link') bg-aqua @else bg-maroon @endif video-label">
-                            <a href="{{ route('pages.show', ['id' => $pageId, 'ia' => false, 'creator' => \Request::get('creator'),  'label' => \Request::get('label'), 'day' => \Request::get('day'), 'type' => 'link', 'from' => request()->get('from'), 'to' => request()->get('to')]) }}">Links</a>
-                        </span>
-                        <span class="badge @if ($iaFilter) bg-aqua @else bg-yellow @endif video-label">
-                            <a href="{{ route('pages.show', ['id' => $pageId, 'ia' => true, 'creator' => \Request::get('creator'), 'label' => \Request::get('label'), 'day' => \Request::get('day'), 'from' => request()->get('from'), 'to' => request()->get('to')]) }}">Instant Articles</a>
-                        </span>
-                        || or video with label:
-                        @foreach ($labels as $label)
-                            <span class="badge @if ($labelFilter && $label->id == $labelFilter->id) bg-aqua @else bg-gray @endif video-label">
-                                <a href="{{ route('pages.show', [
-                                'id' => $pageId,
-                                'from' => request()->get('from'),
-                                'to' => request()->get('to'),
-                                'label' => $label->id,
-                                'ia' => request()->get('ia'),
-                                'creator' => request()->get('creator'),
-                                'day' => request()->get('day'),
-                                'type' => request()->get('type')
-                                ]) }}">{{$label->label}}</a>
-
-                            </span>
-                        @endforeach
+                    <div class="col-lg-12">
+                        <a style="border-radius: 0px; @if(request()->get('type') == null) text-decoration: underline; font:bolder @endif" class="col-lg-3 btn btn-lg btn-success" href="{{ route('pages.show', ['id' => $pageId, 'from' => request()->get('from'), 'to' => request()->get('to')]) }}">All</a>
+                        <a style="border-radius: 0px; @if(request()->get('type') == 'video') text-decoration: underline; font:bolder @endif" class="col-lg-3 btn btn-lg bg-purple" href="{{ route('pages.show', ['id' => $pageId, 'ia' => false, 'creator' => request()->get('creator'),  'label' => request()->get('label'), 'day' => request()->get('day'), 'type' => 'video', 'from' => request()->get('from'), 'to' => request()->get('to')]) }}">Videos</a>
+                        <a style="border-radius: 0px; @if(request()->get('type') == 'link') text-decoration: underline; font:bolder @endif" class="col-lg-3 btn btn-lg bg-maroon" href="{{ route('pages.show', ['id' => $pageId, 'ia' => false, 'creator' => request()->get('creator'),  'label' => request()->get('label'), 'day' => request()->get('day'), 'type' => 'link', 'from' => request()->get('from'), 'to' => request()->get('to')]) }}">Links</a>
+                        <a style="border-radius: 0px; @if(request()->get('type') == 'ia') text-decoration: underline; font:bolder @endif" class="col-lg-3 btn btn-lg bg-yellow" href="{{ route('pages.show', ['id' => $pageId, 'ia' => true, 'creator' => request()->get('creator'), 'label' => request()->get('label'), 'day' => request()->get('day'), 'from' => request()->get('from'), 'to' => request()->get('to')]) }}">Instant Articles</a>
+                    </div>
+                    <br>
+                    <hr>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                @foreach ($labels as $label)
+                                    @if(!in_array($label, explode(',', $chosenLabels)))
+                                        <a class="label label-default" style="margin: 2px;" href="{{ route('pages.show', [
+                                        'id' => $pageId,
+                                        'from' => request()->get('from'),
+                                        'to' => request()->get('to'),
+                                        'label' => is_null($chosenLabels) ? $label : $chosenLabels .','.$label,
+                                        'ia' => request()->get('ia'),
+                                        'creator' => request()->get('creator'),
+                                        'day' => request()->get('day'),
+                                        'type' => request()->get('type')
+                                        ]) }}"> {{$label}} </a>
+                                    @else
+                                        <a class="label label-info" style="margin: 2px;"> {{ $label }} </a>
+                                    @endif
+                                @endforeach
+                                <a class="label label-danger" style="margin: 2px;" href="{{ route('pages.show', [
+                                    'id' => $pageId,
+                                    'from' => request()->get('from'),
+                                    'to' => request()->get('to'),
+                                    'ia' => request()->get('ia'),
+                                    'creator' => request()->get('creator'),
+                                    'day' => request()->get('day'),
+                                    'type' => request()->get('type')
+                                    ]) }}"> Reset Labels </a>
+                                </a>
+                                <br>
+                                <div class="col-lg-12">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             @endif
@@ -229,146 +249,202 @@
             <hr/>
 
             {{--Table--}}
-            <table class="table table-striped" id="posts-table">
-                <thead class="dt-center">
+            <table class="table table-striped table-condensed" id="posts-table">
+                <thead>
                 <tr>
-                    <th class="dt-center">Page</th>
                     <th class="dt-center">Posted</th>
-                    <th class="dt-center">Type</th>
+                    <th class="dt-center" data-orderable="false">Type</th>
                     <th class="dt-center">Posted by</th>
-                    <th class="dt-center" data-orderable="false"></th>
-                    <th class="dt-center">IA</th>
+                    <th class="dt-center" data-orderable="false"><i class="fa fa-image"></i></th>
                     <th class="dt-center" data-orderable="false">Message</th>
-                    <th class="dt-center" data-orderable="false">Link name</th>
                     <th class="dt-center"><i class="fa fa-eye"></i></th>
                     <th class="dt-center"><i class="fa fa-thumbs-up"></i></th>
                     <th class="dt-center"><i class="fa fa-comment"></i></th>
                     <th class="dt-center"><i class="fa fa-share"></i></th>
                     <th class="dt-center"><i class="fa fa-hand-pointer-o"></i></th>
+                    <th class="dt-center" data-orderable="false">Updated At</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach ($posts as $post)
-                    <tr @if (!is_null($post->deleted_at)) class="error deleted-post" @endif>
-                        <td class="dt-center"><strong>{{ $post->page->name }}</strong></td>
-                        <td class="dt-center">{{ human_since($post->posted) }}
-                        <td class="dt-center">{{ title_case($post->type) }}</td>
-                        @if ($post->creator)
-                            <td class="dt-center">
-                                <a href="{{ route('pages.show', ['id' => $pageId, 'creator' => $post->creator->id, 'ia' => \Request::get('ia'),  'day' => \Request::get('day'), 'type' => \Request::get('type'), 'from' => $from->format('Y-m-d'), 'to' => $to->format('Y-m-d')]) }}">{{ $post->creator->name }}</a>
-                            </td>
-                        @else
-                            <td class="dt-center">Unknown</td>
-                        @endif
-                        <td class="dt-center"><a href="/posts/{{ $post->id }}"><img src="{{ $post->picture }}" width="50"></a></td>
-                        <td class="dt-center" data-sort="{{ $post->instant_article }}">@if ($post->instant_article)<i class="fa fa-bolt"></i>&nbsp;@endif</td>
-                        <td><a href="/posts/{{ $post->id }}">{{ $post->message }}</a></td>
-                        <td>{{ $post->name }}</td>
-                        <td class="dt-center" data-sort="{{ $post->reach }}">
-                            <i class="badge @if (!$post->isUnderAverage('reach', true, $post->type)) bg-green @else bg-red @endif "> {{ number_format($post->reach) }}</i>
-                            <br/>
-                            @if (!$post->isUnderAverage('reach', true, $post->type))
-                                <i class="text-success"><i class="fa fa-caret-up"></i>
-                            @else
-                                <i class="text-danger"><i class="fa fa-caret-down"></i>
-                            @endif
-                            {{ number_format($post->percentageFromTarget('reach', true, $type)) }}%</i><br/>
-                            <em><i class="fa fa-bullseye"></i> {{ number_format($post->getTarget('reach', true, $post->type)) }}</em>
-                        </td>
-                        <td class="dt-center" data-sort="{{ $post->likes }}">
-                            <i class="badge @if (!$post->isUnderAverage('likes', true, $post->type)) bg-green @else bg-red @endif "> {{ number_format($post->likes) }}</i><br/>
-                            @if (!$post->isUnderAverage('likes', true, $post->type))
-                                <i class="text-success"><i class="fa fa-caret-up"></i>
-                            @else
-                                <i class="text-danger"><i class="fa fa-caret-down"></i>
-                            @endif
-                            {{ number_format($post->percentageFromTarget('likes', true, $post->type)) }}%</i><br/>
-                            <em><i class="fa fa-bullseye"></i> {{ number_format($post->getTarget('likes', true, $post->type)) }}</em>
-                        </td>
-                        <td class="dt-center" data-sort="{{ $post->comments }}">
-                            <i class="badge @if (!$post->isUnderAverage('comments', true, $post->type)) bg-green @else bg-red @endif "> {{ number_format($post->comments) }} </i><br/>
-                            @if (!$post->isUnderAverage('comments', true, $post->type))
-                                <i class="text-success"><i class="fa fa-caret-up"></i>
-                            @else
-                                <i class="text-danger"><i class="fa fa-caret-down"></i>
-                            @endif
-                            {{ number_format($post->percentageFromTarget('comments', true, $post->type)) }}%</i><br/>
-                            <em><i class="fa fa-bullseye"></i> {{ number_format($post->getTarget('comments', true, $post->type)) }}</em>
-                        </td>
-                        <td class="dt-center" data-sort="{{ $post->shares }}">
-                            <i class="badge @if (!$post->isUnderAverage('shares', true, $post->type)) bg-green @else bg-red @endif "> {{ number_format($post->shares) }}</i><br/>
-                            @if (!$post->isUnderAverage('shares', true, $post->type))
-                                <i class="text-success"><i class="fa fa-caret-up"></i>
-                            @else
-                                <i class="text-danger"><i class="fa fa-caret-down"></i>
-                            @endif
-                            {{ number_format($post->percentageFromTarget('shares', true, $post->type)) }}%</i><br/>
-                            <em><i class="fa fa-bullseye"></i> {{ number_format($post->getTarget('shares', true, $post->type)) }}</em>
-                        </td>
-                        <td class="dt-center"
-                            @if ($post->type == 'link')
-                                data-sort="{{ $post->link_clicks > 0 ? $post->link_clicks : $post->ga_page_views }}">
-                                <i class="badge @if (!$post->isUnderAverage('link_clicks', true)) bg-green @else bg-red @endif "> {{ $post->link_clicks > 0 ? number_format($post->link_clicks) : "GA:".number_format($post->ga_page_views) }}</i><br/>
-                                @if (!$post->isUnderAverage('link_clicks', true))
-                                    <i class="text-success"><i class="fa fa-caret-up"></i>
-                                @else
-                                    <i class="text-danger"><i class="fa fa-caret-down"></i>
-                                @endif
-                                {{ number_format($post->percentageFromTarget('link_clicks', true)) }}%</i><br/>
-                                <em><i class="fa fa-bullseye"></i> {{ number_format($post->getTarget('link_clicks', true)) }}</em>
-                            @else
-                                data-sort="0">
-                            @endif
-                        </td>
-                    </tr>
-                @endforeach
-                </tbody>
-                {{-- Total calculations--}}
-                <tfoot>
-                <tr>
-                    @if(count($averages) > 0)
-                        <th>Totals</th>
-                        <th colspan="8" style="text-align: right;">
+                {{-- Totals --}}
+                @if(count($averages) > 0)
+                    <tr class="text-center">
+                        <td><b>Totals</b></td>
+                        <td colspan="4"></td>
+                        <td>
                             <i class="badge @if ($type == 'link' && ($posts->sum('reach') > $averages->get('daily_reach_article')->average)) bg-green @elseif ($type == 'link') bg-red @elseif ($type == 'video' && ($posts->sum('reach') > $averages->get('daily_reach_video')->average)) bg-green @elseif ($type == 'video') bg-red @elseif ($posts->sum('reach') > $averages->get('daily_reach')->average)) bg-green @else bg-red @endif">
                                 {{ number_format($posts->sum('reach')) }}<br/>
                             </i>
-                        </th>
-                        <th>
+                        </td>
+                        <td>
                             <i class="badge @if ($posts->sum('likes') > $averages->get('daily_likes')->average)  bg-green @else bg-red @endif">
                                 {{ number_format($posts->sum('likes')) }}<br/>
                             </i>
-                        </th>
-                        <th>
+                        </td>
+                        <td>
                             <i class="badge @if ($type == 'link' && ($posts->sum('comments') > $averages->get('daily_comments_article')->average)) bg-green @elseif ($type == 'link') bg-red @elseif ($type == 'video' && ($posts->sum('comments') > $averages->get('daily_comments_video')->average)) bg-green @elseif ($type == 'video') bg-red @elseif ($posts->sum('comments') > $averages->get('daily_comments')->average)) bg-green @else bg-red @endif">
                                 {{ number_format($posts->sum('comments')) }}<br/>
                             </i>
-                        </th>
-                        <th>
+                        </td>
+                        <td>
                             <i class="badge @if ($type == 'link' && ($posts->sum('shares') > $averages->get('daily_shares_article')->average)) bg-green @elseif ($type == 'link') bg-red @elseif ($type == 'video' && ($posts->sum('shares') > $averages->get('daily_shares_video')->average)) bg-green @elseif ($type == 'video') bg-red @elseif ($posts->sum('shares') > $averages->get('daily_shares')->average)) bg-green @else bg-red @endif">
                                 {{ number_format($posts->sum('shares')) }}<br/>
                             </i>
-                        </th>
-                        <th>
-                            <i class="badge @if ($posts->sum(function ($post) {
-                                if ($post->type == 'link') {
-                                    return $post->link_clicks;
-                                }
-                                return 0;
-                                })
-                                > $averages->get('daily_link_clicks')->average)) bg-green @else bg-red @endif ">
-                                {{ number_format($posts->sum(function ($post) {
-                                    if ($post->type == 'link') {
-                                        return $post->link_clicks;
-                                    }
-                                    return 0;
-                                    })
-                                )}}
-                                <br/>
+                        </td>
+                        <td>
+                            <i class="badge @if ($type == 'link' && ($posts->sum('shares') > $averages->get('daily_shares_article')->average)) bg-green @elseif ($type == 'link') bg-red @elseif ($type == 'video' && ($posts->sum('shares') > $averages->get('daily_shares_video')->average)) bg-green @elseif ($type == 'video') bg-red @elseif ($posts->sum('shares') > $averages->get('daily_shares')->average)) bg-green @else bg-red @endif">
+                                {{ number_format($posts->sum('link_clicks')) }}<br/>
                             </i>
-                        </th>
-                    @endif
-                </tr>
-                </tfoot>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                @endif
+
+                {{--Posts --}}
+                @foreach ($posts as $post)
+                    <tr class="text-center">
+                        <td class="dt-center" @if (!is_null($post->deleted_at)) style="background-color: lightpink;" @else style="width:130px;" @endif>
+                            <small>{{ date('D m @ H:i:s', strtotime($post->posted)) }}</small>
+                            <br>
+                            @if(!is_null($post->deleted_at))
+                                <small>Del: {{ date('D m @ H:i:s', strtotime($post->deleted_at)) }}</small> <br>
+                            @endif
+                            <i>{{ human_since($post->posted) }}</i>
+                        </td>
+
+                        <td class="dt-center" style="font-size: 12pt;">
+                            @if($post->type == 'video')
+                                <div class="label label-default" style="background: #570f85; color:white;">
+                                    <i style="min-width:20px;" class="fa fa-youtube-play"></i>
+                                </div>
+                            @elseif($post->instant_article)
+                                <div class="label label-default" style="background: #ffaf2b; color:white;">
+                                    <i style="min-width:20px;" class="fa fa-bolt"></i>
+                                </div>
+                            @else
+                                <div class="label label-default" style="background: #d22334; color:white;">
+                                    <i style="min-width:20px;" class="fa fa-link"></i>
+                                </div>
+                            @endif
+                        </td>
+
+                        <td class="dt-center">
+                            <a href="{{ route('pages.show', [
+                                    'id' => $pageId,
+                                    'creator' => $post->creator->id ?? null,
+                                    'ia' => request()->get('ia'),
+                                    'day' => request()->get('day'),
+                                    'label' => request()->get('label'),
+                                    'type' => request()->get('type'),
+                                    'from' => request()->get('from'),
+                                    'to' => request()->get('to')]) }}">
+                                {{ $post->creator->name ?? "Unknown" }}
+                            </a>
+                        </td>
+
+                        <td class="dt-center">
+                            <a href="/posts/{{ $post->id }}"><img src="{{ $post->picture }}" height="50"></a>
+                        </td>
+
+                        <td class="dt-center">
+                            <a target="_blank" style="color:black;" href="{{ $post->link }}">{{ $post->name }}
+                                <i class="fa fa-external-link"></i></a>
+                            <br>
+                            &quot;<a href="/posts/{{ $post->id }}">{{ $post->message }}</a>&quot;
+                            <br>
+                            @if($post->videoLabels->count() > 0)
+                                <small>#{{ implode(', #', $post->videoLabels->pluck('label')->toArray()) }}</small>
+                            @else
+                                <span class="label label-danger">NO TAGS! Gimme some tags, <b>{{ explode(' ',$post->creator->name)[0] }}!</b></span>
+                            @endif
+
+                        </td>
+
+                        <td class="dt-center" data-sort="{{ $post->reach }}">
+                            <i class="badge @if (!$post->isUnderAverage('reach', true, $post->type)) bg-green @else bg-red @endif ">
+                                {{ number_format($post->reach) }}
+                            </i>
+                            <br/>
+                            @if (!$post->isUnderAverage('reach', true, $post->type))
+                                <i class="text-success"><i class="fa fa-caret-up"></i></i>
+                            @else
+                                <i class="text-danger"><i class="fa fa-caret-down"></i></i>
+                            @endif
+                            {{ number_format($post->percentageFromTarget('reach', true, $type)) }}%
+                            <br/>
+                            <em><i class="fa fa-bullseye"></i>
+                                <small>{{ number_format($post->getTarget('reach', true, $post->type)) }}</small>
+                            </em>
+                        </td>
+
+                        <td class="dt-center" data-sort="{{ $post->likes }}">
+                            <i class="badge @if (!$post->isUnderAverage('likes', true, $post->type)) bg-green @else bg-red @endif "> {{ number_format($post->likes) }}</i><br/>
+                            @if (!$post->isUnderAverage('likes', true, $post->type))
+                                <i class="text-success"><i class="fa fa-caret-up"></i></i>
+                            @else
+                                <i class="text-danger"><i class="fa fa-caret-down"></i></i>
+                            @endif
+                            {{ number_format($post->percentageFromTarget('likes', true, $post->type)) }}%
+                            <br/>
+                            <em><i class="fa fa-bullseye"></i>
+                                <small>{{ number_format($post->getTarget('likes', true, $post->type)) }}</small>
+                            </em>
+                        </td>
+
+                        <td class="dt-center" data-sort="{{ $post->comments }}">
+                            <i class="badge @if (!$post->isUnderAverage('comments', true, $post->type)) bg-green @else bg-red @endif "> {{ number_format($post->comments) }} </i><br/>
+                            @if (!$post->isUnderAverage('comments', true, $post->type))
+                                <i class="text-success"><i class="fa fa-caret-up"></i></i>
+                            @else
+                                <i class="text-danger"><i class="fa fa-caret-down"></i></i>
+                            @endif
+                            {{ number_format($post->percentageFromTarget('comments', true, $post->type)) }}%
+                            <br/>
+                            <em><i class="fa fa-bullseye"></i>
+                                <small>{{ number_format($post->getTarget('comments', true, $post->type)) }}</small>
+                            </em>
+                        </td>
+
+                        <td class="dt-center" data-sort="{{ $post->shares }}">
+                            <i class="badge @if (!$post->isUnderAverage('shares', true, $post->type)) bg-green @else bg-red @endif "> {{ number_format($post->shares) }}</i><br/>
+                            @if (!$post->isUnderAverage('shares', true, $post->type))
+                                <i class="text-success"><i class="fa fa-caret-up"></i></i>
+                            @else
+                                <i class="text-danger"><i class="fa fa-caret-down"></i></i>
+                            @endif
+                            {{ number_format($post->percentageFromTarget('shares', true, $post->type)) }}%
+                            <br/>
+                            <em><i class="fa fa-bullseye"></i>
+                                <small>{{ number_format($post->getTarget('shares', true, $post->type)) }}</small>
+                            </em>
+                        </td>
+
+                        <td class="dt-center" data-sort="{{ $post->link_clicks > 0 ? $post->link_clicks : $post->ga_page_views }}">
+                            @if($post->type === 'video')
+
+                            @else
+                                <i class="badge @if (!$post->isUnderAverage('link_clicks', true)) bg-green @else bg-red @endif ">
+                                    {{ $post->link_clicks > 0 ? number_format($post->link_clicks) : "GA: ".number_format($post->ga_page_views) }}
+                                </i>
+                                <br/>
+                                @if (!$post->isUnderAverage('link_clicks', true))
+                                    <i class="text-success"><i class="fa fa-caret-up"></i></i>
+                                @else
+                                    <i class="text-danger"><i class="fa fa-caret-down"></i></i>
+                                @endif
+                                {{ number_format($post->percentageFromTarget('link_clicks', true)) }}%
+                                <br/>
+                                <em><i class="fa fa-bullseye"></i>
+                                    <small>{{ number_format($post->getTarget('link_clicks', true)) }}</small>
+                                </em>
+                            @endif
+                        </td>
+                        <td><small>{{ date('D m Y @ H:i:s', strtotime($post->updated_at)) }}</small></td>
+                    </tr>
+                @endforeach
+                </tbody>
             </table>
             <div class="row">
                 <div class="col-lg-12 text-center">
@@ -379,43 +455,44 @@
     </div>
 @stop
 
-    @push('js')
+@push('js')
     <script src="{{ asset('js/app.js') }}"></script>
     <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.16/js/dataTables.bootstrap.min.js"></script>
+
     <!-- Include Date Range Picker -->
     <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css"/>
 
     <script>
-    $('#posts-table').dataTable({
-        "paging": false,
-    });
-    $('input[name="rangepicker"]').daterangepicker({
-        maxDate: moment(),
-        timePicker: true,
-        timePicker24Hour: true,
-        alwaysShowCalendars: true,
-        startDate: '{{ $from->format('d-m-Y H:i') }}',
-        endDate: '{{ $to->format('d-m-Y H:i') }}',
-        locale: {
-            format: 'DD/MM/YYYY H:mm',
-            firstDay: 1,
-        },
-        ranges: {
-            'Today': [moment(), moment()],
-            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            'Last Week': [moment().subtract(1, 'weeks').startOf('isoWeek'), moment().subtract(1, 'weeks').endOf('isoWeek')],
-            'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-        }
-    });
+        $('input[name="rangepicker"]').daterangepicker({
+            maxDate: moment(),
+            timePicker: true,
+            timePicker24Hour: true,
+            alwaysShowCalendars: true,
+            startDate: '{{ $from->format('d-m-Y H:i') }}',
+            endDate: '{{ $to->format('d-m-Y H:i') }}',
+            locale: {
+                format: 'DD/MM/YYYY H:mm',
+                firstDay: 1,
+            },
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last Week': [moment().subtract(1, 'weeks').startOf('isoWeek'), moment().subtract(1, 'weeks').endOf('isoWeek')],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+            }
+        });
 
-    $('input[name="rangepicker"]').on('apply.daterangepicker', function (ev, picker) {
-        window.location.search += '&from=' + picker.startDate.format('DD-MM-YY-H-mm') + '&to=' + picker.endDate.format('DD-MM-YY-H-mm');
-    });
+        $('input[name="rangepicker"]').on('apply.daterangepicker', function (ev, picker) {
+            window.location.search += '&from=' + picker.startDate.format('DD-MM-YY-H-mm') + '&to=' + picker.endDate.format('DD-MM-YY-H-mm');
+        });
 
+        $('#posts-table').dataTable({
+            "paging": false,
+        });
     </script>
 
-    @endpush
+@endpush

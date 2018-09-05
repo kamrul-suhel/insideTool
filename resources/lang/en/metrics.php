@@ -234,4 +234,14 @@ return [
         group by video_labels.label
         order by total DESC;
     ",
+
+	'creators_stats' => "
+        select creators.name, count(posts.id) as posts, round(:conversion(posts.reactions)) as reactions, round(:conversion(posts.shares)) as shares, round(:conversion(posts.comments)) as comments, round(:conversion(posts.reach)) as reach
+        from posts
+        left join creators on creators.id = posts.creator_id
+        where posts.page_id = :id 
+        and posts.posted between ':from' and ':to'
+        group by creators.name
+        order by creators.name ASC;
+    "
 ];
