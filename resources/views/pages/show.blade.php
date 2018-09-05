@@ -355,7 +355,23 @@
                             &quot;<a href="/posts/{{ $post->id }}">{{ $post->message }}</a>&quot;
                             <br>
                             @if($post->videoLabels->count() > 0)
-                                <small>#{{ implode(', #', $post->videoLabels->pluck('label')->toArray()) }}</small>
+
+                                @foreach($post->videoLabels->pluck('label') as $label)
+                                    @if(!in_array($label, explode(',', $chosenLabels)))
+                                        <a class="label label-default" style="margin: 2px;" href="{{ route('pages.show', [
+                                        'id' => $pageId,
+                                        'from' => request()->get('from'),
+                                        'to' => request()->get('to'),
+                                        'label' => is_null($chosenLabels) ? $label : $chosenLabels .','.$label,
+                                        'ia' => request()->get('ia'),
+                                        'creator' => request()->get('creator'),
+                                        'day' => request()->get('day'),
+                                        'type' => request()->get('type')
+                                        ]) }}"> {{$label}} </a>
+                                    @else
+                                        <a class="label label-info" style="margin: 2px;"> {{ $label }} </a>
+                                    @endif
+                                @endforeach
                             @else
                                 <span class="label label-danger">NO TAGS! Gimme some tags, <b>{{ explode(' ',$post->creator->name)[0] }}!</b></span>
                             @endif
