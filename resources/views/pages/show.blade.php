@@ -252,7 +252,7 @@
             <table class="table table-striped table-condensed" id="posts-table">
                 <thead>
                 <tr>
-                    <th class="dt-center">Posted</th>
+                    <th class="dt-center"></th>
                     <th class="dt-center" data-orderable="false">Type</th>
                     <th class="dt-center">Posted by</th>
                     <th class="dt-center" data-orderable="false"><i class="fa fa-image"></i></th>
@@ -268,7 +268,7 @@
                 <tbody>
                 {{-- Totals --}}
                 @if(count($averages) > 0)
-                    <tr class="text-center">
+                    <tr class="">
                         <td><b>Totals</b></td>
                         <td colspan="4"></td>
                         <td>
@@ -304,7 +304,7 @@
 
                 {{--Posts --}}
                 @foreach ($posts as $post)
-                    <tr class="text-center">
+                    <tr class="dt-center">
                         <td class="dt-center" @if (!is_null($post->deleted_at)) style="background-color: lightpink;" @else style="width:130px;" @endif>
                             <small>{{ date('D m @ H:i:s', strtotime($post->posted)) }}</small>
                             <br>
