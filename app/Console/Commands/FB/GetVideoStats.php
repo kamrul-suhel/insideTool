@@ -99,12 +99,13 @@ class GetVideoStats extends Command
             $snapshot->post_id = $post->id;
         
             $response = $api->get('/' . $postId . '/video_insights', $post->page->access_token);
-            if ($response) {
+            if (is_null($response)) {
                 foreach ($response->getGraphEdge() as $node) {
                     if (in_array($node["name"], $this->simpleFields)) {
                         $simpleStats[$node["name"]] = $node["values"][0]["value"];
                     }
                 }
+
                 $snapshot->fill($simpleStats);
                 
                 $snapshot->save();

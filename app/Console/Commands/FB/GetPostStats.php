@@ -115,7 +115,7 @@ class GetPostStats extends Command
                     $snapshot->comments = $commentsTotal;
                 }
 
-                if ($commentsTotal > 0) {
+                if (isset($commentsTotal) && $commentsTotal > 0) {
                     $post->comments = $commentsTotal;
                     $post->save();
                 }

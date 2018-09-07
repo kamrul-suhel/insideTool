@@ -75,12 +75,12 @@ class GetPostStatsDelayed extends Command
                 }
 
                 // Link clicks
-                $response = $api->get('/' . $post->page->facebook_id . '_'. $postId . '/insights/post_clicks', $post->page->access_token);
+                $response = $api->get('/' . $post->page->facebook_id . '_'. $postId . '/insights/post_clicks_by_type/lifetime', $post->page->access_token);
                 if ($response) {
                     $link_clicks = $response->getGraphEdge()[0]->getField('values')->getField(0)->getField('value');
                     if ($link_clicks) {
-                        $snapshot->link_clicks = $link_clicks;
-                        $post->link_clicks = $link_clicks;
+                        $snapshot->link_clicks = $link_clicks['link clicks'];
+                        $post->link_clicks = $link_clicks['link clicks'];
                         $post->save();
                     }
                 }
