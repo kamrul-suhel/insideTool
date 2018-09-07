@@ -79,8 +79,8 @@ class GetPostStatsDelayed extends Command
                 if ($response) {
                     $link_clicks = $response->getGraphEdge()[0]->getField('values')->getField(0)->getField('value');
                     if ($link_clicks) {
-                        $snapshot->link_clicks = $link_clicks['link clicks'];
-                        $post->link_clicks = $link_clicks['link clicks'];
+                        $snapshot->link_clicks = $link_clicks['link clicks'] ?? 0;
+                        $post->link_clicks = $link_clicks['link clicks'] ?? 0;
                         $post->save();
                     }
                 }

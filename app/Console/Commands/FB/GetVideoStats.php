@@ -69,7 +69,15 @@ class GetVideoStats extends Command
         'total_video_impressions_fan',
         'total_video_impressions_fan_paid_unique',
         'total_video_impressions_fan_paid',
-		//todo total_video_retention_graph
+    ];
+
+    protected $complexFields = [
+	    'total_video_retention_graph',
+	    'total_video_retention_graph_autoplayed',
+	    'total_video_retention_graph_clicked_to_play',
+	    'total_video_view_time_by_age_bucket_and_gender',
+	    'total_video_view_time_by_region_id',
+	    'total_video_reactions_by_type_total',
     ];
 
     /**
@@ -87,7 +95,7 @@ class GetVideoStats extends Command
      */
     public function handle()
     {
-        $api = new Facebook;
+        $api = new Facebook(['default_graph_version' => 'v3.1']);
         $snapshot = new VideoStatSnapshot;
         $postId = $this->argument('videoid');
         $post = Post::where(['facebook_id' => $postId])->first();
@@ -99,15 +107,23 @@ class GetVideoStats extends Command
             $snapshot->post_id = $post->id;
         
             $response = $api->get('/' . $postId . '/video_insights', $post->page->access_token);
-            if (is_null($response)) {
+
+            if (!is_null($response)) {
                 foreach ($response->getGraphEdge() as $node) {
                     if (in_array($node["name"], $this->simpleFields)) {
                         $simpleStats[$node["name"]] = $node["values"][0]["value"];
                     }
-                }
 
+	                if(in_array($node['name'], $this->complexFields)) {
+	                	$final = [];
+	                	$elements = $node['values'][0]['value'];
+	                	foreach($elements as $elementKey => $elementValue) {
+	                		$final[$elementKey] = $elementValue;
+		                }
+		                $simpleStats[$node['name']] = json_encode($final);
+	                }
+                }
                 $snapshot->fill($simpleStats);
-                
                 $snapshot->save();
             }
         }
