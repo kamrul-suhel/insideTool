@@ -49,8 +49,8 @@ class GetVideoPageLengths extends Command
         $page = Page::where(['facebook_id' => $this->argument('pageid')])->first();
 
         $snapshotsWithRetention = VideoStatSnapshot::whereNotNull('total_video_retention_graph')->groupBy('post_id')->pluck('post_id');
-        $videos = Post::where('type', 'video')->whereIn('id', $snapshotsWithRetention)->get();
-        
+        $videos = Post::where('type', 'video')->where('length', '!=', 0.00)->whereIn('id', $snapshotsWithRetention)->get();
+
         foreach($videos as $video) {
 	        $videoLengthResponse = $api->get('/' . $video->facebook_id . '/?fields=length', $page->access_token);
 	        if($videoLengthResponse) {
