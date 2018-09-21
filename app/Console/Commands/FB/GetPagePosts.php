@@ -114,6 +114,13 @@ class GetPagePosts extends Command
                                 }
                             }
                         }
+
+                        $videoResponse = $api->get('/' . $objectId . '/?fields=length', $page->access_token);
+                        if($videoResponse) {
+	                        $post->length = $videoResponse->getGraphNode()->getField('length');
+	                        $post->save();
+                        }
+
                     // LINKS - GET INSTANT ARTICLE
                     } else if ($post->type == 'link') {
                         $instantArticles = $api->get('/' . $this->argument('pageid') . '/instant_articles', $page->access_token);

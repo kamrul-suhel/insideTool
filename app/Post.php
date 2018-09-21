@@ -56,6 +56,14 @@ class Post extends Model
         return $this->hasMany('App\PostDelayedStatSnapshot');
     }
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+    public function videoStatSnapshots()
+    {
+    	return $this->hasMany(VideoStatSnapshot::class);
+    }
+
     /**
      * Return video labels
      */
