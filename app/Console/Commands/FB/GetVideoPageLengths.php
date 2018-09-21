@@ -15,53 +15,58 @@ use Illuminate\Support\Facades\Storage;
 
 class GetVideoPageLengths extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'stats:getvideopagelengths {pageid}';
+	/**
+	 * The name and signature of the console command.
+	 *
+	 * @var string
+	 */
+	protected $signature = 'stats:getvideopagelengths {pageid}';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Retrieves the length for all video posts';
+	/**
+	 * The console command description.
+	 *
+	 * @var string
+	 */
+	protected $description = 'Retrieves the length for all video posts';
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
+	/**
+	 * Create a new command instance.
+	 *
+	 * @return void
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+	}
 
-    /**
-     * @throws \Facebook\Exceptions\FacebookSDKException
-     */
-    public function handle()
-    {
-        $api = new Facebook;
+	/**
+	 * @throws \Facebook\Exceptions\FacebookSDKException
+	 */
+	public function handle()
+	{
+		$api = new Facebook;
 
-        $page = Page::where(['facebook_id' => $this->argument('pageid')])->first();
+		$page = Page::where(['facebook_id' => $this->argument('pageid')])->first();
 
-        $snapshotsWithRetention = VideoStatSnapshot::whereNotNull('total_video_retention_graph')->groupBy('post_id')->pluck('post_id');
-        $videos = Post::where('type', 'video')
-	        ->where('length', '=', 0.00)
-	        ->where('facebook_id', '!=', 1215858231887003)
-	        ->where('deleted_at', '=', null)
-	        ->whereIn('id', $snapshotsWithRetention)
-	        ->get();
+		$snapshotsWithRetention = VideoStatSnapshot::whereNotNull('total_video_retention_graph')->groupBy('post_id')->pluck('post_id');
+		$videos = Post::where('type', 'video')
+			->where('length', '=', 0.00)
+			->where('facebook_id', '!=', 1215858231887003)
+			->where('deleted_at', '=', null)
+			->whereIn('id', $snapshotsWithRetention)
+			->get();
 
-        foreach($videos as $video) {
-	        $videoLengthResponse = $api->get('/' . $video->facebook_id . '/?fields=length', $page->access_token);
-	        if($videoLengthResponse) {
-		        $video->length = $videoLengthResponse->getGraphNode()->getField('length');
-		        $video->save();
-	        }
-        }
-    }
+
+		foreach ($videos as $video) {
+			try {
+				$videoLengthResponse = $api->get('/' . $video->facebook_id . '/?fields=length', $page->access_token);
+				if ($videoLengthResponse) {
+					$video->length = $videoLengthResponse->getGraphNode()->getField('length');
+					$video->save();
+				}
+			} catch (\Exception $e) {
+				dump('cant find video: id=' . $video->id, ' Message: ' .$e->getMessage());
+			}
+		}
+	}
 }
