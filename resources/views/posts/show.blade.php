@@ -25,6 +25,23 @@
                 </div>
             </div>
             <div class="row">
+
+                @if($post->videoStatSnapshots->count() > 0)
+                    {{-- IA non IA comparison --}}
+                    <div class="col-lg-12">
+                        <div class="box">
+                            <div class="box-header">
+                                <h3 class="box-title"> Video Retention (The X axis is split into 40 segments of the total video time ({{$post->length}} seconds))</h3>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                                class="fa fa-minus"></i></button>
+                                </div>
+                                <canvas id="videoRetentionGraphCanvas" class="chart" style="height:400px;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
                 <div class="col-md-12">
                     <div class="box">
                         <div class="box-header">
@@ -55,7 +72,9 @@
                                         @if ($post->creator)
                                             <tr>
                                                 <th>Posted by</th>
-                                                <td><a href="{{ route('pages.show', ['id' => $post->page_id, 'creator' => $post->creator->id]) }}">{{ $post->creator->name }}</a></td>
+                                                <td>
+                                                    <a href="{{ route('pages.show', ['id' => $post->page_id, 'creator' => $post->creator->id]) }}">{{ $post->creator->name }}</a>
+                                                </td>
                                             </tr>
                                         @endif
                                         <tr>
@@ -64,16 +83,37 @@
                                         </tr>
                                         <tr>
                                             <th>Facebook</th>
-                                            <td><a target="_blank" href="https://facebook.com/{{ $post->page->facebook_id }}/posts/{{ $post->facebook_id }}">Link</a></td>
+                                            <td><a target="_blank"
+                                                   href="https://facebook.com/{{ $post->page->facebook_id }}/posts/{{ $post->facebook_id }}">Link</a>
+                                            </td>
                                         </tr>
                                         @if ($post->type == 'video')
                                             <tr>
                                                 <th>Labels</th>
                                                 <td>
                                                     @foreach ($post->videoLabels as $label)
-                                                        <span class="badge bg-aqua video-label"><a href="{{ route('pages.show', ['id' => $post->page_id, 'label' => $label->id]) }}">{{$label->label}}</a></span>
+                                                        <span class="badge bg-aqua video-label"><a
+                                                                    href="{{ route('pages.show', ['id' => $post->page_id, 'label' => $label->id]) }}">{{$label->label}}</a></span>
                                                     @endforeach
                                                 </td>
+                                            </tr>
+                                        @endif
+                                        @if($post->videoMonitizationStatSnapshot->count() > 0)
+                                            <tr>
+                                                <th>Ads Stats</th>
+                                                @php $latestAdsStats = $post->videoMonetizationStatsSnapshotLatest->toArray() @endphp
+                                                <tr>
+                                                    <td>post_video_ad_break_ad_impressions</td>
+                                                    <td>{{number_format($latestAdsStats[0]['post_video_ad_break_ad_impressions'])}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>post_video_ad_break_earnings</td>
+                                                    <td>£{{number_format($latestAdsStats[0]['post_video_ad_break_earnings'])}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>post_video_ad_break_ad_cpm</td>
+                                                    <td>{{number_format($latestAdsStats[0]['post_video_ad_break_ad_cpm'])}}</td>
+                                                </tr>
                                             </tr>
                                         @endif
                                     </table>
@@ -96,13 +136,16 @@
                                 @else
                                     text-red 
                                 @endif
-                                ">
+                                    ">
                                 @if ($liveLatest->likespm_lifetime > $averages->get("likes_perminute_{$post->type}_lifetime")->average)
-                                    <i class="fa fa-angle-up"></i> {{ round($liveLatest->likespm_lifetime) }} <em><sup><small>({{ $averages->get("likes_perminute_{$post->type}_lifetime")->average }})</small></sup></em>
+                                    <i class="fa fa-angle-up"></i> {{ round($liveLatest->likespm_lifetime) }} <em><sup><small>({{ $averages->get("likes_perminute_{$post->type}_lifetime")->average }}
+                                                )</small></sup></em>
                                 @else
-                                    <i class="fa fa-angle-down"></i> {{ round($liveLatest->likespm_lifetime) }} <em><sup><small>({{ $averages->get("likes_perminute_{$post->type}_lifetime")->average }})</small></sup></em>
+                                    <i class="fa fa-angle-down"></i> {{ round($liveLatest->likespm_lifetime) }}
+                                    <em><sup><small>({{ $averages->get("likes_perminute_{$post->type}_lifetime")->average }}
+                                                )</small></sup></em>
                                 @endif
-                            </span>                        
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -110,20 +153,23 @@
                     <div class="info-box">
                         <span class="info-box-icon bg-green"><i class="fa fa-share"></i></span>
                         <div class="info-box-content">
-                        <span class="info-box-text"><abbr title="Shares per minute">SPM</abbr>  (Lifetime)</span>
-                        <span class="info-box-number info-box-number-big 
+                            <span class="info-box-text"><abbr title="Shares per minute">SPM</abbr>  (Lifetime)</span>
+                            <span class="info-box-number info-box-number-big
                                 @if ($liveLatest->sharespm_lifetime > $averages->get("shares_perminute_{$post->type}_lifetime")->average)
                                     text-green 
                                 @else
                                     text-red 
                                 @endif
-                                ">
+                                    ">
                                 @if ($liveLatest->sharespm_lifetime > $averages->get("shares_perminute_{$post->type}_lifetime")->average)
-                                    <i class="fa fa-angle-up"></i> {{ round($liveLatest->sharespm_lifetime) }} <em><sup><small>({{ $averages->get("shares_perminute_{$post->type}_lifetime")->average }})</small></sup></em>
+                                    <i class="fa fa-angle-up"></i> {{ round($liveLatest->sharespm_lifetime) }} <em><sup><small>({{ $averages->get("shares_perminute_{$post->type}_lifetime")->average }}
+                                                )</small></sup></em>
                                 @else
-                                    <i class="fa fa-angle-down"></i> {{ round($liveLatest->sharespm_lifetime) }} <em><sup><small>({{ $averages->get("shares_perminute_{$post->type}_lifetime")->average }})</small></sup></em>
+                                    <i class="fa fa-angle-down"></i> {{ round($liveLatest->sharespm_lifetime) }}
+                                    <em><sup><small>({{ $averages->get("shares_perminute_{$post->type}_lifetime")->average }}
+                                                )</small></sup></em>
                                 @endif
-                            </span>                        
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -131,18 +177,22 @@
                     <div class="info-box">
                         <span class="info-box-icon bg-purple"><i class="fa fa-comment"></i></span>
                         <div class="info-box-content">
-                        <span class="info-box-text"><abbr title="Comments per minute">CPM</abbr> (Lifetime)</span>
+                            <span class="info-box-text"><abbr title="Comments per minute">CPM</abbr> (Lifetime)</span>
                             <span class="info-box-number info-box-number-big 
                                 @if ($liveLatest->commentspm_lifetime > $averages->get("comments_perminute_{$post->type}_lifetime")->average)
                                     text-green 
                                 @else
                                     text-red 
                                 @endif
-                                ">
+                                    ">
                                 @if ($liveLatest->commentspm_lifetime > $averages->get("comments_perminute_{$post->type}_lifetime")->average)
-                                    <i class="fa fa-angle-up"></i> {{ round($liveLatest->commentspm_lifetime) }} <em><sup><small>({{ $averages->get("comments_perminute_{$post->type}_lifetime")->average }})</small></sup></em>
+                                    <i class="fa fa-angle-up"></i> {{ round($liveLatest->commentspm_lifetime) }}
+                                    <em><sup><small>({{ $averages->get("comments_perminute_{$post->type}_lifetime")->average }}
+                                                )</small></sup></em>
                                 @else
-                                    <i class="fa fa-angle-down"></i> {{ round($liveLatest->commentspm_lifetime) }} <em><sup><small>({{ $averages->get("comments_perminute_{$post->type}_lifetime")->average }})</small></sup></em>
+                                    <i class="fa fa-angle-down"></i> {{ round($liveLatest->commentspm_lifetime) }}
+                                    <em><sup><small>({{ $averages->get("comments_perminute_{$post->type}_lifetime")->average }}
+                                                )</small></sup></em>
                                 @endif
                             </span>
                         </div>
@@ -154,18 +204,21 @@
                     <div class="info-box">
                         <span class="info-box-icon bg-aqua"><i class="fa fa-thumbs-up"></i></span>
                         <div class="info-box-content">
-                        <span class="info-box-text"><abbr title="Likes per minute">LPM</abbr> (First 5 minutes)</span>
+                            <span class="info-box-text"><abbr
+                                        title="Likes per minute">LPM</abbr> (First 5 minutes)</span>
                             <span class="info-box-number info-box-number-big 
                                 @if ($liveLatest->likespm_birth > $averages->get("likes_perminute_{$post->type}_birth")->average)
                                     text-green 
                                 @else
                                     text-red 
                                 @endif
-                                ">
+                                    ">
                                 @if ($liveLatest->likespm_birth > $averages->get("likes_perminute_{$post->type}_birth")->average)
-                                    <i class="fa fa-angle-up"></i> {{ round($liveLatest->likespm_birth) }} <em><sup><small>({{ $averages->get("likes_perminute_{$post->type}_birth")->average }})</small></sup></em>
+                                    <i class="fa fa-angle-up"></i> {{ round($liveLatest->likespm_birth) }} <em><sup><small>({{ $averages->get("likes_perminute_{$post->type}_birth")->average }}
+                                                )</small></sup></em>
                                 @else
-                                    <i class="fa fa-angle-down"></i> {{ round($liveLatest->likespm_birth) }} <em><sup><small>({{ $averages->get("likes_perminute_{$post->type}_birth")->average }})</small></sup></em>
+                                    <i class="fa fa-angle-down"></i> {{ round($liveLatest->likespm_birth) }} <em><sup><small>({{ $averages->get("likes_perminute_{$post->type}_birth")->average }}
+                                                )</small></sup></em>
                                 @endif
                             </span>
                         </div>
@@ -175,20 +228,23 @@
                     <div class="info-box">
                         <span class="info-box-icon bg-green"><i class="fa fa-share"></i></span>
                         <div class="info-box-content">
-                        <span class="info-box-text"><abbr title="Shares per minute">SPM</abbr> (First 5 minutes)</span>
-                        <span class="info-box-number info-box-number-big 
+                            <span class="info-box-text"><abbr
+                                        title="Shares per minute">SPM</abbr> (First 5 minutes)</span>
+                            <span class="info-box-number info-box-number-big
                                 @if ($liveLatest->sharespm_birth > $averages->get("shares_perminute_{$post->type}_birth")->average)
                                     text-green 
                                 @else
                                     text-red 
                                 @endif
-                                ">
+                                    ">
                                 @if ($liveLatest->sharespm_birth > $averages->get("shares_perminute_{$post->type}_birth")->average)
-                                    <i class="fa fa-angle-up"></i> {{ round($liveLatest->sharespm_birth) }} <em><sup><small>({{ $averages->get("shares_perminute_{$post->type}_birth")->average }})</small></sup></em>
+                                    <i class="fa fa-angle-up"></i> {{ round($liveLatest->sharespm_birth) }} <em><sup><small>({{ $averages->get("shares_perminute_{$post->type}_birth")->average }}
+                                                )</small></sup></em>
                                 @else
-                                    <i class="fa fa-angle-down"></i> {{ round($liveLatest->sharespm_birth) }} <em><sup><small>({{ $averages->get("shares_perminute_{$post->type}_birth")->average }})</small></sup></em>
+                                    <i class="fa fa-angle-down"></i> {{ round($liveLatest->sharespm_birth) }} <em><sup><small>({{ $averages->get("shares_perminute_{$post->type}_birth")->average }}
+                                                )</small></sup></em>
                                 @endif
-                            </span>                        
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -196,18 +252,22 @@
                     <div class="info-box">
                         <span class="info-box-icon bg-purple"><i class="fa fa-comment"></i></span>
                         <div class="info-box-content">
-                        <span class="info-box-text"><abbr title="Comments per minute">CPM</abbr> (First 5 minutes)</span>
+                            <span class="info-box-text"><abbr
+                                        title="Comments per minute">CPM</abbr> (First 5 minutes)</span>
                             <span class="info-box-number info-box-number-big 
                                 @if ($liveLatest->commentspm_birth > $averages->get("comments_perminute_{$post->type}_birth")->average)
                                     text-green 
                                 @else
                                     text-red 
                                 @endif
-                                ">
+                                    ">
                                 @if ($liveLatest->commentspm_birth > $averages->get("comments_perminute_{$post->type}_birth")->average)
-                                    <i class="fa fa-angle-up"></i> {{ round($liveLatest->commentspm_birth) }} <em><sup><small>({{ $averages->get("comments_perminute_{$post->type}_birth")->average }})</small></sup></em>
+                                    <i class="fa fa-angle-up"></i> {{ round($liveLatest->commentspm_birth) }} <em><sup><small>({{ $averages->get("comments_perminute_{$post->type}_birth")->average }}
+                                                )</small></sup></em>
                                 @else
-                                    <i class="fa fa-angle-down"></i> {{ round($liveLatest->commentspm_birth) }} <em><sup><small>({{ $averages->get("comments_perminute_{$post->type}_birth")->average }})</small></sup></em>
+                                    <i class="fa fa-angle-down"></i> {{ round($liveLatest->commentspm_birth) }}
+                                    <em><sup><small>({{ $averages->get("comments_perminute_{$post->type}_birth")->average }}
+                                                )</small></sup></em>
                                 @endif
                             </span>
                         </div>
@@ -217,44 +277,28 @@
 
             <div class="row">
                 <div class="col-md-4">
-                        <div class="info-box">
-                            <span class="info-box-icon bg-orange"><i class="fa fa-eye"></i></span>
-                            <div class="info-box-content">
-                            <span class="info-box-text"><abbr title="Impressions per minute">IPM</abbr> (Lifetime)</span>
+                    <div class="info-box">
+                        <span class="info-box-icon bg-orange"><i class="fa fa-eye"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text"><abbr
+                                        title="Impressions per minute">IPM</abbr> (Lifetime)</span>
                             <span class="info-box-number info-box-number-largeish 
                                     @if ($delayedLatest->reachpm_lifetime > $averages->get("impressions_perminute_{$post->type}_lifetime")->average)
-                                        text-green 
-                                    @else
-                                        text-red 
-                                    @endif
+                                    text-green
+@else
+                                    text-red
+@endif
                                     ">
                                     @if ($delayedLatest->reachpm_lifetime > $averages->get("impressions_perminute_{$post->type}_lifetime")->average)
-                                        <i class="fa fa-angle-up"></i> {{ number_format(round($delayedLatest->reachpm_lifetime)) }} <em><sup><small>({{ number_format($averages->get("impressions_perminute_{$post->type}_lifetime")->average) }})</small></sup></em>
-                                    @else
-                                        <i class="fa fa-angle-down"></i> {{ number_format(round($delayedLatest->reachpm_lifetime)) }} <em><sup><small>({{ number_format($averages->get("impressions_perminute_{$post->type}_lifetime")->average) }})</small></sup></em>
-                                    @endif
-                                </span>                        
-                            </div>
-                        </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="info-box">
-                        <span class="info-box-icon bg-blue"><i class="fa fa-user-circle"></i></span>
-                        <div class="info-box-content">
-                        <span class="info-box-text"><abbr title="Engagement per minute">EPM</abbr> (First 5 minutes)</span>
-                                <span class="info-box-number info-box-number-big 
-                                @if ($liveLatest->reactionspm_birth > $averages->get("reactions_perminute_{$post->type}_birth")->average)
-                                    text-green 
+                                    <i class="fa fa-angle-up"></i> {{ number_format(round($delayedLatest->reachpm_lifetime)) }}
+                                    <em><sup><small>({{ number_format($averages->get("impressions_perminute_{$post->type}_lifetime")->average) }}
+                                                )</small></sup></em>
                                 @else
-                                    text-red 
+                                    <i class="fa fa-angle-down"></i> {{ number_format(round($delayedLatest->reachpm_lifetime)) }}
+                                    <em><sup><small>({{ number_format($averages->get("impressions_perminute_{$post->type}_lifetime")->average) }}
+                                                )</small></sup></em>
                                 @endif
-                                ">
-                                @if ($liveLatest->reactionspm_birth > $averages->get("reactions_perminute_{$post->type}_birth")->average)
-                                    <i class="fa fa-angle-up"></i> {{ number_format(round($liveLatest->reactionspm_birth)) }} <em><sup><small>({{ number_format($averages->get("reactions_perminute_{$post->type}_birth")->average) }})</small></sup></em>
-                                @else
-                                    <i class="fa fa-angle-down"></i> {{ number_format(round($liveLatest->reactionspm_birth)) }} <em><sup><small>({{ number_format($averages->get("reactions_perminute_{$post->type}_birth")->average) }})</small></sup></em>
-                                @endif
-                            </span>                        
+                                </span>
                         </div>
                     </div>
                 </div>
@@ -262,20 +306,49 @@
                     <div class="info-box">
                         <span class="info-box-icon bg-blue"><i class="fa fa-user-circle"></i></span>
                         <div class="info-box-content">
-                        <span class="info-box-text"><abbr title="Engagement per minute">EPM</abbr> (Lifetime)</span>
-                                <span class="info-box-number info-box-number-big 
+                            <span class="info-box-text"><abbr title="Engagement per minute">EPM</abbr> (First 5 minutes)</span>
+                            <span class="info-box-number info-box-number-big
+                                @if ($liveLatest->reactionspm_birth > $averages->get("reactions_perminute_{$post->type}_birth")->average)
+                                    text-green 
+                                @else
+                                    text-red 
+                                @endif
+                                    ">
+                                @if ($liveLatest->reactionspm_birth > $averages->get("reactions_perminute_{$post->type}_birth")->average)
+                                    <i class="fa fa-angle-up"></i> {{ number_format(round($liveLatest->reactionspm_birth)) }}
+                                    <em><sup><small>({{ number_format($averages->get("reactions_perminute_{$post->type}_birth")->average) }}
+                                                )</small></sup></em>
+                                @else
+                                    <i class="fa fa-angle-down"></i> {{ number_format(round($liveLatest->reactionspm_birth)) }}
+                                    <em><sup><small>({{ number_format($averages->get("reactions_perminute_{$post->type}_birth")->average) }}
+                                                )</small></sup></em>
+                                @endif
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-blue"><i class="fa fa-user-circle"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text"><abbr title="Engagement per minute">EPM</abbr> (Lifetime)</span>
+                            <span class="info-box-number info-box-number-big
                                 @if ($liveLatest->reactionspm_lifetime > $averages->get("reactions_perminute_{$post->type}_lifetime")->average)
                                     text-green 
                                 @else
                                     text-red 
                                 @endif
-                                ">
+                                    ">
                                 @if ($liveLatest->reactionspm_lifetime > $averages->get("reactions_perminute_{$post->type}_lifetime")->average)
-                                    <i class="fa fa-angle-up"></i> {{ number_format(round($liveLatest->reactionspm_lifetime)) }} <em><sup><small>({{ number_format($averages->get("reactions_perminute_{$post->type}_lifetime")->average) }})</small></sup></em>
+                                    <i class="fa fa-angle-up"></i> {{ number_format(round($liveLatest->reactionspm_lifetime)) }}
+                                    <em><sup><small>({{ number_format($averages->get("reactions_perminute_{$post->type}_lifetime")->average) }}
+                                                )</small></sup></em>
                                 @else
-                                    <i class="fa fa-angle-down"></i> {{ number_format(round($liveLatest->reactionspm_lifetime)) }} <em><sup><small>({{ number_format($averages->get("reactions_perminute_{$post->type}_lifetime")->average) }})</small></sup></em>
+                                    <i class="fa fa-angle-down"></i> {{ number_format(round($liveLatest->reactionspm_lifetime)) }}
+                                    <em><sup><small>({{ number_format($averages->get("reactions_perminute_{$post->type}_lifetime")->average) }}
+                                                )</small></sup></em>
                                 @endif
-                            </span>                        
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -284,42 +357,63 @@
                 <div class="col-md-12">
                     <div class="nav-tabs-custom">
                         <ul class="nav nav-tabs">
-                            <li class="active"><a href="#lcs" data-toggle="tab"><i class="fa fa-thumbs-up"></i>&nbsp;&nbsp;<i class="fa fa-share"></i>&nbsp;&nbsp;<i class="fa fa-comment"></i></a></li>
-                            <li><a href="#reactions" data-toggle="tab"><i class="fa fa-heart"></i>&nbsp;&nbsp;<i class="fa fa-exclamation"></i>&nbsp;&nbsp;<i class="fa fa-hand-paper-o"></i>&nbsp;&nbsp;<i class="fa fa-frown-o"></i>&nbsp;&nbsp;<i class="fa fa-at"></i></a></li>
+                            <li class="active"><a href="#lcs" data-toggle="tab"><i class="fa fa-thumbs-up"></i>&nbsp;&nbsp;<i
+                                            class="fa fa-share"></i>&nbsp;&nbsp;<i class="fa fa-comment"></i></a></li>
+                            <li><a href="#reactions" data-toggle="tab"><i class="fa fa-heart"></i>&nbsp;&nbsp;<i
+                                            class="fa fa-exclamation"></i>&nbsp;&nbsp;<i class="fa fa-hand-paper-o"></i>&nbsp;&nbsp;<i
+                                            class="fa fa-frown-o"></i>&nbsp;&nbsp;<i class="fa fa-at"></i></a></li>
                             <li><a href="#views" data-toggle="tab"><i class="fa fa-eye"></i></a></li>
                         </ul>
                         <div class="tab-content">
                             <div class="active tab-pane" id="lcs">
-                                <h3>Likes, comments, and shares <small>First 5 minutes</small></h3>
+                                <h3>Likes, comments, and shares
+                                    <small>First 5 minutes</small>
+                                </h3>
                                 <div class="chart">
-                                    <graph-view id="chart-lcs" birth="true" fields="likes,shares,comments" type="live" post-id="{{ $post->id }}"></graph-view>
+                                    <graph-view id="chart-lcs" birth="true" fields="likes,shares,comments" type="live"
+                                                post-id="{{ $post->id }}"></graph-view>
                                 </div>
-                                <h3>Likes, comments, and shares <small>Post lifetime</small></h3>
+                                <h3>Likes, comments, and shares
+                                    <small>Post lifetime</small>
+                                </h3>
                                 <div class="chart">
-                                    <graph-view id="chart-lcs-birth" birth="" fields="likes,shares,comments" type="live" post-id="{{ $post->id }}"></graph-view>
+                                    <graph-view id="chart-lcs-birth" birth="" fields="likes,shares,comments" type="live"
+                                                post-id="{{ $post->id }}"></graph-view>
                                 </div>
                             </div>
                             <div class="tab-pane" id="reactions">
-                                <h3>Reactions <small>First 5 minutes</small></h3>
+                                <h3>Reactions
+                                    <small>First 5 minutes</small>
+                                </h3>
                                 <div class="chart">
-                                    <graph-view id="chart-reactions-birth" fields="loves,wows,hahas,sads,angrys" type="live" birth="true" post-id="{{ $post->id }}"></graph-view>
+                                    <graph-view id="chart-reactions-birth" fields="loves,wows,hahas,sads,angrys"
+                                                type="live" birth="true" post-id="{{ $post->id }}"></graph-view>
                                 </div>
-                                <h3>Reactions <small>Post lifetime</small></h3>
+                                <h3>Reactions
+                                    <small>Post lifetime</small>
+                                </h3>
                                 <div class="chart">
-                                    <graph-view id="chart-reactions" fields="loves,wows,hahas,sads,angrys" type="live" birth="false" post-id="{{ $post->id }}"></graph-view>
+                                    <graph-view id="chart-reactions" fields="loves,wows,hahas,sads,angrys" type="live"
+                                                birth="false" post-id="{{ $post->id }}"></graph-view>
                                 </div>
                             </div>
                             <div class="tab-pane" id="views">
-                                <h3>Views <small>Everyone</small></h3>
+                                <h3>Views
+                                    <small>Everyone</small>
+                                </h3>
                                 <div class="chart">
-                                    <graph-view id="chart-views" birth="" fields="impressions,uniques" type="delayed" post-id="{{ $post->id }}"></graph-view>
+                                    <graph-view id="chart-views" birth="" fields="impressions,uniques" type="delayed"
+                                                post-id="{{ $post->id }}"></graph-view>
                                 </div>
-                                <h3>Video Views <small>Everyone</small></h3>
+                                <h3>Video Views
+                                    <small>Everyone</small>
+                                </h3>
                                 <div class="chart">
-                                    <graph-view id="chart-video-views" birth="" fields="total_video_views,total_video_views_autoplayed,total_video_views_clicked_to_play,total_video_complete_views" type="video" post-id="{{ $post->id }}"></graph-view>
+                                    <graph-view id="chart-video-views" birth=""
+                                                fields="total_video_views,total_video_views_autoplayed,total_video_views_clicked_to_play,total_video_complete_views"
+                                                type="video" post-id="{{ $post->id }}"></graph-view>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -417,10 +511,78 @@
             </div>
         </div>
     </div>
+
+    @foreach($post->videoStatSnapshots as $vidSnapshot)
+        @if($vidSnapshot->total_video_retention_graph)
+            @php
+                $stats = str_replace('[', '',$vidSnapshot->total_video_retention_graph);
+                $stats = str_replace(']', '',$stats);
+                $stats = explode(',', $stats);
+                $increments = $post->length/40;
+            $newArray = [];
+            foreach($stats as $key => $value) {
+                $inc = ($key + 1) * $increments;
+                $newArray[ (string) $inc] = $value;
+            }
+            @endphp
+        @endif
+    @endforeach
 @stop
 
 @push('js')
-    {{--<script src="{{ asset('js/app.js') }}"></script>--}}
+    <script src="{{ asset('js/app.js') }}"></script>
+    @if($post->videoStatSnapshots->count() > 0)
+        <script>
+            let videoRetentionGraphCanvas = $('#videoRetentionGraphCanvas').get(0).getContext('2d');
+
+            let areaChartOptions = {
+                title: {
+                    display: false,
+                    text: 'Video Retention',
+                    fontSize: 25,
+                },
+                scaleShowValues: true,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            autoSkip: false
+                        }
+                    }]
+                }
+            };
+
+            let videoRetentionGraphData = {
+                labels: [
+                    @foreach($newArray as $key => $value)
+                        '{{ $key }}',
+                    @endforeach
+                ],
+                datasets: [{
+                    label: 'Retention',
+                    backgroundColor: '#57d3ff',
+                    borderWidth: 1,
+                    data: [
+                        @foreach($newArray as $stat)
+                            '{{ $stat }}',
+                        @endforeach
+                    ]
+                }]
+
+            };
+
+            new Chart(videoRetentionGraphCanvas, {
+                type: 'bar',
+                data: videoRetentionGraphData,
+                options: areaChartOptions,
+            });
+        </script>
+    @endif
+
 @endpush
 
 @section('js')

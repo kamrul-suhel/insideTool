@@ -12,7 +12,7 @@ class GetStats extends Command
      *
      * @var string
      */
-    protected $signature = 'stats:get {{--type=}} {{--from=}} {{--to=}}';
+    protected $signature = 'stats:get {{--post_type=}} {{--type=}} {{--from=}} {{--to=}}';
 
     /**
      * The console command description.
@@ -41,17 +41,24 @@ class GetStats extends Command
         $from = new \Carbon\Carbon($this->option('from'));
         $to = new \Carbon\Carbon($this->option('to'));
         $type = $this->option('type');
+        $postType = $this->option('post_type');
 
-        $posts = Post::whereBetween('posted', [$from, $to])->orderBy('id', 'DESC')->get();
         if ($type == 'live') {
+	        $posts = Post::whereBetween('posted', [$from, $to])->orderBy('id', 'DESC')->get();
             foreach ($posts as $post) {
                 \Artisan::call('stats:getpoststats', ['postid' => $post->facebook_id]);
                 \Artisan::call('stats:getgapoststats', ['postid' => $post->facebook_id]); // Ga Analytics
             }
         } else if ($type == 'delayed') {
-            foreach ($posts as $post) {
-                \Artisan::call('stats:getpoststatsdelayed', ['postid' => $post->facebook_id]);
-            }
+	        $posts = Post::whereBetween('posted', [$from, $to])->orderBy('id', 'DESC')->get();
+	        foreach ($posts as $post) {
+		        \Artisan::call('stats:getpoststatsdelayed', ['postid' => $post->facebook_id]);
+	        }
+        } else if ($type == 'monitization') {
+	        $posts = Post::whereBetween('posted', [$from, $to])->where('type', $postType)->where('ads', 1)->orderBy('id', 'DESC')->get();
+        	foreach($posts as $post) {
+                \Artisan::call('stats:getpostmonitizationstats', ['postid' => $post->facebook_id]);
+	        }
         } else {
             $this->error("Invalid stats type, valid types are live and delayed");
         }

@@ -458,6 +458,11 @@
                             @endif
                         </td>
                         <td><small>{{ date('D m Y @ H:i:s', strtotime($post->updated_at)) }}</small></td>
+                        <td>
+                            @if($post->videoMonitizationStatSnapshot->count() > 0)
+                                <a href="/posts/{{ $post->id }}" class="btn btn-xs btn-primary"><i class="fa fa-line-chart"></i></a>
+                            @endif
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>

@@ -27,6 +27,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('stats:getposts')->everyFiveMinutes();
         $schedule->command('stats:get --from="48 hours ago" --to="now" --type=live')->everyTenMinutes();
         $schedule->command('stats:get --from="48 hours ago" --to="now" --type=delayed')->everyTenMinutes();
+
+        $schedule->command('stats:get --post_type="video" --from="1 years ago" --to="now" --type=monitization')->daily();
         $schedule->command('stats:updateaverages')->everyTenMinutes();
         $schedule->command('stats:emailstats')->dailyAt('09:40')->timezone('Europe/London');
 

@@ -64,6 +64,20 @@ class Post extends Model
     	return $this->hasMany(VideoStatSnapshot::class);
     }
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+    public function videoMonitizationStatSnapshot()
+    {
+        return $this->hasMany(VideoMonitizationStatSnapshot::class);
+    }
+
+    public function videoMonetizationStatsSnapshotLatest()
+    {
+	    return $this->hasMany(VideoMonitizationStatSnapshot::class)->latest();
+
+    }
+
     /**
      * Return video labels
      */
