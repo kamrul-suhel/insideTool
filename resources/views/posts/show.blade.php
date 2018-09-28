@@ -26,7 +26,7 @@
             </div>
             <div class="row">
 
-                @if($post->videoStatSnapshots->count() > 0)
+                @if($post->videoStatSnapshots()->orderBy('id', 'desc')->first()->total_video_retention_graph !== null)
                     {{-- IA non IA comparison --}}
                     <div class="col-lg-12">
                         <div class="box">
@@ -98,23 +98,26 @@
                                                 </td>
                                             </tr>
                                         @endif
-                                        @if($post->videoMonitizationStatSnapshot->count() > 0)
-                                            <tr>
-                                                <th>Ads Stats</th>
-                                                @php $latestAdsStats = $post->videoMonetizationStatsSnapshotLatest->toArray() @endphp
+
+                                        @if(auth()->user()->role === 'admin')
+                                            @if($post->videoMonitizationStatSnapshot->count() > 0)
                                                 <tr>
-                                                    <td>post_video_ad_break_ad_impressions</td>
-                                                    <td>{{number_format($latestAdsStats[0]['post_video_ad_break_ad_impressions'])}}</td>
+                                                    <th>Ads Stats</th>
+                                                    @php $latestAdsStats = $post->videoMonetizationStatsSnapshotLatest->toArray() @endphp
+                                                    <tr>
+                                                        <td>post_video_ad_break_ad_impressions</td>
+                                                        <td>{{number_format($latestAdsStats[0]['post_video_ad_break_ad_impressions'])}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>post_video_ad_break_earnings</td>
+                                                        <td>£{{number_format($latestAdsStats[0]['post_video_ad_break_earnings'])}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>post_video_ad_break_ad_cpm</td>
+                                                        <td>{{number_format($latestAdsStats[0]['post_video_ad_break_ad_cpm'])}}</td>
+                                                    </tr>
                                                 </tr>
-                                                <tr>
-                                                    <td>post_video_ad_break_earnings</td>
-                                                    <td>£{{number_format($latestAdsStats[0]['post_video_ad_break_earnings'])}}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>post_video_ad_break_ad_cpm</td>
-                                                    <td>{{number_format($latestAdsStats[0]['post_video_ad_break_ad_cpm'])}}</td>
-                                                </tr>
-                                            </tr>
+                                            @endif
                                         @endif
                                     </table>
                                 </div>
@@ -519,12 +522,13 @@
                 $stats = str_replace(']', '',$stats);
                 $stats = explode(',', $stats);
                 $increments = $post->length/40;
-            $newArray = [];
-            foreach($stats as $key => $value) {
-                $inc = ($key + 1) * $increments;
-                $newArray[ (string) $inc] = $value;
-            }
-            @endphp
+
+                $newArray = [];
+                foreach($stats as $key => $value) {
+                    $inc = ($key + 1) * $increments;
+                    $newArray[ (string) $inc] = $value;
+                }
+                @endphp
         @endif
     @endforeach
 @stop
@@ -556,30 +560,32 @@
                 }
             };
 
-            let videoRetentionGraphData = {
-                labels: [
-                    @foreach($newArray as $key => $value)
-                        '{{ $key }}',
-                    @endforeach
-                ],
-                datasets: [{
-                    label: 'Retention',
-                    backgroundColor: '#57d3ff',
-                    borderWidth: 1,
-                    data: [
-                        @foreach($newArray as $stat)
-                            '{{ $stat }}',
+            @if(isset($newArray))
+                let videoRetentionGraphData = {
+                    labels: [
+                        @foreach($newArray as $key => $value)
+                            '{{ $key }}',
                         @endforeach
-                    ]
-                }]
+                    ],
+                    datasets: [{
+                        label: 'Retention',
+                        backgroundColor: '#57d3ff',
+                        borderWidth: 1,
+                        data: [
+                            @foreach($newArray as $stat)
+                                '{{ $stat }}',
+                            @endforeach
+                        ]
+                    }]
 
-            };
+                };
 
-            new Chart(videoRetentionGraphCanvas, {
-                type: 'bar',
-                data: videoRetentionGraphData,
-                options: areaChartOptions,
-            });
+                new Chart(videoRetentionGraphCanvas, {
+                    type: 'bar',
+                    data: videoRetentionGraphData,
+                    options: areaChartOptions,
+                });
+            @endif
         </script>
     @endif
 
