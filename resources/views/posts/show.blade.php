@@ -26,8 +26,8 @@
             </div>
             <div class="row">
 
-                @if($post->videoStatSnapshots()->orderBy('id', 'desc')->first()->total_video_retention_graph !== null)
-                    {{-- IA non IA comparison --}}
+                @if(isset($post->videoStatSnapshots()->orderBy('id', 'desc')->first()->total_video_retention_graph))
+                    {{-- Retetion Graph --}}
                     <div class="col-lg-12">
                         <div class="box">
                             <div class="box-header">
@@ -105,15 +105,15 @@
                                                     <th>Ads Stats</th>
                                                     @php $latestAdsStats = $post->videoMonetizationStatsSnapshotLatest->toArray() @endphp
                                                     <tr>
-                                                        <td>post_video_ad_break_ad_impressions</td>
+                                                        <td>Post video ad break ad impressions</td>
                                                         <td>{{number_format($latestAdsStats[0]['post_video_ad_break_ad_impressions'])}}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td>post_video_ad_break_earnings</td>
-                                                        <td>£{{number_format($latestAdsStats[0]['post_video_ad_break_earnings'])}}</td>
+                                                        <td>Post video ad break earnings</td>
+                                                        <td>${{number_format($latestAdsStats[0]['post_video_ad_break_earnings']/100)}}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td>post_video_ad_break_ad_cpm</td>
+                                                        <td>Post video ad break ad cpm</td>
                                                         <td>{{number_format($latestAdsStats[0]['post_video_ad_break_ad_cpm'])}}</td>
                                                     </tr>
                                                 </tr>
