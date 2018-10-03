@@ -580,12 +580,12 @@
                     @endforeach
                 ],
                 datasets: [{
-                    label: 'Daily Ad Break Earnings',
+                    label: 'Daily Ad Break Earnings ($)',
                     backgroundColor: '#57d3ff',
                     borderWidth: 1,
                     data: [
                         @foreach($earningsArray as $stat)
-                            '{{ $stat }}',
+                            '{{ number_format($stat/100) }}',
                         @endforeach
                     ]
                 }]
