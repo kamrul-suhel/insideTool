@@ -562,16 +562,15 @@
             let monitizationGraphData = {
                 labels: [
                     @foreach($earningsArray as $key => $value)
-                        '{{ $key }}',
+                        '{{ date('d-m-y', strtotime($key)) }}',
                     @endforeach
                 ],
                 datasets: [{
                     label: 'Daily Ad Break Earnings ($)',
-                    //backgroundColor: '#57d3ff',
                     borderWidth: 1,
                     data: [
                         @foreach($earningsArray as $stat)
-                            '{{ number_format($stat/100) }}',
+                            '{{ $stat/100 }}',
                         @endforeach
                     ]
                 }]
