@@ -31,7 +31,8 @@
                     <div class="col-lg-12">
                         <div class="box">
                             <div class="box-header">
-                                <h3 class="box-title"> Video Retention (The X axis is split into 40 segments of the total video time ({{$post->length}} seconds))</h3>
+                                <h3 class="box-title"> Video Retention (The X axis is split into 40 segments of the
+                                    total video time ({{$post->length}} seconds))</h3>
                                 <div class="box-tools pull-right">
                                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                                 class="fa fa-minus"></i></button>
@@ -103,23 +104,32 @@
                                             @if($post->videoMonitizationStatSnapshot->count() > 0)
                                                 <tr>
                                                     <th>Ads Stats</th>
-                                                    @php $latestAdsStats = $post->videoMonetizationStatsSnapshotLatest->toArray() @endphp
-                                                    <tr>
-                                                        <td>Post video ad break ad impressions</td>
-                                                        <td>{{number_format($latestAdsStats[0]['post_video_ad_break_ad_impressions'])}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Post video ad break earnings</td>
-                                                        <td>${{number_format($latestAdsStats[0]['post_video_ad_break_earnings']/100)}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Post video ad break ad cpm</td>
-                                                        <td>{{number_format($latestAdsStats[0]['post_video_ad_break_ad_cpm'])}}</td>
-                                                    </tr>
+                                                @php $latestAdsStats = $post->videoMonetizationStatsSnapshotLatest->toArray() @endphp
+                                                <tr>
+                                                    <td>Post video ad break ad impressions</td>
+                                                    <td>{{number_format($latestAdsStats[0]['post_video_ad_break_ad_impressions'])}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Post video ad break earnings</td>
+                                                    <td>
+                                                        ${{number_format($latestAdsStats[0]['post_video_ad_break_earnings']/100)}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Post video ad break ad cpm</td>
+                                                    <td>{{number_format($latestAdsStats[0]['post_video_ad_break_ad_cpm'])}}</td>
+                                                </tr>
                                                 </tr>
                                             @endif
                                         @endif
                                     </table>
+                                    @if(auth()->user()->role === 'admin')
+                                        @if($post->videoMonitizationStatSnapshot->count() > 0)
+                                            <div class="col-lg-12">
+                                                <canvas id="monitizationGraphCanvas" class="chart"
+                                                        style="height:400px;"></canvas>
+                                            </div>
+                                        @endif
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -528,40 +538,75 @@
                     $inc = ($key + 1) * $increments;
                     $newArray[ (string) $inc] = $value;
                 }
-                @endphp
+            @endphp
         @endif
     @endforeach
 @stop
 
 @push('js')
     <script src="{{ asset('js/app.js') }}"></script>
+
+    <script>
+        let areaChartOptions = {
+            title: {
+                display: false,
+                text: 'Video Retention',
+                fontSize: 25,
+            },
+            scaleShowValues: true,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                    }
+                }],
+                xAxes: [{
+                    ticks: {
+                        autoSkip: false
+                    }
+                }]
+            }
+        };
+    </script>
+    @if($post->videoMonitizationStatSnapshot->count())
+
+        @php $earningsArray = $post->VideoMonitizationStatSnapshot->pluck('post_video_ad_break_earnings', 'created_at')->toArray(); @endphp
+
+        <script>
+            let monitizationGraphData = {
+                labels: [
+                    @foreach($earningsArray as $key => $value)
+                        '{{ $key }}',
+                    @endforeach
+                ],
+                datasets: [{
+                    label: 'Daily Ad Break Earnings',
+                    backgroundColor: '#57d3ff',
+                    borderWidth: 1,
+                    data: [
+                        @foreach($earningsArray as $stat)
+                            '{{ $stat }}',
+                        @endforeach
+                    ]
+                }]
+
+            };
+
+            new Chart(monitizationGraphCanvas, {
+                type: 'line',
+                data: monitizationGraphData,
+                options: areaChartOptions,
+            });
+        </script>
+    @endif
+
     @if($post->videoStatSnapshots->count() > 0)
         <script>
             let videoRetentionGraphCanvas = $('#videoRetentionGraphCanvas').get(0).getContext('2d');
+            let monitizationGraphCanvas = $('#monitizationGraphCanvas').get(0).getContext('2d');
 
-            let areaChartOptions = {
-                title: {
-                    display: false,
-                    text: 'Video Retention',
-                    fontSize: 25,
-                },
-                scaleShowValues: true,
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true,
-                        }
-                    }],
-                    xAxes: [{
-                        ticks: {
-                            autoSkip: false
-                        }
-                    }]
-                }
-            };
-
-            @if(isset($newArray))
-                let videoRetentionGraphData = {
+                    @if(isset($newArray))
+            let videoRetentionGraphData = {
                     labels: [
                         @foreach($newArray as $key => $value)
                             '{{ $key }}',
@@ -580,11 +625,11 @@
 
                 };
 
-                new Chart(videoRetentionGraphCanvas, {
-                    type: 'bar',
-                    data: videoRetentionGraphData,
-                    options: areaChartOptions,
-                });
+            new Chart(videoRetentionGraphCanvas, {
+                type: 'bar',
+                data: videoRetentionGraphData,
+                options: areaChartOptions,
+            });
             @endif
         </script>
     @endif
