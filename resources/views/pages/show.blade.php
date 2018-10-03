@@ -201,10 +201,19 @@
                      data-average-comments="{{ $averages->get('comments')->average }}"
                      data-average-shares="{{ $averages->get('shares')->average }}">
                     <div class="col-lg-12">
-                        <a style="border-radius: 0px; @if(request()->get('type') == null) text-decoration: underline; font:bolder @endif" class="col-lg-3 btn btn-lg btn-success" href="{{ route('pages.show', ['id' => $pageId, 'from' => request()->get('from'), 'to' => request()->get('to')]) }}">All</a>
-                        <a style="border-radius: 0px; @if(request()->get('type') == 'video') text-decoration: underline; font:bolder @endif" class="col-lg-3 btn btn-lg bg-purple" href="{{ route('pages.show', ['id' => $pageId, 'ia' => false, 'creator' => request()->get('creator'),  'label' => request()->get('label'), 'day' => request()->get('day'), 'type' => 'video', 'from' => request()->get('from'), 'to' => request()->get('to')]) }}">Videos</a>
-                        <a style="border-radius: 0px; @if(request()->get('type') == 'link') text-decoration: underline; font:bolder @endif" class="col-lg-3 btn btn-lg bg-maroon" href="{{ route('pages.show', ['id' => $pageId, 'ia' => false, 'creator' => request()->get('creator'),  'label' => request()->get('label'), 'day' => request()->get('day'), 'type' => 'link', 'from' => request()->get('from'), 'to' => request()->get('to')]) }}">Links</a>
-                        <a style="border-radius: 0px; @if(request()->get('type') == 'ia') text-decoration: underline; font:bolder @endif" class="col-lg-3 btn btn-lg bg-yellow" href="{{ route('pages.show', ['id' => $pageId, 'ia' => true, 'creator' => request()->get('creator'), 'label' => request()->get('label'), 'day' => request()->get('day'), 'from' => request()->get('from'), 'to' => request()->get('to')]) }}">Instant Articles</a>
+                        <a style="border-radius: 0px; @if(request()->get('type') == null) text-decoration: underline; font:bolder @endif"
+                           class="col-lg-3 btn btn-lg btn-success"
+                           href="{{ route('pages.show', ['id' => $pageId, 'from' => request()->get('from'), 'to' => request()->get('to')]) }}">All</a>
+                        <a style="border-radius: 0px; @if(request()->get('type') == 'video') text-decoration: underline; font:bolder @endif"
+                           class="col-lg-3 btn btn-lg bg-purple"
+                           href="{{ route('pages.show', ['id' => $pageId, 'ia' => false, 'creator' => request()->get('creator'),  'label' => request()->get('label'), 'day' => request()->get('day'), 'type' => 'video', 'from' => request()->get('from'), 'to' => request()->get('to')]) }}">Videos</a>
+                        <a style="border-radius: 0px; @if(request()->get('type') == 'link') text-decoration: underline; font:bolder @endif"
+                           class="col-lg-3 btn btn-lg bg-maroon"
+                           href="{{ route('pages.show', ['id' => $pageId, 'ia' => false, 'creator' => request()->get('creator'),  'label' => request()->get('label'), 'day' => request()->get('day'), 'type' => 'link', 'from' => request()->get('from'), 'to' => request()->get('to')]) }}">Links</a>
+                        <a style="border-radius: 0px; @if(request()->get('type') == 'ia') text-decoration: underline; font:bolder @endif"
+                           class="col-lg-3 btn btn-lg bg-yellow"
+                           href="{{ route('pages.show', ['id' => $pageId, 'ia' => true, 'creator' => request()->get('creator'), 'label' => request()->get('label'), 'day' => request()->get('day'), 'from' => request()->get('from'), 'to' => request()->get('to')]) }}">Instant
+                            Articles</a>
                     </div>
                     <br>
                     <hr>
@@ -305,7 +314,8 @@
                 {{--Posts --}}
                 @foreach ($posts as $post)
                     <tr class="dt-center">
-                        <td class="dt-center" @if (!is_null($post->deleted_at)) style="background-color: lightpink;" @else style="width:130px;" @endif>
+                        <td class="dt-center" @if (!is_null($post->deleted_at)) style="background-color: lightpink;"
+                            @else style="width:130px;" @endif>
                             <small>{{ date('D m @ H:i:s', strtotime($post->posted)) }}</small>
                             <br>
                             @if(!is_null($post->deleted_at))
@@ -354,11 +364,12 @@
                             <br>
                             &quot;<a href="/posts/{{ $post->id }}">{{ $post->message }}</a>&quot;
                             <br>
-                            @if($post->type == 'video' && $post->videoLabels->count() > 0)
+                            @if($post->type === 'video')
 
-                                @foreach($post->videoLabels->pluck('label') as $label)
-                                    @if(!in_array($label, explode(',', $chosenLabels)))
-                                        <a class="label label-default" style="margin: 2px;" href="{{ route('pages.show', [
+                                @if($post->videoLabels->count() > 0)
+                                    @foreach($post->videoLabels->pluck('label') as $label)
+                                        @if(!in_array($label, explode(',', $chosenLabels)))
+                                            <a class="label label-default" style="margin: 2px;" href="{{ route('pages.show', [
                                         'id' => $pageId,
                                         'from' => request()->get('from'),
                                         'to' => request()->get('to'),
@@ -368,12 +379,13 @@
                                         'day' => request()->get('day'),
                                         'type' => request()->get('type')
                                         ]) }}"> {{$label}} </a>
-                                    @else
-                                        <a class="label label-info" style="margin: 2px;"> {{ $label }} </a>
-                                    @endif
-                                @endforeach
-                            @else
-                                <span class="label label-danger">NO TAGS! Gimme some tags, <b>{{ explode(' ',$post->creator->name)[0] }}!</b></span>
+                                        @else
+                                            <a class="label label-info" style="margin: 2px;"> {{ $label }} </a>
+                                        @endif
+                                    @endforeach
+                                @else
+                                    <span class="label label-danger">NO TAGS! Gimme some tags, <b>{{ explode(' ',$post->creator->name)[0] }}!</b></span>
+                                @endif
                             @endif
 
                         </td>
@@ -437,7 +449,8 @@
                             </em>
                         </td>
 
-                        <td class="dt-center" data-sort="{{ $post->link_clicks > 0 ? $post->link_clicks : $post->ga_page_views }}">
+                        <td class="dt-center"
+                            data-sort="{{ $post->link_clicks > 0 ? $post->link_clicks : $post->ga_page_views }}">
                             @if($post->type === 'video')
 
                             @else
@@ -457,10 +470,13 @@
                                 </em>
                             @endif
                         </td>
-                        <td><small>{{ date('D m Y @ H:i:s', strtotime($post->updated_at)) }}</small></td>
+                        <td>
+                            <small>{{ date('D m Y @ H:i:s', strtotime($post->updated_at)) }}</small>
+                        </td>
                         <td>
                             @if($post->videoMonitizationStatSnapshot->count() > 0)
-                                <a href="/posts/{{ $post->id }}" class="btn btn-xs btn-primary"><i class="fa fa-line-chart"></i></a>
+                                <a href="/posts/{{ $post->id }}" class="btn btn-xs btn-primary"><i
+                                            class="fa fa-line-chart"></i></a>
                             @endif
                         </td>
                     </tr>
