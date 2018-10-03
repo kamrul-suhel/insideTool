@@ -568,7 +568,7 @@
             }
         };
     </script>
-    @if($post->videoMonitizationStatSnapshot->count())
+    @if($post->videoMonitizationStatSnapshot->count() > 0)
 
         @php $earningsArray = $post->VideoMonitizationStatSnapshot->pluck('post_video_ad_break_earnings', 'created_at')->toArray(); @endphp
 
