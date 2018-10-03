@@ -354,7 +354,7 @@
                             <br>
                             &quot;<a href="/posts/{{ $post->id }}">{{ $post->message }}</a>&quot;
                             <br>
-                            @if($post->videoLabels->count() > 0)
+                            @if($post->type == 'video' && $post->videoLabels->count() > 0)
 
                                 @foreach($post->videoLabels->pluck('label') as $label)
                                     @if(!in_array($label, explode(',', $chosenLabels)))
