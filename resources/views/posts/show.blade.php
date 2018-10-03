@@ -322,9 +322,9 @@
                             <span class="info-box-text"><abbr title="Engagement per minute">EPM</abbr> (First 5 minutes)</span>
                             <span class="info-box-number info-box-number-big
                                 @if ($liveLatest->reactionspm_birth > $averages->get("reactions_perminute_{$post->type}_birth")->average)
-                                    text-green 
+                                    text-green
                                 @else
-                                    text-red 
+                                    text-red
                                 @endif
                                     ">
                                 @if ($liveLatest->reactionspm_birth > $averages->get("reactions_perminute_{$post->type}_birth")->average)
@@ -380,13 +380,6 @@
                         <div class="tab-content">
                             <div class="active tab-pane" id="lcs">
                                 <h3>Likes, comments, and shares
-                                    <small>First 5 minutes</small>
-                                </h3>
-                                <div class="chart">
-                                    <graph-view id="chart-lcs" birth="true" fields="likes,shares,comments" type="live"
-                                                post-id="{{ $post->id }}"></graph-view>
-                                </div>
-                                <h3>Likes, comments, and shares
                                     <small>Post lifetime</small>
                                 </h3>
                                 <div class="chart">
@@ -395,13 +388,6 @@
                                 </div>
                             </div>
                             <div class="tab-pane" id="reactions">
-                                <h3>Reactions
-                                    <small>First 5 minutes</small>
-                                </h3>
-                                <div class="chart">
-                                    <graph-view id="chart-reactions-birth" fields="loves,wows,hahas,sads,angrys"
-                                                type="live" birth="true" post-id="{{ $post->id }}"></graph-view>
-                                </div>
                                 <h3>Reactions
                                     <small>Post lifetime</small>
                                 </h3>
@@ -581,7 +567,7 @@
                 ],
                 datasets: [{
                     label: 'Daily Ad Break Earnings ($)',
-                    backgroundColor: '#57d3ff',
+                    //backgroundColor: '#57d3ff',
                     borderWidth: 1,
                     data: [
                         @foreach($earningsArray as $stat)
